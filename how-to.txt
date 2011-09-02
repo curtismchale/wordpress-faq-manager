@@ -1,0 +1,25 @@
+=== FAQ Manager How-To ===
+
+The FAQ Manager plugin uses a combination of custom post types, meta fields, and taxonomies. The plugin will automatically create single posts using your existing permalink structure. And the FAQ categories and tags can be added to your menu using the WP Menu Manager
+
+**Shortcodes**
+
+The plugin also has the option of using shortcodes. To use them, follow the syntax accordingly in the HTML tab:
+
+*For the complete list: 
+	place [faq] on a post / page
+
+*For a single FAQ: 
+	place [faq faq_id="ID"] on a post / page
+
+*List all from a single FAQ topic category: 
+	place [faq faq_topic="topic-slug"] on a post / page
+
+*List all from a single FAQ tag: 
+	place [faq faq_tag="tag-slug"] on a post / page
+
+Please note that the shortcode can't handle a query of multiple categories in a single shortcode. However, you can stack them as such:
+...content....
+[faq faq_topic="topic-slug-one"]
+[faq faq_topic="topic-slug-two"]
+
