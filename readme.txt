@@ -3,8 +3,8 @@ Contributors: norcross
 Donate link: http://andrewnorcross.com/donate
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 3.0
-Tested up to: 3.2
-Stable tag: 1.11
+Tested up to: 3.4.1
+Stable tag: 1.22
 
 Uses custom post types and taxonomies to manage an FAQ section for your site.
 
@@ -60,6 +60,28 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 
 == Changelog ==
 
+= 1.22 =
+* added a user permissions filter `faq-cap` to all related admin menu pages. [See the Codex](http://codex.wordpress.org/Plugin_API/Filter_Reference/user_has_cap "See the Codex") on `user_has_cap` filter to adjust. 
+
+= 1.21 =
+* updated FAQ sort page to match user permissions of settings page
+
+= 1.2 =
+* MAJOR code cleanup
+* converted code base to OOP
+* serialized settings storage in DB
+* consolidated widgets
+
+= 1.14 =
+* Added fallbacks if user doesn't save settings
+
+= 1.13 =
+* Removed version number for script and CSS enqueues for better cache setup
+* New icon
+
+= 1.12 =
+* Code cleanup for 3.3
+
 = 1.11 =
 * Added FAQ slug as title anchor
 * Optional H type selector (H1, H2) for better theme compatibility
@@ -99,6 +121,9 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.2 =
+* Note: you MUST re-save your settings based on changed made.
 
 = 1.01 =
 * Fixed query for number of FAQs displayed

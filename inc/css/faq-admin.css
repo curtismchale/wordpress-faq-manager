@@ -1,0 +1,51 @@
+div#icon-faq-admin {
+	background: url(../img/faq_admin_icon.png) no-repeat 0 0;
+}
+
+select.faq_htype option {margin: 0 5px 0 0;}
+
+.widefat th#id {width:35px;}
+.widefat th#questions {width:200px;}	
+.widefat th#answers {width:400px;}
+ul.faqinfo {margin:0 15px;}
+p.indent {text-indent:10px;}
+p.norcross_donate {margin-top:50px;}
+
+
+#custom-type-list { margin: 20px 0; }
+ 
+#custom-type-list li {
+	padding: 10px;	
+	width: 50%;	
+	font-weight: bold;
+ /* '#f7f7f7', endColorstr='#e7e7e7' */
+	cursor: move;
+ 
+	border: 1px solid #ddd;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	border-radius: 10px;
+
+	background-color:#f7f7f7;
+	background-image:-webkit-gradient(linear,left bottom,left top,color-stop(0.32,#f7f7f7),color-stop(0.66,#e7e7e7), color-stop(0.83,#cccccc));
+	background-image:-webkit-linear-gradient(#f7f7f7,#e7e7e7,#cccccc);
+	background-image:-moz-linear-gradient(top,#f7f7f7,#e7e7e7,#cccccc);
+	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7f7f7', endColorstr='#e7e7e7');
+	-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr='#f7f7f7', endColorstr='#e7e7e7')";
+	background-image: -ms-linear-gradient(#f7f7f7,#e7e7e7,#cccccc);
+	background-image: -o-linear-gradient(#f7f7f7,#e7e7e7,#cccccc);
+	background-image: linear-gradient(#f7f7f7,#e7e7e7,#cccccc);
+
+}
+ 
+#custom-type-list li.breaker {
+	background:none;
+	margin:5px 0 25px;
+	line-height:24px;
+	border:none;
+	font-size:22px;
+	border-top:1px double #000;
+	border-bottom:1px double #000;		
+}
+ 
+#loading-animation { display: none; }
