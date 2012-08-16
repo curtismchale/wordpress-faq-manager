@@ -71,9 +71,9 @@ class WP_FAQ_Manager
 
 	public function admin_pages() {
 		
-		add_submenu_page('edit.php?post_type=question', 'Sort FAQs', 'Sort FAQs', apply_filters( 'faq-caps-sort', 'manage_options' ), basename(__FILE__), array( &$this, 'sort_page' ));
-		add_submenu_page('edit.php?post_type=question', 'Settings', 'Settings', apply_filters( 'faq-caps-settings', 'manage_options' ), 'faq-options', array( &$this, 'settings_page' ));
-		add_submenu_page('edit.php?post_type=question', 'Instructions', 'Instructions', apply_filters( 'faq-caps-instructions', 'manage_options' ), 'faq-instructions', array( &$this, 'instructions_page' ));
+		add_submenu_page('edit.php?post_type=question', 'Sort FAQs', 'Sort FAQs', apply_filters( 'faq-caps', 'manage_options', 'sort' ), basename(__FILE__), array( &$this, 'sort_page' ));
+		add_submenu_page('edit.php?post_type=question', 'Settings', 'Settings', apply_filters( 'faq-caps', 'manage_options', 'settings' ), 'faq-options', array( &$this, 'settings_page' ));
+		add_submenu_page('edit.php?post_type=question', 'Instructions', 'Instructions', apply_filters( 'faq-caps', 'manage_options', 'instructions' ), 'faq-instructions', array( &$this, 'instructions_page' ));
 	}
 
 	/**
