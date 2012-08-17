@@ -4,7 +4,7 @@ Plugin Name: WordPress FAQ Manager
 Plugin URI: http://andrewnorcross.com/tools/faq-manager/
 Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
 Author: Andrew Norcross
-Version: 1.22
+Version: 1.23
 Requires at least: 3.0
 Author URI: http://andrewnorcross.com
 */
@@ -45,6 +45,7 @@ class WP_FAQ_Manager
 		add_filter					( 'manage_edit-question_columns',	array( $this, 'column_setup'	) );
 		add_filter					( 'enter_title_here',				array( $this, 'title_text'		) );
 		add_filter					( 'pre_get_posts',					array( $this, 'rss_include'		) );
+		add_filter					( 'faq-caps',						array( $this, 'menu_filter'		), 10, 2);
 		add_shortcode				( 'faq',							array( $this, 'shortcode_main'	) );
 		add_shortcode				( 'faqlist',						array( $this, 'shortcode_list'	) );	
 
@@ -61,6 +62,28 @@ class WP_FAQ_Manager
 		global $pagenow, $wp_rewrite;
 			if ('plugins.php' == $pagenow && isset( $_GET['activate'] ) )
 			$wp_rewrite->flush_rules();
+	}
+
+	/**
+	 * Declare filters
+	 *
+	 * @return WP_FAQ_Manager
+	 */
+
+
+	public function menu_filter( $capability, $menu ) {
+
+		// Anybody who can publish posts has access to the sort menu		
+		if( $menu === 'sort' )
+			return 'manage_options';
+  
+  		// Anybody who can edit posts has access to the instructions page
+  		if( $menu === 'instructions' )
+			return 'manage_options';
+  		
+  		// Anybody who can manage options has access to the settings page
+  		// If another function has changed this capability already, we'll respect that by just passing the value we were given
+		return $capability;
 	}
 
 	/**
@@ -535,7 +558,7 @@ class WP_FAQ_Manager
 				'hierarchical'		=> false,
 				'menu_position'		=> 20,
 				'capability_type'	=> 'post',
-				'menu_icon'			=> plugins_url( '/lib/img/faq_menu.png', __FILE__ ),
+				'menu_icon'			=> plugins_url( '/inc/img/faq_menu.png', __FILE__ ),
 				'query_var'			=> true,
 				'rewrite'			=> true,
 				'has_archive'		=> $arch,
@@ -755,10 +778,10 @@ class WP_FAQ_Manager
 
 		if ( 'question' == $screen->post_type ) :
 		
-			wp_enqueue_style( 'faq-admin', plugins_url('/lib/css/faq-admin.css', __FILE__) );
+			wp_enqueue_style( 'faq-admin', plugins_url('/inc/css/faq-admin.css', __FILE__) );
 
 			wp_enqueue_script('jquery-ui-sortable');
-			wp_enqueue_script( 'faq-admin', plugins_url('/lib/js/faq.admin.init.js', __FILE__) , array('jquery'), null, true );
+			wp_enqueue_script( 'faq-admin', plugins_url('/inc/js/faq.admin.init.js', __FILE__) , array('jquery'), null, true );
 		
 		endif;
 
@@ -774,13 +797,13 @@ class WP_FAQ_Manager
 
 	public function front_style() {
 
-		wp_enqueue_style( 'faq-style', plugins_url('/lib/css/faq-style.css', __FILE__) );
+		wp_enqueue_style( 'faq-style', plugins_url('/inc/css/faq-style.css', __FILE__) );
 
 	}
 
 	public function front_script() {
 
-		wp_enqueue_script( 'faq-init', plugins_url('/lib/js/faq.init.js', __FILE__) , array('jquery'), null, true );
+		wp_enqueue_script( 'faq-init', plugins_url('/inc/js/faq.init.js', __FILE__) , array('jquery'), null, true );
 
 	}
 
@@ -809,6 +832,54 @@ add_action('init', 'WP_FAQ_Manager_init', 1);
 	 *
 	 * @return WP_FAQ_Manager
 	 */
+
+// FAQ Search
+class search_FAQ_Widget extends WP_Widget {
+	function search_FAQ_Widget() {
+		$widget_ops = array( 'classname' => 'faq_search_widget widget_search', 'description' => 'Puts a search box for just FAQs' );
+		$this->WP_Widget( 'faq_search', 'FAQ Widget - Search', $widget_ops );
+	}
+
+	function widget( $args, $instance ) {
+		extract( $args, EXTR_SKIP );
+		echo $before_widget;
+		$title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
+		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };		
+
+		echo '<form class="searchform" role="search" method="get" id="faq-search" action="' . home_url( '/' ) . '" >';
+		echo '<input type="text" value="' . get_search_query() . '" name="s" id="s" class="s" />';
+		echo '<input type="submit" class="searchsubmit" value="'. esc_attr__('Search') .'" />';
+		echo '<input type="hidden" name="post_type" value="question" />';
+		echo '</form>';
+		
+		echo $after_widget;
+		?>
+      
+        <?php }
+
+    /** @see WP_Widget::update */
+    function update($new_instance, $old_instance) {             
+    $instance = $old_instance;
+    $instance['title']  = strip_tags($new_instance['title']);
+        return $instance;
+    }
+
+    /** @see WP_Widget::form */
+    function form($instance) {              
+        $instance = wp_parse_args( (array) $instance, array( 
+            'title' => 'Search FAQs',
+            ));
+        $title  = strip_tags($instance['title']);
+        ?>
+        <p>
+            <label for="<?php echo $this->get_field_id('title'); ?>">Widget Title:</label>
+            <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
+        </p>
+
+	<?php }
+
+
+} // class 
 
 
 // show randoms
@@ -1117,6 +1188,7 @@ class cloud_FAQ_Widget extends WP_Widget {
 
 
 // register widget
+add_action( 'widgets_init', create_function( '', "register_widget('search_FAQ_Widget');" ) );
 add_action( 'widgets_init', create_function( '', "register_widget('random_FAQ_Widget');" ) );
 add_action( 'widgets_init', create_function( '', "register_widget('recent_FAQ_Widget');" ) );
 add_action( 'widgets_init', create_function( '', "register_widget('topics_FAQ_Widget');" ) );
