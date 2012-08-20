@@ -4,12 +4,12 @@ Donate link: http://andrewnorcross.com/donate
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 1.23
+Stable tag: 1.25
 
 Uses custom post types and taxonomies to manage an FAQ section for your site.
 
 == Description ==
-Uses custom post types and taxonomies to manage an FAQ section for your site. Includes a set of custom tags and taxonomies to organize, and shortcode for display options.
+Uses custom post types and taxonomies to manage an FAQ section for your site. Includes a set of custom taxonomies to organize, and shortcode options for different display configurations. [See the FAQ section](http://wordpress.org/extend/plugins/wordpress-faq-manager/faq "See the FAQ section")  for complete setup options.
 
 == Installation ==
 
@@ -56,11 +56,26 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 
 == Screenshots ==
 
-1. Screenshot of the "Add New FAQ" area
+1. The "Add New FAQ" area
+2. Example of collapsed FAQs
+3. Example of expanded FAQs
 
 == Changelog ==
 
+= 1.25 =
+* added CSS for printing to auto-expand FAQs (does not affect screen)
+* fixed jQuery expand bug that was causing FAQs to be collapsed at all times.
+
+= 1.24 =
+* removed the 'public' option (it was misleading)
+* added SEO options (noindex, nofollow, and noarchive)
+
+= 1.23 =
+* bugfix with URL source of files (for reals this time)
+* Search widget to search just FAQs
+
 = 1.22 =
+* bugfix with URL source of files
 * added a user permissions filter `faq-cap` to all related admin menu pages. [See the Codex](http://codex.wordpress.org/Plugin_API/Filter_Reference/user_has_cap "See the Codex") on `user_has_cap` filter to adjust. 
 
 = 1.21 =
@@ -108,7 +123,6 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 * included optional jQuery collapse / expand
 * added second shortcode option [faqlist]
 * added instructions page within FAQ submenu
-
 
 = 1.02 =
 * added option to control number of FAQs displayed via shortcode. See the How To section of the readme for more info

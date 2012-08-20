@@ -1,10 +1,10 @@
 <?php
 /*
 Plugin Name: WordPress FAQ Manager
-Plugin URI: http://andrewnorcross.com/tools/faq-manager/
+Plugin URI: http://andrewnorcross.com/plugins/wordpress-faq-manager/
 Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
 Author: Andrew Norcross
-Version: 1.23
+Version: 1.25
 Requires at least: 3.0
 Author URI: http://andrewnorcross.com
 */
@@ -34,13 +34,15 @@ class WP_FAQ_Manager
 	 */
 	public function __construct() {
 		add_action					( 'load-plugins.php',				array( $this, 'flush_rewrite'	) );
+		add_action					( 'init',							array( $this, '_register_faq'	) );
 		add_action					( 'admin_menu',						array( $this, 'admin_pages'		) );
 		add_action					( 'admin_init', 					array( $this, 'reg_settings'	) );
-		add_action					( 'init',							array( $this, '_register_faq'	) );
-		add_action					( 'admin_enqueue_scripts', 			array( $this, 'admin_scripts'	), 10 );
 		add_action					( 'the_posts', 						array( $this, 'style_loader'	) );
 		add_action					( 'the_posts', 						array( $this, 'script_loader'	) );
 		add_action					( 'wp_ajax_save_sort',				array( $this, 'save_sort'		) );
+		add_action					( 'wp_head', 						array( $this, 'seo_head'		), 5  );
+		add_action					( 'wp_head', 						array( $this, 'print_css'		), 999  );
+		add_action					( 'admin_enqueue_scripts', 			array( $this, 'admin_scripts'	), 10 );
 		add_action					( 'manage_posts_custom_column',		array( $this, 'column_data'		), 10, 2);
 		add_filter					( 'manage_edit-question_columns',	array( $this, 'column_setup'	) );
 		add_filter					( 'enter_title_here',				array( $this, 'title_text'		) );
@@ -155,6 +157,77 @@ class WP_FAQ_Manager
 	}
 
 	/**
+	 * expand FAQs for print
+	 *
+	 * @return WP_FAQ_Manager
+	 */
+
+	public function print_css() { ?>
+		
+		<style media="print" type="text/css">
+			div.faq_answer {display: block!important;}
+			p.faq_nav {display: none;}
+		</style>
+		
+	<?php }
+
+	/**
+	 * Add optional SEO headings
+	 *
+	 * @return WP_FAQ_Manager
+	 */
+
+	public function seo_head() {
+
+		// just get out if the blog is set to private
+		if ( 0 == get_option( 'blog_public' ) )
+			return;
+
+		// set some defaults
+		$faq_options	= get_option('faq_options');
+		
+		$noindex		= (isset($faq_options['noindex'])	? 'noindex'   : '' );
+		$nofollow		= (isset($faq_options['nofollow'])	? 'nofollow'  : '' );
+		$noarchive		= (isset($faq_options['noarchive'])	? 'noarchive' : '' );
+
+		$meta = array(
+			'noindex'   => '',
+			'nofollow'  => '',
+			'noarchive' => '',
+		);
+
+		// individual FAQs
+		if ( is_singular('question') ) {
+			$meta['noindex']   = (isset($faq_options['noindex'])	? 'noindex'   : '' );
+			$meta['nofollow']  = (isset($faq_options['nofollow'])	? 'nofollow'  : '' );
+			$meta['noarchive'] = (isset($faq_options['noarchive'])	? 'noarchive' : '' );
+		}
+
+		// FAQ archive pages
+		if ( is_post_type_archive('question') ) {
+			$meta['noindex']   = (isset($faq_options['noindex'])	? 'noindex'   : '' );
+			$meta['nofollow']  = (isset($faq_options['nofollow'])	? 'nofollow'  : '' );
+			$meta['noarchive'] = (isset($faq_options['noarchive'])	? 'noarchive' : '' );
+		}
+
+		// FAQ taxonomies
+		if ( is_tax('faq-topic') || is_tax('faq-tags') ) {
+			$meta['noindex']   = (isset($faq_options['noindex'])	? 'noindex'   : '' );
+			$meta['nofollow']  = (isset($faq_options['nofollow'])	? 'nofollow'  : '' );
+			$meta['noarchive'] = (isset($faq_options['noarchive'])	? 'noarchive' : '' );
+		}
+
+
+		$meta = array_filter( $meta );
+		
+		/** Add meta if any exist */
+		if ( $meta )
+			printf( '<meta name="robots" content="%s" />' . "\n", implode( ',', $meta ) );
+
+	}
+
+
+	/**
 	 * Display main options page structure
 	 *
 	 * @return WP_FAQ_Manager
@@ -180,15 +253,19 @@ class WP_FAQ_Manager
                 settings_fields( 'faq_options' );
 				$faq_options	= get_option('faq_options');
 
+				$htype		= (isset($faq_options['htype'])		? 'choice'					: 'default' );
 				$paginate	= (isset($faq_options['paginate'])	? $faq_options['paginate']	: 'false' );
 				$expand		= (isset($faq_options['expand'])	? $faq_options['expand']	: 'false' );
 				$css		= (isset($faq_options['css'])		? $faq_options['css']		: 'false' );
 				$rss		= (isset($faq_options['rss'])		? $faq_options['rss']		: 'false' );
-				$public		= (isset($faq_options['public'])	? $faq_options['public']	: 'false' );
+				$noindex	= (isset($faq_options['noindex'])	? $faq_options['noindex']	: 'false' );
+				$nofollow	= (isset($faq_options['nofollow'])	? $faq_options['nofollow']	: 'false' );
+				$noarchive	= (isset($faq_options['noarchive'])	? $faq_options['noarchive']	: 'false' );
+				$archtext	= (isset($faq_options['arch'])		? $faq_options['arch']		: 'questions' );
 				?>
 
 				<p>
-					<select class="faq_htype" name="faq_options[htype]" id="faq_htype">
+					<select class="faq_htype <?php echo $htype?>" name="faq_options[htype]" id="faq_htype">
 		            <option value="h1" <?php selected( $faq_options['htype'], 'h1' ); ?>>H1</option>
 					<option value="h2" <?php selected( $faq_options['htype'], 'h2' ); ?>>H2</option>
 					<option value="h3" <?php selected( $faq_options['htype'], 'h3' ); ?>>H3</option>
@@ -219,20 +296,33 @@ class WP_FAQ_Manager
 				    <label for="faq_options[rss]" rel="checkbox">Include in main RSS feed</label>
 				</p>
 
+				<h3>SEO Options</h3>
+
 				<p>
-				    <input type="checkbox" name="faq_options[public]" id="faq_public" value="true" <?php checked( $public, 'true' ); ?> />
-				    <label for="faq_options[public]" rel="checkbox">Make individual FAQ entries public</label>
+				    <input type="checkbox" name="faq_options[noindex]" id="faq_noindex" value="true" <?php checked( $noindex, 'true' ); ?> />
+				    <label for="faq_options[noindex]" rel="checkbox"> Apply <code>noindex</code> header tag to FAQs</label>
 				</p>
 
 				<p>
-					<input name="faq_options[arch]" id="faq_arch" type="text" size="40" value="<?php echo $faq_options['arch']; ?>" />
+				    <input type="checkbox" name="faq_options[nofollow]" id="faq_nofollow" value="true" <?php checked( $nofollow, 'true' ); ?> />
+				    <label for="faq_options[nofollow]" rel="checkbox"> Apply <code>nofollow</code> header tag to FAQs</label>
+				</p>
+
+				<p>
+				    <input type="checkbox" name="faq_options[noarchive]" id="faq_noarchive" value="true" <?php checked( $noarchive, 'true' ); ?> />
+				    <label for="faq_options[noarchive]" rel="checkbox"> Apply <code>noarchive</code> header tag to FAQs</label>
+				</p>				
+
+				<p>
+					<input name="faq_options[arch]" id="faq_arch" type="text" size="25" value="<?php echo sanitize_title($archtext); ?>" />
 					<label for="faq_options[arch]">Desired page slug for archiving (all lower case, no capitals or spaces)</label>
-				</p>	
-				<p class="description">You may need to flush your permalinks after changing this. Go to Settings &raquo; Permalinks &raquo; and click "save"</p>
+				</p>
+
 
     			<!-- submit -->
 	    		<p class="submit"><input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" /></p>
-				
+
+				<p class="description"><strong>Note:</strong> You may need to flush your permalinks after changing settings. <a href="<?php echo admin_url( 'options-permalink.php'); ?>">Go to your Permalink Settings here</a></p>
 
 				</form>
                 </div>
@@ -404,12 +494,13 @@ class WP_FAQ_Manager
 
 			// get options from settings page
 			$faqopts	= get_option('faq_options');
-			$expand		= (isset($faqopts['expand']) && $faqopts['expand'] == 'true' ? ' expand_title'  : '' );
+			$expand_a	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true' ? ' expand_faq'  : '' );
+			$expand_b	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true' ? ' expand_title'  : '' );
 			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
 
 
-				$displayfaq .= '<div class="single_faq expand_faq">';
-				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq_question'.$expand.'">'.$title.'</'.$htype.'>';
+				$displayfaq .= '<div class="single_faq'.$expand_a.'">';
+				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq_question'.$expand_b.'">'.$title.'</'.$htype.'>';
 				$displayfaq .= '<div class="faq_answer">'.wpautop($content, true).'</div>';
 				$displayfaq .= '</div>';
 			
@@ -531,8 +622,7 @@ class WP_FAQ_Manager
 
 		// get options from settings page
 		$faqopts	= get_option('faq_options');
-		$public		= (isset($faqopts['public'])	? $faqopts['public']	: 'questions'	);
-		$arch		= (isset($faqopts['arch'])		? $faqopts['arch']  	: false			);
+		$arch		= (isset($faqopts['arch']) ? sanitize_title($faqopts['arch']) : 'questions' );
 
 		register_post_type( 'question',
 			array(
@@ -550,8 +640,8 @@ class WP_FAQ_Manager
 					'not_found'				=> __( 'No FAQs found' ),
 					'not_found_in_trash'	=> __( 'No FAQs found in Trash' ),
 				),
-				'public'	=> $public,
-					'show_in_nav_menus'		=> false,			
+				'public'	=> true,
+					'show_in_nav_menus'		=> true,
 					'show_ui'				=> true,
 					'publicly_queryable'	=> true,
 					'exclude_from_search'	=> false,

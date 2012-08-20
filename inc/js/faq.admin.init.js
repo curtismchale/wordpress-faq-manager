@@ -6,6 +6,22 @@ jQuery(document).ready(function($) {
 
 	$('div#icon-edit').attr('id','icon-faq-admin');
 
+//********************************************************
+// set default choice on dropdown
+//********************************************************
+
+	var htype = $('div.faq_form_options select#faq_htype').hasClass('default');
+	
+	if (htype === true)
+		$('div.faq_form_options select.faq_htype option[value="h3"]').prop('selected',true);
+
+//********************************************************
+// remove caps and other junk from slug
+//********************************************************
+
+	$('input#faq_arch').keyup(function() {
+		this.value = this.value.replace(/\d+/g, '');
+	});
 
 //********************************************************
 // trigger checkbox on label
