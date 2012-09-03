@@ -4,7 +4,7 @@ Plugin Name: WordPress FAQ Manager
 Plugin URI: http://andrewnorcross.com/plugins/wordpress-faq-manager/
 Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
 Author: Andrew Norcross
-Version: 1.25
+Version: 1.27
 Requires at least: 3.0
 Author URI: http://andrewnorcross.com
 */
@@ -49,7 +49,8 @@ class WP_FAQ_Manager
 		add_filter					( 'pre_get_posts',					array( $this, 'rss_include'		) );
 		add_filter					( 'faq-caps',						array( $this, 'menu_filter'		), 10, 2);
 		add_shortcode				( 'faq',							array( $this, 'shortcode_main'	) );
-		add_shortcode				( 'faqlist',						array( $this, 'shortcode_list'	) );	
+		add_shortcode				( 'faqlist',						array( $this, 'shortcode_list'	) );
+		add_shortcode				( 'faqcombo',						array( $this, 'shortcode_combo'	) );
 
 	}
 
@@ -359,15 +360,19 @@ class WP_FAQ_Manager
 			<li>place <code>[faq]</code> on a post / page</li><br />
 			<li><strong>For the question title, and a link to the FAQ on a separate page:</strong></li>
 			<li>place <code>[faqlist]</code> on a post / page</li><br />
+			<li><strong>For a list with a group of titles that link to complete content later in page:</strong></li>
+			<li>place <code>[faqcombo]</code> on a post / page</li><br />
+			<li><em><strong>Please note:</strong> that the combo shortcode will not recognize the pagination and expand / collapse:</em></li><br />			
 			</ul>
-			<h3>The following options apply to both the <code>[faq]</code> and <code>[faqlist]</code> shortcodes</h3>
+
+			<h3>The following options apply to all the <code>shortcode</code> types</h3>
 
 			<p>The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).</p>
 			<ul class="faqinfo">
-			<li>To display only 5:</li><br />
-			<li>place <code>[faq limit="5"]</code> on a post / page</li>
-			<li>To display ALL:</li><br />
-			<li>place <code>[faq limit="-1"]</code> on a post / page</li>
+			<li><strong>To display only 5:</strong></li>
+			<li>place <code>[faq limit="5"]</code> on a post / page</li><br />
+			<li><strong>To display ALL:</strong></li>
+			<li>place <code>[faq limit="-1"]</code> on a post / page</li><br />
 			</ul>
 
 			<ul class="faqinfo">
@@ -375,15 +380,19 @@ class WP_FAQ_Manager
 			<li>place <code>[faq faq_id="ID"]</code> on a post / page</li><br />
 			<li><strong>List all from a single FAQ topic category:</strong></li>
 			<li>place <code>[faq faq_topic="topic-slug"]</code> on a post / page</li><br />
-			<li><strong>List all from a single FAQ tag:</strong></li><br />
+			<li><strong>List all from a single FAQ tag:</strong></li>
 			<li>place <code>[faq faq_tag="tag-slug"]</code> on a post / page</li><br />
 			</ul>
+
 			<p><strong><em>Please note that the shortcode can't handle a query of multiple categories / topics in a single shortcode. However, you can stack them as such:</em></strong></p>
 			<p>...content....<p>
 			<p class="indent"><code>[faq faq_topic="topic-slug-one"]</code></p>
 			<p>...more content....<p>
 			<p class="indent"><code>[faq faq_topic="topic-slug-two"]</code></p>
 			<p>...even more content....<p>
+
+
+
 			<p class="norcross_donate">Like the plugin? Find it useful? Maybe wanna buy me a cup of coffee?</p>
 			<form style="text-align: left;" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank"> <input name="cmd" type="hidden" value="_s-xclick" />
 			<input name="hosted_button_id" type="hidden" value="11085100" />
@@ -606,6 +615,98 @@ class WP_FAQ_Manager
 				}
 				wp_reset_query();
 		$displayfaq .= '</div></div>';
+		endif;	
+		
+		// now send it all back
+		return $displayfaq;
+	}
+
+	/**
+	 * load combo version shortcode
+	 *
+	 * @return WP_FAQ_Manager
+	 */
+
+	public function shortcode_combo($atts, $content = NULL) {
+		extract(shortcode_atts(array(
+			'faq_topic'		=> '',
+			'faq_tag'		=> '',
+			'faq_id'		=> '',
+		), $atts));
+		
+		// no pagination
+
+		// clean up text
+		$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_topic);
+		$faq_tag	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_tag);
+
+		// FAQ query
+		$args = array (
+			'p'					=> ''.$faq_id.'',
+			'faq-topic'			=> ''.$faq_topic.'',
+			'faq-tags'			=> ''.$faq_tag.'',
+			'post_type'			=>	'question',
+			'posts_per_page'	=>	-1,
+			'orderby'			=>	'menu_order',
+			'order'				=>	'ASC',
+		);
+		
+		$wp_query = new WP_Query($args);
+
+		if($wp_query->have_posts()) :
+		
+		$displayfaq = '<div id="faq_block">';
+		$displayfaq .= '<div class="faq_list">';
+			
+			$displayfaq .= '<ul>';
+			while ($wp_query->have_posts()) : $wp_query->the_post();
+			
+			global $post;
+			$title		= get_the_title();
+			$slug		= basename(get_permalink());
+
+			// get options from settings page
+			$faqopts	= get_option('faq_options');
+			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
+
+				$displayfaq .= '<li class="faqlist_question"><a href="#'.$slug.'">'.$title.'</a></li>';
+				
+			
+			endwhile;
+		$displayfaq .= '</ul>';
+		$displayfaq .= '</div>';
+
+		$displayfaq .= '<div class="faq_content">';			
+			// second part of query
+			while ($wp_query->have_posts()) : $wp_query->the_post();
+			
+			global $post;
+			$title		= get_the_title();
+			$slug		= basename(get_permalink());
+
+			// get options from settings page
+			$faqopts	= get_option('faq_options');
+			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
+
+			$content	= get_the_content();
+			$title		= get_the_title();
+			$slug		= basename(get_permalink());
+
+			// get options from settings page
+			$faqopts	= get_option('faq_options');
+			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
+
+				$displayfaq .= '<div class="single_faq">';
+				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq_question">'.$title.'</'.$htype.'>';
+				$displayfaq .= '<div class="faq_answer">'.wpautop($content, true).'</div>';
+				$displayfaq .= '</div>';
+			
+			endwhile;
+
+		$displayfaq .= '</div>';
+		wp_reset_query();
+
+		$displayfaq .= '</div>';
 		endif;	
 		
 		// now send it all back
@@ -982,23 +1083,27 @@ class random_FAQ_Widget extends WP_Widget {
 	function widget( $args, $instance ) {
 		extract( $args, EXTR_SKIP );
 		echo $before_widget;
-		$title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
+		$title		= empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
+		$count		= empty($instance['count']) ? 1 : $instance['count'];
+		$seemore	= empty($instance['seemore']) ? 'See the entire answer' : $instance['seemore'];
+
 		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };
 			$args = array(
-				'post_type' => 'question',
-				'numberposts' => 1,
-				'orderby' => 'rand',
+				'post_type'		=> 'question',
+				'numberposts'	=> $count,
+				'orderby'		=> 'rand',
 				);
 			$faqs = get_posts( $args );
 			
 			foreach( $faqs as $faq ) :
 				$text = wpautop( $faq->post_content );
  			
-				echo '<h4 class="faq_widget_title">' . $faq->post_title . '</h4>';
+				echo '<h5 class="faq_widget_title">'.$faq->post_title.'</h5>';
 				echo wp_trim_words( $text, 15, null );
-				echo '<p><a href="' . get_permalink( $faq->ID ) . '">See the entire answer</a></p>';
+				echo '<p><a href="'.get_permalink($faq->ID).'">'.$seemore.'</a></p>';
         
         	endforeach;
+		wp_reset_query();
 		echo $after_widget;
 		?>
       
@@ -1007,22 +1112,35 @@ class random_FAQ_Widget extends WP_Widget {
     /** @see WP_Widget::update */
     function update($new_instance, $old_instance) {             
     $instance = $old_instance;
-    $instance['title']  = strip_tags($new_instance['title']);
+    $instance['title']		= strip_tags($new_instance['title']);
+    $instance['seemore']	= strip_tags($new_instance['seemore']);
+    $instance['count']		= strip_tags($new_instance['count']);
         return $instance;
     }
 
     /** @see WP_Widget::form */
     function form($instance) {              
         $instance = wp_parse_args( (array) $instance, array( 
-            'title' => 'Frequently Asked Question',
+            'title'		=> 'Frequently Asked Question',
+            'seemore'	=> 'See the entire answer',
+            'count'		=> '1',
             ));
-        $title  = strip_tags($instance['title']);
+        $title		= strip_tags($instance['title']);
+        $seemore	= strip_tags($instance['seemore']);
+        $count		= strip_tags($instance['count']);
         ?>
         <p>
             <label for="<?php echo $this->get_field_id('title'); ?>">Widget Title:</label>
             <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
         </p>
-
+        <p>
+            <label for="<?php echo $this->get_field_id('seemore'); ?>">"See More" text:</label>
+            <input class="widefat" id="<?php echo $this->get_field_id('seemore'); ?>" name="<?php echo $this->get_field_name('seemore'); ?>" type="text" value="<?php echo esc_attr($seemore); ?>" />
+        </p>
+        <p>
+            <label for="<?php echo $this->get_field_id('count'); ?>">Post Count:</label>
+            <input class="small-text" id="<?php echo $this->get_field_id('count'); ?>" name="<?php echo $this->get_field_name('count'); ?>" type="text" value="<?php echo esc_attr($count); ?>" />
+        </p>
 	<?php }
 
 

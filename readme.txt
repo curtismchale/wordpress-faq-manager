@@ -4,7 +4,7 @@ Donate link: http://andrewnorcross.com/donate
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 1.25
+Stable tag: 1.27
 
 Uses custom post types and taxonomies to manage an FAQ section for your site.
 
@@ -53,6 +53,11 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 * To display ALL: 
 	place [faq limit="-1"] on a post / page
 
+* For a list with a title and link to full FAQ: 
+	place [faqlist] on a post / page
+
+* For a list with a group of titles that link to complete content later in page: 
+	place [faqcombo] on a post / page	
 
 == Screenshots ==
 
@@ -61,6 +66,12 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 3. Example of expanded FAQs
 
 == Changelog ==
+
+= 1.27 =
+* fixed bug in Random FAQ widget and and added variable for 'see more' text and number. Props @jupiterwise
+
+= 1.26 =
+* added `faqcombo` shortcode to allow for a list of FAQ titles that inner-link to the content on the page
 
 = 1.25 =
 * added CSS for printing to auto-expand FAQs (does not affect screen)
