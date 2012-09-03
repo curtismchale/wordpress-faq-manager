@@ -991,16 +991,14 @@ class random_FAQ_Widget extends WP_Widget {
 				);
 			$faqs = get_posts( $args );
 			
-			foreach( $faqs as $post ) :	setup_postdata($post);
-				global $post;
-				$text = get_the_content($post->ID);
+			foreach( $faqs as $faq ) :
+				$text = get_the_content( $faq->ID );
  			
-				echo '<h4 class="faq_widget_title">'.get_the_title().'</h4>';
+				echo '<h4 class="faq_widget_title">' . $faq->post_title . '</h4>';
 				echo wp_trim_words( $text, 15, null );
-				echo '<p><a href="'.get_permalink().'">See the entire answer</a></p>';
+				echo '<p><a href="' . get_permalink( $faq->ID ) . '">See the entire answer</a></p>';
         
         	endforeach;
-		wp_reset_query();
 		echo $after_widget;
 		?>
       
