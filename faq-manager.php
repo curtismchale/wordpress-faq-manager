@@ -992,7 +992,7 @@ class random_FAQ_Widget extends WP_Widget {
 			$faqs = get_posts( $args );
 			
 			foreach( $faqs as $faq ) :
-				$text = get_the_content( $faq->ID );
+				$text = wpautop( $faq->post_content );
  			
 				echo '<h4 class="faq_widget_title">' . $faq->post_title . '</h4>';
 				echo wp_trim_words( $text, 15, null );
