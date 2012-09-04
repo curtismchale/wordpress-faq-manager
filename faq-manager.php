@@ -4,7 +4,7 @@ Plugin Name: WordPress FAQ Manager
 Plugin URI: http://andrewnorcross.com/plugins/wordpress-faq-manager/
 Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
 Author: Andrew Norcross
-Version: 1.27
+Version: 1.28
 Requires at least: 3.0
 Author URI: http://andrewnorcross.com
 */
@@ -24,6 +24,9 @@ Author URI: http://andrewnorcross.com
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
+if(!defined('FAQ_BASE'))
+	define('FAQ_BASE', plugin_basename(__FILE__) );
+
 class WP_FAQ_Manager
 {
 
@@ -39,6 +42,7 @@ class WP_FAQ_Manager
 		add_action					( 'admin_init', 					array( $this, 'reg_settings'	) );
 		add_action					( 'the_posts', 						array( $this, 'style_loader'	) );
 		add_action					( 'the_posts', 						array( $this, 'script_loader'	) );
+		add_action					( 'the_posts',						array( $this, 'combo_wrapper'	) );
 		add_action					( 'wp_ajax_save_sort',				array( $this, 'save_sort'		) );
 		add_action					( 'wp_head', 						array( $this, 'seo_head'		), 5  );
 		add_action					( 'wp_head', 						array( $this, 'print_css'		), 999  );
@@ -48,6 +52,7 @@ class WP_FAQ_Manager
 		add_filter					( 'enter_title_here',				array( $this, 'title_text'		) );
 		add_filter					( 'pre_get_posts',					array( $this, 'rss_include'		) );
 		add_filter					( 'faq-caps',						array( $this, 'menu_filter'		), 10, 2);
+		add_filter 					( 'plugin_action_links', 			array( $this, 'quick_link'		), 10, 2 );
 		add_shortcode				( 'faq',							array( $this, 'shortcode_main'	) );
 		add_shortcode				( 'faqlist',						array( $this, 'shortcode_list'	) );
 		add_shortcode				( 'faqcombo',						array( $this, 'shortcode_combo'	) );
@@ -66,6 +71,7 @@ class WP_FAQ_Manager
 			if ('plugins.php' == $pagenow && isset( $_GET['activate'] ) )
 			$wp_rewrite->flush_rules();
 	}
+
 
 	/**
 	 * Declare filters
@@ -101,6 +107,37 @@ class WP_FAQ_Manager
 		add_submenu_page('edit.php?post_type=question', 'Settings', 'Settings', apply_filters( 'faq-caps', 'manage_options', 'settings' ), 'faq-options', array( &$this, 'settings_page' ));
 		add_submenu_page('edit.php?post_type=question', 'Instructions', 'Instructions', apply_filters( 'faq-caps', 'manage_options', 'instructions' ), 'faq-instructions', array( &$this, 'instructions_page' ));
 	}
+
+
+	/**
+	 * show settings link on plugins page
+	 *
+	 * @return WP_FAQ_Manager
+	 */
+
+    public function quick_link( $links, $file ) {
+
+		static $this_plugin;
+		
+		if (!$this_plugin) {
+			$this_plugin = FAQ_BASE;
+		}
+ 
+    	// check to make sure we are on the correct plugin
+    	if ($file == $this_plugin) {
+        	
+        	$settings_url	= menu_page_url( 'faq-options' );
+			$settings_link	= '<a href="'.$settings_url.'">Settings</a>';
+
+        	$instruct_url	= menu_page_url( 'faq-instructions' );
+			$instruct_link	= '<a href="'.$instruct_url.'">How-To</a>';
+        
+        	array_unshift($links, $settings_link, $instruct_link);
+    	}
+ 
+		return $links;
+
+	}	
 
 	/**
 	 * Custom column setup
@@ -257,6 +294,7 @@ class WP_FAQ_Manager
 				$htype		= (isset($faq_options['htype'])		? 'choice'					: 'default' );
 				$paginate	= (isset($faq_options['paginate'])	? $faq_options['paginate']	: 'false' );
 				$expand		= (isset($faq_options['expand'])	? $faq_options['expand']	: 'false' );
+				$scroll		= (isset($faq_options['scroll'])	? $faq_options['scroll']	: 'false' );
 				$css		= (isset($faq_options['css'])		? $faq_options['css']		: 'false' );
 				$rss		= (isset($faq_options['rss'])		? $faq_options['rss']		: 'false' );
 				$noindex	= (isset($faq_options['noindex'])	? $faq_options['noindex']	: 'false' );
@@ -285,6 +323,11 @@ class WP_FAQ_Manager
 				<p>
 				    <input type="checkbox" name="faq_options[expand]" id="faq_expand" value="true" <?php checked( $expand, 'true' ); ?> />
 				    <label for="faq_options[expand]" rel="checkbox">Include jQuery collapse / expand</label>
+				</p>
+
+				<p>
+				    <input type="checkbox" name="faq_options[scroll]" id="faq_scroll" value="true" <?php checked( $scroll, 'true' ); ?> />
+				    <label for="faq_options[scroll]" rel="checkbox">Include jQuery scrolling for Combo shortcode</label>
 				</p>
 
 				<p>
@@ -669,7 +712,7 @@ class WP_FAQ_Manager
 			$faqopts	= get_option('faq_options');
 			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
 
-				$displayfaq .= '<li class="faqlist_question"><a href="#'.$slug.'">'.$title.'</a></li>';
+				$displayfaq .= '<li class="faqlist_question"><a href="#'.$slug.'" rel="'.$slug.'">'.$title.'</a></li>';
 				
 			
 			endwhile;
@@ -696,7 +739,7 @@ class WP_FAQ_Manager
 			$faqopts	= get_option('faq_options');
 			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
 
-				$displayfaq .= '<div class="single_faq">';
+				$displayfaq .= '<div class="single_faq" rel="'.$slug.'">';
 				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq_question">'.$title.'</'.$htype.'>';
 				$displayfaq .= '<div class="faq_answer">'.wpautop($content, true).'</div>';
 				$displayfaq .= '</div>';
@@ -889,6 +932,44 @@ class WP_FAQ_Manager
 	}
 
 	/**
+	 * Check for FAQCombo shortcode and call related JS
+	 *
+	 * @return WP_FAQ_Manager
+	 */
+
+	public function combo_wrapper($posts) {
+
+		$faqopts = get_option('faq_options');
+
+		if(!isset($faqopts['scroll']) )
+			return $posts;
+
+		if ( empty($posts) )
+			return $posts;
+		
+		// false because we have to search through the posts first
+		$found = false;
+		 
+		// search through each post
+		foreach ($posts as $post) {
+			// check the post content for the short code
+			$content	= $post->post_content;
+			if ( preg_match('/faqcombo(.*)/', $content) ) // we have found a post with the short code
+				$found = true;
+				
+				// stop the search
+				break;
+		}
+		 
+		if ($found == true )
+			$this->scroll_script();
+		
+
+		return $posts;
+	}
+
+
+	/**
 	 * load front-end JS
 	 *
 	 * @return WP_FAQ_Manager
@@ -998,6 +1079,11 @@ class WP_FAQ_Manager
 
 	}
 
+	public function scroll_script() {
+
+		wp_enqueue_script( 'faq-scroll', plugins_url('/inc/js/faq.scroll.js', __FILE__) , array('jquery'), null, true );
+
+	}
 
 		
 
