@@ -4,7 +4,7 @@ Donate link: http://andrewnorcross.com/donate
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 3.0
 Tested up to: 3.4.1
-Stable tag: 1.28
+Stable tag: 1.281
 
 Uses custom post types and taxonomies to manage an FAQ section for your site.
 
@@ -66,6 +66,9 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 3. Example of expanded FAQs
 
 == Changelog ==
+
+= 1.281 =
+* bugfix on plugin page menu links
 
 = 1.28 =
 * added optional jQuery smooth scrolling effect for FAQ Combo shortcode

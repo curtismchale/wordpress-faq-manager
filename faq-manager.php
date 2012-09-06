@@ -4,7 +4,7 @@ Plugin Name: WordPress FAQ Manager
 Plugin URI: http://andrewnorcross.com/plugins/wordpress-faq-manager/
 Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
 Author: Andrew Norcross
-Version: 1.28
+Version: 1.281
 Requires at least: 3.0
 Author URI: http://andrewnorcross.com
 */
@@ -126,11 +126,8 @@ class WP_FAQ_Manager
     	// check to make sure we are on the correct plugin
     	if ($file == $this_plugin) {
         	
-        	$settings_url	= menu_page_url( 'faq-options' );
-			$settings_link	= '<a href="'.$settings_url.'">Settings</a>';
-
-        	$instruct_url	= menu_page_url( 'faq-instructions' );
-			$instruct_link	= '<a href="'.$instruct_url.'">How-To</a>';
+			$settings_link	= '<a href="'.menu_page_url( 'faq-options', 0 ).'">Settings</a>';
+			$instruct_link	= '<a href="'.menu_page_url( 'faq-instructions', 0 ).'">How-To</a>';
         
         	array_unshift($links, $settings_link, $instruct_link);
     	}
