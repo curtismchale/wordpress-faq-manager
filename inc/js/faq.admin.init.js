@@ -23,6 +23,51 @@ jQuery(document).ready(function($) {
 		this.value = this.value.replace(/\d+/g, '');
 	});
 
+
+//********************************************************
+// show / hide the speed option
+//********************************************************
+
+	$('input#faq_expand').each(function() { // for initial load
+		var checkval = $(this).is(':checked');
+
+		if (checkval === true)
+			$('p.speedshow').show();
+
+		if (checkval === false)
+			$('p.speedshow').hide();
+
+	});
+
+
+	$('input#faq_expand').change( function() { // for value change
+		var checkval = $(this).is(':checked');
+
+		if (checkval === true)
+			$('p.speedshow').slideToggle(200);
+
+		if (checkval === false)
+			$('p.speedshow').hide(200);
+		
+	});
+
+//********************************************************
+// remove non-numeric from speed
+//********************************************************
+
+	$('input#faq_exspeed').keyup(function () {
+		var numcheck = $.isNumeric($(this).val() );
+
+		if(numcheck === false) {
+			this.value = this.value.replace(/[^0-9\.]/g,'');
+			$(this).next('span.warning').remove();
+			$(this).next('label').after('<span class="warning">No non-numeric characters allowed</span>');
+		}
+
+		if(numcheck === true)
+			$(this).next('span.warning').remove();
+	});
+
 //********************************************************
 // trigger checkbox on label
 //********************************************************

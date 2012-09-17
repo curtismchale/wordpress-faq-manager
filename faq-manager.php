@@ -4,7 +4,7 @@ Plugin Name: WordPress FAQ Manager
 Plugin URI: http://andrewnorcross.com/plugins/wordpress-faq-manager/
 Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
 Author: Andrew Norcross
-Version: 1.281
+Version: 1.29
 Requires at least: 3.0
 Author URI: http://andrewnorcross.com
 */
@@ -53,6 +53,7 @@ class WP_FAQ_Manager
 		add_filter					( 'pre_get_posts',					array( $this, 'rss_include'		) );
 		add_filter					( 'faq-caps',						array( $this, 'menu_filter'		), 10, 2);
 		add_filter 					( 'plugin_action_links', 			array( $this, 'quick_link'		), 10, 2 );
+		add_filter					( 'post_class', 					array( $this, 'faq_post_class'	) );
 		add_shortcode				( 'faq',							array( $this, 'shortcode_main'	) );
 		add_shortcode				( 'faqlist',						array( $this, 'shortcode_list'	) );
 		add_shortcode				( 'faqcombo',						array( $this, 'shortcode_combo'	) );
@@ -261,6 +262,22 @@ class WP_FAQ_Manager
 
 	}
 
+	/**
+	 * Add 'normal' post classes for themes with narrow CSS
+	 *
+	 * @return WP_FAQ_Manager
+	 */
+
+	public function faq_post_class($classes) {
+
+		if (is_singular('question') || is_post_type_archive('question') || is_tax('faq-topic') || is_tax('faq-tags')) :
+			$classes[] = 'post';
+			$classes[] = 'type-post';
+		endif;
+		
+		return $classes;
+	
+	}
 
 	/**
 	 * Display main options page structure
@@ -268,7 +285,9 @@ class WP_FAQ_Manager
 	 * @return WP_FAQ_Manager
 	 */
 	 
-	public function settings_page() { 
+	public function settings_page() {
+		if (!current_user_can('manage_options') )
+			return;
 		?>
 	
 		<div class="wrap">
@@ -277,8 +296,8 @@ class WP_FAQ_Manager
         
 	        <div class="faq_options">
             	<div class="faq_form_text">
-            	<p>Options relating to the FAQ manager</p>
-                <hr />
+            	<p>Options relating to the FAQ manager. Looking for some help or more information? Please read through the <a href="<?php echo menu_page_url( 'faq-instructions', 0 ); ?>">Instructions page</a>.</p>
+                
                 </div>
                
 
@@ -288,20 +307,21 @@ class WP_FAQ_Manager
                 settings_fields( 'faq_options' );
 				$faq_options	= get_option('faq_options');
 
-				$htype		= (isset($faq_options['htype'])		? 'choice'					: 'default' );
-				$paginate	= (isset($faq_options['paginate'])	? $faq_options['paginate']	: 'false' );
-				$expand		= (isset($faq_options['expand'])	? $faq_options['expand']	: 'false' );
-				$scroll		= (isset($faq_options['scroll'])	? $faq_options['scroll']	: 'false' );
-				$css		= (isset($faq_options['css'])		? $faq_options['css']		: 'false' );
-				$rss		= (isset($faq_options['rss'])		? $faq_options['rss']		: 'false' );
-				$noindex	= (isset($faq_options['noindex'])	? $faq_options['noindex']	: 'false' );
-				$nofollow	= (isset($faq_options['nofollow'])	? $faq_options['nofollow']	: 'false' );
-				$noarchive	= (isset($faq_options['noarchive'])	? $faq_options['noarchive']	: 'false' );
-				$archtext	= (isset($faq_options['arch'])		? $faq_options['arch']		: 'questions' );
+				$htype		= (isset($faq_options['htype'])		? 'choice'					: 'default'		);
+				$paginate	= (isset($faq_options['paginate'])	? $faq_options['paginate']	: 'false'		);
+				$expand		= (isset($faq_options['expand'])	? $faq_options['expand']	: 'false'		);
+				$exspeed	= (isset($faq_options['exspeed'])	? $faq_options['exspeed']	: '200'			);
+				$scroll		= (isset($faq_options['scroll'])	? $faq_options['scroll']	: 'false'		);
+				$css		= (isset($faq_options['css'])		? $faq_options['css']		: 'false'		);
+				$rss		= (isset($faq_options['rss'])		? $faq_options['rss']		: 'false'		);
+				$noindex	= (isset($faq_options['noindex'])	? $faq_options['noindex']	: 'false'		);
+				$nofollow	= (isset($faq_options['nofollow'])	? $faq_options['nofollow']	: 'false'		);
+				$noarchive	= (isset($faq_options['noarchive'])	? $faq_options['noarchive']	: 'false'		);
+				$archtext	= (isset($faq_options['arch'])		? $faq_options['arch']		: 'questions'	);
 				?>
 
 				<p>
-					<select class="faq_htype <?php echo $htype?>" name="faq_options[htype]" id="faq_htype">
+					<select class="faq_htype <?php echo $htype; ?>" name="faq_options[htype]" id="faq_htype">
 		            <option value="h1" <?php selected( $faq_options['htype'], 'h1' ); ?>>H1</option>
 					<option value="h2" <?php selected( $faq_options['htype'], 'h2' ); ?>>H2</option>
 					<option value="h3" <?php selected( $faq_options['htype'], 'h3' ); ?>>H3</option>
@@ -322,6 +342,11 @@ class WP_FAQ_Manager
 				    <label for="faq_options[expand]" rel="checkbox">Include jQuery collapse / expand</label>
 				</p>
 
+				<p class="speedshow" style="display:none;">
+					<input type="text" name="faq_options[exspeed]" id="faq_exspeed" size="20" class="small-text" value="<?php echo sanitize_title($exspeed); ?>" />
+					<label for="faq_options[exspeed]">Expand / collapse speed <em><small>(in milliseconds, i.e. 200 or 1000)</small></em></label>
+				</p>
+
 				<p>
 				    <input type="checkbox" name="faq_options[scroll]" id="faq_scroll" value="true" <?php checked( $scroll, 'true' ); ?> />
 				    <label for="faq_options[scroll]" rel="checkbox">Include jQuery scrolling for Combo shortcode</label>
@@ -334,7 +359,7 @@ class WP_FAQ_Manager
 
 				<p>
 				    <input type="checkbox" name="faq_options[rss]" id="faq_rss" value="true" <?php checked( $rss, 'true' ); ?> />
-				    <label for="faq_options[rss]" rel="checkbox">Include in main RSS feed</label>
+				    <label for="faq_options[rss]" rel="checkbox">Include FAQs in main RSS feed</label>
 				</p>
 
 				<h3>SEO Options</h3>
@@ -355,8 +380,8 @@ class WP_FAQ_Manager
 				</p>				
 
 				<p>
-					<input name="faq_options[arch]" id="faq_arch" type="text" size="25" value="<?php echo sanitize_title($archtext); ?>" />
-					<label for="faq_options[arch]">Desired page slug for archiving (all lower case, no capitals or spaces)</label>
+					<input type="text" name="faq_options[arch]" id="faq_arch" size="20" value="<?php echo sanitize_title($archtext); ?>" />
+					<label for="faq_options[arch]">Desired page slug for archiving <em><small>(all lower case, no capitals or spaces)</small></em></label>
 				</p>
 
 
@@ -387,8 +412,6 @@ class WP_FAQ_Manager
 		<div class="wrap">
 	    	<div id="icon-faq-admin" class="icon32"><br /></div>
 		    <h2>FAQ Instructions</h2>
-			<p>A brief overview of the available options / shortcodes</p>
-			<hr />
     
 			<p>The FAQ Manager plugin uses a combination of custom post types, meta fields, and taxonomies. The plugin will automatically create single posts using your existing permalink structure. And the FAQ categories and tags can be added to your menu using the WP Menu Manager</p>
 
@@ -531,26 +554,26 @@ class WP_FAQ_Manager
 		$wp_query = new WP_Query($args);
 
 		if($wp_query->have_posts()) :
+
+		// get options from settings page
+		$faqopts	= get_option('faq_options');
+		$exspeed	= (isset($faqopts['exspeed'])									? $faqopts['exspeed']	: '200'	);
+		$expand_a	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand_faq'			: ''	);
+		$expand_b	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand_title'		: ''	);
+		$htype		= (isset($faqopts['htype'])										? $faqopts['htype']		: 'h3'	);
 		
-		$displayfaq = '<div id="faq_block"><div class="faq_list">';
+		$displayfaq = '<div id="faq_block"><div class="faq_list" data-speed="'.$exspeed.'">';
 			
 			while ($wp_query->have_posts()) : $wp_query->the_post();
 			
 			global $post;
-			$content	= get_the_content();
-			$title		= get_the_title();
-			$slug		= basename(get_permalink());
-
-			// get options from settings page
-			$faqopts	= get_option('faq_options');
-			$expand_a	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true' ? ' expand_faq'  : '' );
-			$expand_b	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true' ? ' expand_title'  : '' );
-			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
-
+				$content	= get_the_content();
+				$title		= get_the_title();
+				$slug		= basename(get_permalink());
 
 				$displayfaq .= '<div class="single_faq'.$expand_a.'">';
 				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq_question'.$expand_b.'">'.$title.'</'.$htype.'>';
-				$displayfaq .= '<div class="faq_answer">'.wpautop($content, true).'</div>';
+				$displayfaq .= '<div class="faq_answer" rel="'.$slug.'">'.wpautop($content, true).'</div>';
 				$displayfaq .= '</div>';
 			
 			endwhile;

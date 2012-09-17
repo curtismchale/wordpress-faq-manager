@@ -1,4 +1,4 @@
-jQuery(document).ready(function ($) {
+jQuery(document).ready(function($) {
 
 //********************************************************
 // expand / collapse
@@ -6,12 +6,19 @@ jQuery(document).ready(function ($) {
 
 	function boom_goes_the_dynamite() {
 
+		var speed_v = jQuery('div.faq_list').data('speed');
+		speed		= (speed_v)		? speed_v		: 200;
+
 		jQuery('div.expand_faq').each(function() {
 			jQuery(this).find('div.faq_answer').hide();
 		});
 
 		jQuery('.expand_title').click (function () {
-			jQuery(this).next('div.faq_answer').slideToggle(200);
+			var faq = jQuery(this).attr('id');
+			console.log(faq);
+			jQuery('div.faq_list').find('div.faq_answer[rel="' + faq + '"]').slideToggle(speed);
+			jQuery('div.faq_list').find('div.faq_answer').not('[rel="' + faq + '"]').hide(speed);
+//			jQuery(this).next('div.faq_answer').slideToggle(200);
 		});
 
 	}

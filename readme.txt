@@ -3,8 +3,8 @@ Contributors: norcross
 Donate link: http://andrewnorcross.com/donate
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 3.0
-Tested up to: 3.4.1
-Stable tag: 1.281
+Tested up to: 3.5
+Stable tag: 1.29
 
 Uses custom post types and taxonomies to manage an FAQ section for your site.
 
@@ -66,6 +66,16 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 3. Example of expanded FAQs
 
 == Changelog ==
+
+= 1.29 =
+* modified expand / collapse to close all other FAQs when one is opened
+* added expand / collapse speed option
+
+= 1.283 =
+* added standard post classes for taxonomy archives
+
+= 1.282 =
+* added standard post classes for themes with narrow CSS
 
 = 1.281 =
 * bugfix on plugin page menu links
