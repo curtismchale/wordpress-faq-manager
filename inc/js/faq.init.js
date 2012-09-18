@@ -6,19 +6,19 @@ jQuery(document).ready(function($) {
 
 	function boom_goes_the_dynamite() {
 
-		var speed_v = jQuery('div.faq_list').data('speed');
+		var speed_v = jQuery('div.faq-list').data('speed');
 		speed		= (speed_v)		? speed_v		: 200;
 
-		jQuery('div.expand_faq').each(function() {
-			jQuery(this).find('div.faq_answer').hide();
+		jQuery('div.expand-faq').each(function() {
+			jQuery(this).find('div.faq-answer').hide();
 		});
 
-		jQuery('.expand_title').click (function () {
+		jQuery('.expand-title').click (function () {
 			var faq = jQuery(this).attr('id');
 			console.log(faq);
-			jQuery('div.faq_list').find('div.faq_answer[rel="' + faq + '"]').slideToggle(speed);
-			jQuery('div.faq_list').find('div.faq_answer').not('[rel="' + faq + '"]').hide(speed);
-//			jQuery(this).next('div.faq_answer').slideToggle(200);
+			jQuery('div.faq-list').find('div.faq-answer[rel="' + faq + '"]').slideToggle(speed);
+			jQuery('div.faq-list').find('div.faq-answer').not('[rel="' + faq + '"]').hide(speed);
+//			jQuery(this).next('div.faq-answer').slideToggle(200);
 		});
 
 	}
@@ -28,11 +28,11 @@ jQuery(document).ready(function($) {
 //********************************************************
 
 	function show_me_some_more() {
-		jQuery('p.faq_nav a').live('click', function(e){
+		jQuery('p.faq-nav a').live('click', function(e){
 			e.preventDefault();
 			var link = jQuery(this).attr('href');
-			jQuery('div#faq_block').fadeOut(500).load(link + ' div.faq_list', function() {
-				jQuery('div#faq_block').fadeIn(500);
+			jQuery('div#faq-block').fadeOut(500).load(link + ' div.faq-list', function() {
+				jQuery('div#faq-block').fadeIn(500);
 				// reset the hide
 				boom_goes_the_dynamite();
 			});

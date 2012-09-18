@@ -4,7 +4,9 @@ Donate link: http://andrewnorcross.com/donate
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 3.0
 Tested up to: 3.5
-Stable tag: 1.29
+Stable tag: 1.30
+License: GPLv2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Uses custom post types and taxonomies to manage an FAQ section for your site.
 
@@ -30,34 +32,40 @@ It uses the custom post type feature to create a dedicated FAQ section in your W
 Each FAQ acts like a "post". You can assign your own categories (called topics) or tags and organize as you see fit. You can also use shortcodes to place them on any page as follows:
 
 * For the complete list: 
-	place [faq] on a post / page
+	place `[faq]` on a post / page
 	
 * For a single FAQ: 
-	place [faq faq_id="ID"] on a post / page
+	place `[faq faq_id="ID"]` on a post / page
 	
 * List all from a single FAQ topic category: 
-	place [faq faq_topic="topic-slug"] on a post / page
+	place `[faq faq_topic="topic-slug"]` on a post / page
 	
 * List all from a single FAQ tag: 
-	place [faq faq_tag="tag-slug"] on a post / page
+	place `[faq faq_tag="tag-slug"]` on a post / page
 	
 Please note that the shortcode can't handle a query of multiple categories in a single shortcode. However, you can stack them as such:
 	...content....
-	[faq faq_topic="topic-slug-one"]
-	[faq faq_tag="tag-slug-two"]
+	`[faq faq_topic="topic-slug-one"]`
+	`[faq faq_tag="tag-slug-two"]`
 
 The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order). 
 * To display only 5: 
-	place [faq limit="5"] on a post / page
+	place `[faq limit="5"]` on a post / page
 
 * To display ALL: 
-	place [faq limit="-1"] on a post / page
+	place `[faq limit="-1"]` on a post / page
 
 * For a list with a title and link to full FAQ: 
-	place [faqlist] on a post / page
+	place `[faqlist]` on a post / page
 
 * For a list with a group of titles that link to complete content later in page: 
-	place [faqcombo] on a post / page	
+	place `[faqcombo]` on a post / page	
+
+* For a list of taxonomies (topics or tags) with a link to their respective archive page: 
+	place `[faqtaxlist type="topics"]` or `[faqtaxlist type="tags"]` on a post / page	
+
+* For a list of taxonomies (topics or tags) with their description: 
+	place `[faqtaxlist type="topics (or tags)" desc="true"]` on a post / page	
 
 == Screenshots ==
 
@@ -66,6 +74,11 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 3. Example of expanded FAQs
 
 == Changelog ==
+
+= 1.30 =
+* added taxonomy list shortcode
+* revamped settings and instructions page
+* CSS cleanup
 
 = 1.29 =
 * modified expand / collapse to close all other FAQs when one is opened
@@ -163,6 +176,9 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 * Initial release
 
 == Upgrade Notice ==
+
+= 1.3 =
+* All the markup changed from using underscores to dashes, i.e. `<div class="faq_list">` to `<div class="faq-list">`. If you have any custom CSS, you will need to update it.
 
 = 1.2 =
 * Note: you MUST re-save your settings based on changed made.

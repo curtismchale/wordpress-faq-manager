@@ -10,10 +10,10 @@ jQuery(document).ready(function($) {
 // set default choice on dropdown
 //********************************************************
 
-	var htype = $('div.faq_form_options select#faq_htype').hasClass('default');
+	var htype = $('div.faq-form-options select#faq_htype').hasClass('default');
 	
 	if (htype === true)
-		$('div.faq_form_options select.faq_htype option[value="h3"]').prop('selected',true);
+		$('div.faq-form-options select.faq_htype option[value="h3"]').prop('selected',true);
 
 //********************************************************
 // remove caps and other junk from slug
@@ -72,7 +72,7 @@ jQuery(document).ready(function($) {
 // trigger checkbox on label
 //********************************************************
 
-	$('div.faq_form_options label[rel="checkbox"]').each(function() {
+	$('div.faq-form-options label[rel="checkbox"]').each(function() {
 		$(this).click(function() {
 
 			var check_me = $(this).prev('input');

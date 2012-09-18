@@ -4,7 +4,7 @@ Plugin Name: WordPress FAQ Manager
 Plugin URI: http://andrewnorcross.com/plugins/wordpress-faq-manager/
 Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
 Author: Andrew Norcross
-Version: 1.29
+Version: 1.3
 Requires at least: 3.0
 Author URI: http://andrewnorcross.com
 */
@@ -57,6 +57,7 @@ class WP_FAQ_Manager
 		add_shortcode				( 'faq',							array( $this, 'shortcode_main'	) );
 		add_shortcode				( 'faqlist',						array( $this, 'shortcode_list'	) );
 		add_shortcode				( 'faqcombo',						array( $this, 'shortcode_combo'	) );
+		add_shortcode				( 'faqtaxlist',						array( $this, 'shortcode_taxls'	) );
 
 	}
 
@@ -290,18 +291,16 @@ class WP_FAQ_Manager
 			return;
 		?>
 	
-		<div class="wrap">
-    	<div id="icon-faq-admin" class="icon32"><br /></div>
-		<h2>FAQ Manager Settings</h2>
-        
-	        <div class="faq_options">
-            	<div class="faq_form_text">
-            	<p>Options relating to the FAQ manager. Looking for some help or more information? Please read through the <a href="<?php echo menu_page_url( 'faq-instructions', 0 ); ?>">Instructions page</a>.</p>
-                
-                </div>
-               
+        <div class="wrap">
+        	<div id="icon-faq-admin" class="icon32"><br /></div>
+        	<h2><?php _e('FAQ Manager Settings') ?></h2>
+			<div id="poststuff" class="metabox-holder has-right-sidebar">
 
-                <div class="faq_form_options">
+			<?php
+			echo $this->settings_side();
+			echo $this->settings_open();
+			?>
+	            
 	            <form method="post" action="options.php">
 			    <?php
                 settings_fields( 'faq_options' );
@@ -319,7 +318,8 @@ class WP_FAQ_Manager
 				$noarchive	= (isset($faq_options['noarchive'])	? $faq_options['noarchive']	: 'false'		);
 				$archtext	= (isset($faq_options['arch'])		? $faq_options['arch']		: 'questions'	);
 				?>
-
+				
+				<h2 class="inst-title"><?php _e('Standard Options') ?></h2>
 				<p>
 					<select class="faq_htype <?php echo $htype; ?>" name="faq_options[htype]" id="faq_htype">
 		            <option value="h1" <?php selected( $faq_options['htype'], 'h1' ); ?>>H1</option>
@@ -362,7 +362,7 @@ class WP_FAQ_Manager
 				    <label for="faq_options[rss]" rel="checkbox">Include FAQs in main RSS feed</label>
 				</p>
 
-				<h3>SEO Options</h3>
+				<h2 class="inst-title"><?php _e('SEO Options') ?></h2>
 
 				<p>
 				    <input type="checkbox" name="faq_options[noindex]" id="faq_noindex" value="true" <?php checked( $noindex, 'true' ); ?> />
@@ -384,18 +384,18 @@ class WP_FAQ_Manager
 					<label for="faq_options[arch]">Desired page slug for archiving <em><small>(all lower case, no capitals or spaces)</small></em></label>
 				</p>
 
-
+				
     			<!-- submit -->
-	    		<p class="submit"><input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" /></p>
+	    		<p id="faq-submit" class="submit"><input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" /></p>
 
-				<p class="description"><strong>Note:</strong> You may need to flush your permalinks after changing settings. <a href="<?php echo admin_url( 'options-permalink.php'); ?>">Go to your Permalink Settings here</a></p>
+				<p id="faq-desc" class="description"><strong>Note:</strong> You may need to flush your permalinks after changing settings. <a href="<?php echo admin_url( 'options-permalink.php'); ?>">Go to your Permalink Settings here</a></p>
 
 				</form>
-                </div>
-    
-            </div>
 
-        </div>    
+	<?php echo $this->settings_close(); ?>
+
+	</div>
+	</div>   
 
 	
 	<?php }
@@ -408,14 +408,19 @@ class WP_FAQ_Manager
 
 	public function instructions_page() {
 		?>
-		
-		<div class="wrap">
-	    	<div id="icon-faq-admin" class="icon32"><br /></div>
-		    <h2>FAQ Instructions</h2>
+        <div class="wrap">
+        	<div id="icon-faq-admin" class="icon32"><br /></div>
+        	<h2><?php _e('FAQ Instructions') ?></h2>
+			<div id="poststuff" class="metabox-holder has-right-sidebar">
+
+			<?php
+			echo $this->settings_side();
+			echo $this->settings_open();
+			?>
     
 			<p>The FAQ Manager plugin uses a combination of custom post types, meta fields, and taxonomies. The plugin will automatically create single posts using your existing permalink structure. And the FAQ categories and tags can be added to your menu using the WP Menu Manager</p>
 
-			<h3>Shortcodes</h3>
+			<h2 class="inst-title">Shortcodes</h2>
 			<p>The plugin also has the option of using shortcodes. To use them, follow the syntax accordingly in the HTML tab:</p>
 
 			<ul class="faqinfo">
@@ -425,10 +430,13 @@ class WP_FAQ_Manager
 			<li>place <code>[faqlist]</code> on a post / page</li><br />
 			<li><strong>For a list with a group of titles that link to complete content later in page:</strong></li>
 			<li>place <code>[faqcombo]</code> on a post / page</li><br />
-			<li><em><strong>Please note:</strong> that the combo shortcode will not recognize the pagination and expand / collapse:</em></li><br />			
+			<li><strong>For a list of taxonomy titles that link to the related archive page:</strong></li>
+			<li>place <code>[faqtaxlist type="topics"]</code> or <code>[faqtaxlist type="tags"]</code> on a post / page</li>
+			<li>Show optional description: <code>[faqtaxlist type="topics" desc="true"]</code></li><br />
+			<li><em><strong>Please note:</strong> that the combo and taxonomy list shortcodes will not recognize the pagination and expand / collapse:</em></li><br />			
 			</ul>
 
-			<h3>The following options apply to all the <code>shortcode</code> types</h3>
+			<h2 class="inst-title">The following options apply to all the <code>shortcode</code> types</h2>
 
 			<p>The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).</p>
 			<ul class="faqinfo">
@@ -455,15 +463,10 @@ class WP_FAQ_Manager
 			<p>...even more content....<p>
 
 
+	<?php echo $this->settings_close(); ?>
 
-			<p class="norcross_donate">Like the plugin? Find it useful? Maybe wanna buy me a cup of coffee?</p>
-			<form style="text-align: left;" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank"> <input name="cmd" type="hidden" value="_s-xclick" />
-			<input name="hosted_button_id" type="hidden" value="11085100" />
-			<input alt="PayPal - The safer, easier way to pay online!" name="submit" src="https://www.paypal.com/en_US/i/btn/btn_donateCC_LG.gif" type="image" />
-			<img src="https://www.paypal.com/en_US/i/scr/pixel.gif" border="0" alt="" width="1" height="1" />
-			</form>
-
-		</div>
+	</div>
+	</div>  
 
 	<?php }	
 
@@ -558,11 +561,11 @@ class WP_FAQ_Manager
 		// get options from settings page
 		$faqopts	= get_option('faq_options');
 		$exspeed	= (isset($faqopts['exspeed'])									? $faqopts['exspeed']	: '200'	);
-		$expand_a	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand_faq'			: ''	);
-		$expand_b	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand_title'		: ''	);
+		$expand_a	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-faq'			: ''	);
+		$expand_b	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-title'		: ''	);
 		$htype		= (isset($faqopts['htype'])										? $faqopts['htype']		: 'h3'	);
 		
-		$displayfaq = '<div id="faq_block"><div class="faq_list" data-speed="'.$exspeed.'">';
+		$displayfaq = '<div id="faq-block"><div class="faq-list" data-speed="'.$exspeed.'">';
 			
 			while ($wp_query->have_posts()) : $wp_query->the_post();
 			
@@ -571,16 +574,16 @@ class WP_FAQ_Manager
 				$title		= get_the_title();
 				$slug		= basename(get_permalink());
 
-				$displayfaq .= '<div class="single_faq'.$expand_a.'">';
-				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq_question'.$expand_b.'">'.$title.'</'.$htype.'>';
-				$displayfaq .= '<div class="faq_answer" rel="'.$slug.'">'.wpautop($content, true).'</div>';
+				$displayfaq .= '<div class="single-faq'.$expand_a.'">';
+				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq-question'.$expand_b.'">'.$title.'</'.$htype.'>';
+				$displayfaq .= '<div class="faq-answer" rel="'.$slug.'">'.wpautop($content, true).'</div>';
 				$displayfaq .= '</div>';
 			
 			endwhile;
 
 				if (isset($faqopts['paginate'])) {
 					// pagination links
-					$displayfaq .= '<p class="faq_nav">';
+					$displayfaq .= '<p class="faq-nav">';
 					$displayfaq .= paginate_links(array(
 					  'base'	=> $old_link . '%_%',
 					  'format'	=> '?faq_page=%#%',
@@ -641,7 +644,7 @@ class WP_FAQ_Manager
 
 		if($wp_query->have_posts()) :
 		
-		$displayfaq = '<div id="faq_block"><div class="faq_list">';
+		$displayfaq = '<div id="faq-block"><div class="faq-list">';
 			
 			$displayfaq .= '<ul>';
 			while ($wp_query->have_posts()) : $wp_query->the_post();
@@ -655,7 +658,7 @@ class WP_FAQ_Manager
 			$faqopts	= get_option('faq_options');
 			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
 
-				$displayfaq .= '<li class="faqlist_question"><a href="'.$link.'" title="Permanent link to '.$title.'" >'.$title.'</a></li>';
+				$displayfaq .= '<li class="faqlist-question"><a href="'.$link.'" title="Permanent link to '.$title.'" >'.$title.'</a></li>';
 				
 			
 			endwhile;
@@ -663,7 +666,7 @@ class WP_FAQ_Manager
 			
 				if (isset($faqopts['paginate'])) {
 					// pagination links
-					$displayfaq .= '<p class="faq_nav">';
+					$displayfaq .= '<p class="faq-nav">';
 					$displayfaq .= paginate_links(array(
 						'base'		=> $old_link . '%_%',
 						'format'	=> '?faq_page=%#%',
@@ -718,8 +721,8 @@ class WP_FAQ_Manager
 
 		if($wp_query->have_posts()) :
 		
-		$displayfaq = '<div id="faq_block">';
-		$displayfaq .= '<div class="faq_list">';
+		$displayfaq = '<div id="faq-block">';
+		$displayfaq .= '<div class="faq-list">';
 			
 			$displayfaq .= '<ul>';
 			while ($wp_query->have_posts()) : $wp_query->the_post();
@@ -732,14 +735,14 @@ class WP_FAQ_Manager
 			$faqopts	= get_option('faq_options');
 			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
 
-				$displayfaq .= '<li class="faqlist_question"><a href="#'.$slug.'" rel="'.$slug.'">'.$title.'</a></li>';
+				$displayfaq .= '<li class="faqlist-question"><a href="#'.$slug.'" rel="'.$slug.'">'.$title.'</a></li>';
 				
 			
 			endwhile;
 		$displayfaq .= '</ul>';
 		$displayfaq .= '</div>';
 
-		$displayfaq .= '<div class="faq_content">';			
+		$displayfaq .= '<div class="faq-content">';			
 			// second part of query
 			while ($wp_query->have_posts()) : $wp_query->the_post();
 			
@@ -755,13 +758,9 @@ class WP_FAQ_Manager
 			$title		= get_the_title();
 			$slug		= basename(get_permalink());
 
-			// get options from settings page
-			$faqopts	= get_option('faq_options');
-			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
-
-				$displayfaq .= '<div class="single_faq" rel="'.$slug.'">';
-				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq_question">'.$title.'</'.$htype.'>';
-				$displayfaq .= '<div class="faq_answer">'.wpautop($content, true).'</div>';
+				$displayfaq .= '<div class="single-faq" rel="'.$slug.'">';
+				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq-question">'.$title.'</'.$htype.'>';
+				$displayfaq .= '<div class="faq-answer">'.wpautop($content, true).'</div>';
 				$displayfaq .= '</div>';
 			
 			endwhile;
@@ -771,6 +770,56 @@ class WP_FAQ_Manager
 
 		$displayfaq .= '</div>';
 		endif;	
+		
+		// now send it all back
+		return $displayfaq;
+	}
+
+	/**
+	 * load taxonomy list shortcode
+	 *
+	 * @return WP_FAQ_Manager
+	 */
+
+	public function shortcode_taxls($atts, $content = NULL) {
+		extract(shortcode_atts(array(
+			'type'		=> 'topics',
+			'desc'		=> '',
+		), $atts));
+
+		// check for type and description variable
+		$type_check	= (isset($type) && $type == 'tags' ) ? 'faq-tags' : 'faq-topic';
+		$disp_desc	= (isset($desc) && $desc == 'true' ) ? true : false;
+
+		// get list of terms
+		$taxitems	= get_terms( $type_check );
+		$countitems	= count($taxitems);
+
+ 		// only show if we have something
+ 		if ( $countitems == 0 )
+ 			return;
+
+		// get options from settings page
+		$faqopts	= get_option('faq_options');
+		$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
+
+		// begin build
+		$displayfaq = '<div id="faq-block" class="faq-taxonomy">';
+
+		// now loop through the topics
+		foreach ( $taxitems as $item ) :
+			$displayfaq .= '<div class="faq-item">';
+			$displayfaq .= '<'.$htype.'><a href="'.get_term_link($item->slug, $type_check).'">'.$item->name.'</a></'.$htype.'>';
+
+			// optional description
+			if ($disp_desc == true && !empty($item->description) )
+				$displayfaq .= '<p>'.$item->description.'</p>';
+			
+			$displayfaq .= '</div>';
+		endforeach;
+			
+
+		$displayfaq .= '</div>';
 		
 		// now send it all back
 		return $displayfaq;
@@ -1105,7 +1154,72 @@ class WP_FAQ_Manager
 
 	}
 
-		
+    /**
+     * Some extra stuff for the settings page
+     *
+     * this is just to keep the area cleaner 
+     *
+     * @return WP_FAQ_Manager
+     */
+
+    public function settings_side() { ?>
+
+		<div id="side-info-column" class="inner-sidebar">
+			<div class="meta-box-sortables">
+				<div id="faq-admin-about" class="postbox">
+					<h3 class="hndle" id="about-sidebar"><?php _e('About the Plugin:') ?></h3>
+					<div class="inside">
+						<p>Talk to <a href="http://twitter.com/norcross" target="_blank">@norcross</a> on twitter or visit the <a href="http://wordpress.org/support/plugin/wordpress-faq-manager/" target="_blank">plugin support form</a> for bugs or feature requests.</p>
+						<p><?php _e('<strong>Enjoy the plugin?</strong>') ?><br />
+						<a href="http://twitter.com/?status=I'm using @norcross's WordPress FAQ Manager plugin - check it out! http://l.norc.co/wpfaq/" target="_blank"><?php _e('Tweet about it') ?></a> <?php _e('and consider donating.') ?></p>
+						<p><?php _e('<strong>Donate:</strong> A lot of hard work goes into building plugins - support your open source developers. Include your twitter username and I\'ll send you a shout out for your generosity. Thank you!') ?><br />
+						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
+						<input type="hidden" name="cmd" value="_s-xclick">
+						<input type="hidden" name="hosted_button_id" value="11085100">
+						<input type="image" src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
+						<img alt="" border="0" src="https://www.paypalobjects.com/en_US/i/scr/pixel.gif" width="1" height="1">
+						</form></p>
+					</div>
+				</div>
+			</div>
+			
+			<div class="meta-box-sortables">
+				<div id="faq-admin-more" class="postbox">
+					<h3 class="hndle" id="about-sidebar"><?php _e('Links:') ?></h3>
+					<div class="inside">
+						<ul>
+						<li><a href="http://wordpress.org/extend/plugins/wordpress-faq-manager/" target="_blank">Plugin on WP.org</a></li>
+						<li><a href="https://github.com/norcross/WordPress-FAQ-Manager" target="_blank">Plugin on GitHub</a></li>
+						<li><a href="http://wordpress.org/support/plugin/wordpress-faq-manager" target="_blank">Support Forum</a><li>
+            			<li><a href="<?php echo menu_page_url( 'faq-instructions', 0 ); ?>">Instructions page</a></li>
+            			</ul>
+					</div>
+				</div>
+			</div>
+		</div> <!-- // #side-info-column .inner-sidebar -->
+
+    <?php }
+
+	public function settings_open() { ?>
+
+		<div id="post-body" class="has-sidebar">
+			<div id="post-body-content" class="has-sidebar-content">
+				<div id="normal-sortables" class="meta-box-sortables">
+					<div id="about" class="postbox">
+						<div class="inside">
+
+    <?php }
+
+	public function settings_close() { ?>
+
+						<br class="clear" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+    <?php }		
 
 /// end class
 }
@@ -1133,7 +1247,7 @@ add_action('init', 'WP_FAQ_Manager_init', 1);
 // FAQ Search
 class search_FAQ_Widget extends WP_Widget {
 	function search_FAQ_Widget() {
-		$widget_ops = array( 'classname' => 'faq_search_widget widget_search', 'description' => 'Puts a search box for just FAQs' );
+		$widget_ops = array( 'classname' => 'faq-search-widget widget_search', 'description' => 'Puts a search box for just FAQs' );
 		$this->WP_Widget( 'faq_search', 'FAQ Widget - Search', $widget_ops );
 	}
 
@@ -1182,7 +1296,7 @@ class search_FAQ_Widget extends WP_Widget {
 // show randoms
 class random_FAQ_Widget extends WP_Widget {
 	function random_FAQ_Widget() {
-		$widget_ops = array( 'classname' => 'faq_random_widget', 'description' => 'Lists a single random FAQ on the sidebar' );
+		$widget_ops = array( 'classname' => 'faq-random-widget', 'description' => 'Lists a single random FAQ on the sidebar' );
 		$this->WP_Widget( 'faq_random', 'FAQ Widget - Random', $widget_ops );
 	}
 
@@ -1204,7 +1318,7 @@ class random_FAQ_Widget extends WP_Widget {
 			foreach( $faqs as $faq ) :
 				$text = wpautop( $faq->post_content );
  			
-				echo '<h5 class="faq_widget_title">'.$faq->post_title.'</h5>';
+				echo '<h5 class="faq-widget-title">'.$faq->post_title.'</h5>';
 				echo wp_trim_words( $text, 15, null );
 				echo '<p><a href="'.get_permalink($faq->ID).'">'.$seemore.'</a></p>';
         
@@ -1257,7 +1371,7 @@ class random_FAQ_Widget extends WP_Widget {
 
 class recent_FAQ_Widget extends WP_Widget {
 	function recent_FAQ_Widget() {
-		$widget_ops = array( 'classname' => 'recent_questions_widget', 'description' => 'List recent questions' );
+		$widget_ops = array( 'classname' => 'recent-questions-widget', 'description' => 'List recent questions' );
 		$this->WP_Widget( 'recent_questions', 'FAQ Widget - Recent', $widget_ops );
 	}
 
@@ -1327,7 +1441,7 @@ class recent_FAQ_Widget extends WP_Widget {
 // FAQ Taxonomy List
 class topics_FAQ_Widget extends WP_Widget {
 	function topics_FAQ_Widget() {
-		$widget_ops = array( 'classname' => 'recent_faqtax_widget', 'description' => 'List FAQ topics or tags' );
+		$widget_ops = array( 'classname' => 'recent-faqtax-widget', 'description' => 'List FAQ topics or tags' );
 		$this->WP_Widget( 'recent_faqtax', 'FAQ Widget - Taxonomies', $widget_ops );
 	}
 
@@ -1415,7 +1529,7 @@ class topics_FAQ_Widget extends WP_Widget {
 
 class cloud_FAQ_Widget extends WP_Widget {
 	function cloud_FAQ_Widget() {
-		$widget_ops = array( 'classname' => 'faq_cloud_widget', 'description' => 'A tag cloud of FAQ topics and tags' );
+		$widget_ops = array( 'classname' => 'faq-cloud-widget', 'description' => 'A tag cloud of FAQ topics and tags' );
 		$this->WP_Widget( 'faq_cloud', 'FAQ Widget - Cloud', $widget_ops );
 	}
 

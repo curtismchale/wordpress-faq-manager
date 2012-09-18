@@ -9,19 +9,30 @@ select.faq_htype option {margin: 0 5px 0 0;}
 .widefat th#answers {width:400px;}
 ul.faqinfo {margin:0 15px;}
 p.indent {text-indent:10px;}
-p.norcross_donate {margin-top:50px;}
 
 p.speedshow {
 	margin: 1em 0 1em 1em;
 }
 
-div.faq_form_options span.warning {
+div.faq-form-options span.warning {
 	display: block;
 	font-size: 11px;
 	font-style: italic;
 	padding: 0.7em 0 0 0.7em;
 	color:#CC0000;
 	vertical-align: middle;
+}
+
+h2.inst-title {
+	font-weight: 700;
+}
+#normal-sortables .postbox p#faq-submit {
+	float: none;
+	margin: 20px 0;
+}
+
+#normal-sortables .postbox p#faq-desc {
+	color: #333;
 }
 
 #custom-type-list { margin: 20px 0; }
