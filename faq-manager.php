@@ -4,7 +4,7 @@ Plugin Name: WordPress FAQ Manager
 Plugin URI: http://andrewnorcross.com/plugins/wordpress-faq-manager/
 Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
 Author: Andrew Norcross
-Version: 1.3
+Version: 1.31
 Requires at least: 3.0
 Author URI: http://andrewnorcross.com
 */
@@ -36,10 +36,10 @@ class WP_FAQ_Manager
 	 * @return WP_FAQ_Manager
 	 */
 	public function __construct() {
-		add_action					( 'load-plugins.php',				array( $this, 'flush_rewrite'	) );
 		add_action					( 'init',							array( $this, '_register_faq'	) );
-		add_action					( 'admin_menu',						array( $this, 'admin_pages'		) );
 		add_action					( 'admin_init', 					array( $this, 'reg_settings'	) );
+		add_action					( 'admin_menu',						array( $this, 'admin_pages'		) );
+		add_action					( 'admin_footer',					array( $this, 'flush_rewrite'	) );
 		add_action					( 'the_posts', 						array( $this, 'style_loader'	) );
 		add_action					( 'the_posts', 						array( $this, 'script_loader'	) );
 		add_action					( 'the_posts',						array( $this, 'combo_wrapper'	) );
@@ -60,20 +60,6 @@ class WP_FAQ_Manager
 		add_shortcode				( 'faqtaxlist',						array( $this, 'shortcode_taxls'	) );
 
 	}
-
-	/**
-	 * flush rewrite rules on activation
-	 *
-	 * @return WP_FAQ_Manager
-	 */
-
-	public function flush_rewrite() {
-		
-		global $pagenow, $wp_rewrite;
-			if ('plugins.php' == $pagenow && isset( $_GET['activate'] ) )
-			$wp_rewrite->flush_rules();
-	}
-
 
 	/**
 	 * Declare filters
@@ -110,6 +96,25 @@ class WP_FAQ_Manager
 		add_submenu_page('edit.php?post_type=question', 'Instructions', 'Instructions', apply_filters( 'faq-caps', 'manage_options', 'instructions' ), 'faq-instructions', array( &$this, 'instructions_page' ));
 	}
 
+
+	/**
+	 * flush rewrite rules on activation or settings change
+	 *
+	 * @return WP_FAQ_Manager
+	 */
+
+	public function flush_rewrite() {
+		
+		global $wp_rewrite;
+		$screen = get_current_screen();
+
+		if ( 'plugins' == $screen->base && isset( $_GET['activate'] ) )
+			$wp_rewrite->flush_rules();
+
+		if ( 'question_page_faq-options' == $screen->base && isset( $_GET['settings-updated'] ) )
+			$wp_rewrite->flush_rules();
+
+	}
 
 	/**
 	 * show settings link on plugins page
@@ -294,6 +299,13 @@ class WP_FAQ_Manager
         <div class="wrap">
         	<div id="icon-faq-admin" class="icon32"><br /></div>
         	<h2><?php _e('FAQ Manager Settings') ?></h2>
+
+			<?php
+			if ( isset( $_GET['settings-updated'] ) )
+    			echo '<div id="message" class="updated below-h2"><p>FAQ Manager settings updated successfully.</p></div>';
+			?>
+
+
 			<div id="poststuff" class="metabox-holder has-right-sidebar">
 
 			<?php
@@ -317,6 +329,7 @@ class WP_FAQ_Manager
 				$nofollow	= (isset($faq_options['nofollow'])	? $faq_options['nofollow']	: 'false'		);
 				$noarchive	= (isset($faq_options['noarchive'])	? $faq_options['noarchive']	: 'false'		);
 				$archtext	= (isset($faq_options['arch'])		? $faq_options['arch']		: 'questions'	);
+				$singletext	= (isset($faq_options['single'])	? $faq_options['single']	: 'question'	);
 				?>
 				
 				<h2 class="inst-title"><?php _e('Standard Options') ?></h2>
@@ -380,8 +393,13 @@ class WP_FAQ_Manager
 				</p>				
 
 				<p>
+					<input type="text" name="faq_options[single]" id="faq_single" size="20" value="<?php echo sanitize_title($singletext); ?>" />
+					<label for="faq_options[single]">Desired slug for single FAQs <em><small>(all lower case, no capitals or spaces)</small></em></label>
+				</p>
+
+				<p>
 					<input type="text" name="faq_options[arch]" id="faq_arch" size="20" value="<?php echo sanitize_title($archtext); ?>" />
-					<label for="faq_options[arch]">Desired page slug for archiving <em><small>(all lower case, no capitals or spaces)</small></em></label>
+					<label for="faq_options[arch]">Desired slug for FAQ archive page <em><small>(all lower case, no capitals or spaces)</small></em></label>
 				</p>
 
 				
@@ -835,7 +853,8 @@ class WP_FAQ_Manager
 
 		// get options from settings page
 		$faqopts	= get_option('faq_options');
-		$arch		= (isset($faqopts['arch']) ? sanitize_title($faqopts['arch']) : 'questions' );
+		$single		= (isset($faqopts['single'])	? sanitize_title($faqopts['single'])	: 'question'	);
+		$arch		= (isset($faqopts['arch'])		? sanitize_title($faqopts['arch'])		: 'questions'	);
 
 		register_post_type( 'question',
 			array(
@@ -863,7 +882,7 @@ class WP_FAQ_Manager
 				'capability_type'	=> 'post',
 				'menu_icon'			=> plugins_url( '/inc/img/faq_menu.png', __FILE__ ),
 				'query_var'			=> true,
-				'rewrite'			=> true,
+				'rewrite'			=> array( 'slug' => $single, 'with_front' => false ),
 				'has_archive'		=> $arch,
 				'supports'			=> array('title', 'editor', 'author', 'thumbnail', 'comments', 'custom-fields'),
 			)
