@@ -4,7 +4,7 @@ Donate link: http://andrewnorcross.com/donate
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 3.0
 Tested up to: 3.5
-Stable tag: 1.323
+Stable tag: 1.324
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,7 +75,7 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 
 == Changelog ==
 
-= 1.323 =
+= 1.324 =
 * applying filters to content output for shortcodes, etc
 * beginning internationalization support
 * moved widgets into a separate file for organization
