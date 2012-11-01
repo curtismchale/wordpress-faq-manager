@@ -10,8 +10,8 @@ select.faq_htype option {margin: 0 5px 0 0;}
 ul.faqinfo {margin:0 15px;}
 p.indent {text-indent:10px;}
 
-p.speedshow {
-	margin: 1em 0 1em 1em;
+.secondary-option {
+	margin: 1em 0 2em 2em;
 }
 
 div.faq-form-options span.warning {

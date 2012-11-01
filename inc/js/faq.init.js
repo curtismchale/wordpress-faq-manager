@@ -13,12 +13,10 @@ jQuery(document).ready(function($) {
 			jQuery(this).find('div.faq-answer').hide();
 		});
 
-		jQuery('.expand-title').click (function () {
+		jQuery('.expand-title').click(function (event) {
 			var faq = jQuery(this).attr('id');
-			console.log(faq);
 			jQuery('div.faq-list').find('div.faq-answer[rel="' + faq + '"]').slideToggle(speed);
 			jQuery('div.faq-list').find('div.faq-answer').not('[rel="' + faq + '"]').hide(speed);
-//			jQuery(this).next('div.faq-answer').slideToggle(200);
 		});
 
 	}

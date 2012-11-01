@@ -4,7 +4,7 @@ Plugin Name: WordPress FAQ Manager
 Plugin URI: http://andrewnorcross.com/plugins/wordpress-faq-manager/
 Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
 Author: Andrew Norcross
-Version: 1.31
+Version: 1.323
 Requires at least: 3.0
 Author URI: http://andrewnorcross.com
 */
@@ -26,6 +26,9 @@ Author URI: http://andrewnorcross.com
 
 if(!defined('FAQ_BASE'))
 	define('FAQ_BASE', plugin_basename(__FILE__) );
+
+if(!defined('FAQ_VER'))
+	define('FAQ_VER', '1.323');
 
 class WP_FAQ_Manager
 {
@@ -91,9 +94,9 @@ class WP_FAQ_Manager
 
 	public function admin_pages() {
 		
-		add_submenu_page('edit.php?post_type=question', 'Sort FAQs', 'Sort FAQs', apply_filters( 'faq-caps', 'manage_options', 'sort' ), basename(__FILE__), array( &$this, 'sort_page' ));
-		add_submenu_page('edit.php?post_type=question', 'Settings', 'Settings', apply_filters( 'faq-caps', 'manage_options', 'settings' ), 'faq-options', array( &$this, 'settings_page' ));
-		add_submenu_page('edit.php?post_type=question', 'Instructions', 'Instructions', apply_filters( 'faq-caps', 'manage_options', 'instructions' ), 'faq-instructions', array( &$this, 'instructions_page' ));
+		add_submenu_page('edit.php?post_type=question', __('Sort FAQs'), __('Sort FAQs'), apply_filters( 'faq-caps', 'manage_options', 'sort' ), basename(__FILE__), array( &$this, 'sort_page' ));
+		add_submenu_page('edit.php?post_type=question', __('Settings'), __('Settings'), apply_filters( 'faq-caps', 'manage_options', 'settings' ), 'faq-options', array( &$this, 'settings_page' ));
+		add_submenu_page('edit.php?post_type=question', __('Instructions'), __('Instructions'), apply_filters( 'faq-caps', 'manage_options', 'instructions' ), 'faq-instructions', array( &$this, 'instructions_page' ));
 	}
 
 
@@ -133,8 +136,8 @@ class WP_FAQ_Manager
     	// check to make sure we are on the correct plugin
     	if ($file == $this_plugin) {
         	
-			$settings_link	= '<a href="'.menu_page_url( 'faq-options', 0 ).'">Settings</a>';
-			$instruct_link	= '<a href="'.menu_page_url( 'faq-instructions', 0 ).'">How-To</a>';
+			$settings_link	= '<a href="'.menu_page_url( 'faq-options', 0 ).'">'.__('Settings').'</a>';
+			$instruct_link	= '<a href="'.menu_page_url( 'faq-instructions', 0 ).'">'.__('How-To').'</a>';
         
         	array_unshift($links, $settings_link, $instruct_link);
     	}
@@ -302,7 +305,7 @@ class WP_FAQ_Manager
 
 			<?php
 			if ( isset( $_GET['settings-updated'] ) )
-    			echo '<div id="message" class="updated below-h2"><p>FAQ Manager settings updated successfully.</p></div>';
+    			echo '<div id="message" class="updated below-h2"><p>'. __('FAQ Manager settings updated successfully.').'</p></div>';
 			?>
 
 
@@ -322,6 +325,8 @@ class WP_FAQ_Manager
 				$paginate	= (isset($faq_options['paginate'])	? $faq_options['paginate']	: 'false'		);
 				$expand		= (isset($faq_options['expand'])	? $faq_options['expand']	: 'false'		);
 				$exspeed	= (isset($faq_options['exspeed'])	? $faq_options['exspeed']	: '200'			);
+				$exlink		= (isset($faq_options['exlink'])	? $faq_options['exlink']	: 'false'		);
+				$extext		= (isset($faq_options['extext'])	? $faq_options['extext']	: 'Read More'	);
 				$scroll		= (isset($faq_options['scroll'])	? $faq_options['scroll']	: 'false'		);
 				$css		= (isset($faq_options['css'])		? $faq_options['css']		: 'false'		);
 				$rss		= (isset($faq_options['rss'])		? $faq_options['rss']		: 'false'		);
@@ -352,61 +357,75 @@ class WP_FAQ_Manager
 
 				<p>
 				    <input type="checkbox" name="faq_options[expand]" id="faq_expand" value="true" <?php checked( $expand, 'true' ); ?> />
-				    <label for="faq_options[expand]" rel="checkbox">Include jQuery collapse / expand</label>
+				    <label for="faq_options[expand]" rel="checkbox"><?php _e('Include jQuery collapse / expand') ?></label>
 				</p>
+				
+				<div class="secondary-option" style="display:none;">
 
-				<p class="speedshow" style="display:none;">
+				<p class="speedshow">
 					<input type="text" name="faq_options[exspeed]" id="faq_exspeed" size="20" class="small-text" value="<?php echo sanitize_title($exspeed); ?>" />
-					<label for="faq_options[exspeed]">Expand / collapse speed <em><small>(in milliseconds, i.e. 200 or 1000)</small></em></label>
+					<label for="faq_options[exspeed]"><?php _e('Expand / collapse speed <em><small>(in milliseconds, i.e. 200 or 1000)</small></em>') ?></label>
 				</p>
 
+				<p class="expandlink">
+				    <input type="checkbox" name="faq_options[exlink]" id="faq_exlink" value="true" <?php checked( $exlink, 'true' ); ?> />
+				    <label for="faq_options[exlink]" rel="checkbox"><?php _e('Include permalink beneath expanded text.') ?></label>
+				</p>
+
+				<p class="extext" style="display:none;">
+					<input type="text" name="faq_options[extext]" id="faq_extext" size="20" value="<?php echo esc_attr($extext); ?>" />
+					<label for="faq_options[extext]"><?php _e('Permalink "read more" text') ?></label>
+				</p>				
+
+				</div>
+				
 				<p>
 				    <input type="checkbox" name="faq_options[scroll]" id="faq_scroll" value="true" <?php checked( $scroll, 'true' ); ?> />
-				    <label for="faq_options[scroll]" rel="checkbox">Include jQuery scrolling for Combo shortcode</label>
+				    <label for="faq_options[scroll]" rel="checkbox"><?php _e('Include jQuery scrolling for Combo shortcode') ?></label>
 				</p>
 
 				<p>
 				    <input type="checkbox" name="faq_options[css]" id="faq_css" value="true" <?php checked( $css, 'true' ); ?> />
-				    <label for="faq_options[css]" rel="checkbox">Load default CSS</label>
+				    <label for="faq_options[css]" rel="checkbox"><?php _e('Load default CSS') ?></label>
 				</p>
 
 				<p>
 				    <input type="checkbox" name="faq_options[rss]" id="faq_rss" value="true" <?php checked( $rss, 'true' ); ?> />
-				    <label for="faq_options[rss]" rel="checkbox">Include FAQs in main RSS feed</label>
+				    <label for="faq_options[rss]" rel="checkbox"><?php _e('Include FAQs in main RSS feed <em><small>(Use with caution, as this will remove all non-posts from the native RSS feed)</small></em>') ?></label>
 				</p>
 
 				<h2 class="inst-title"><?php _e('SEO Options') ?></h2>
 
 				<p>
 				    <input type="checkbox" name="faq_options[noindex]" id="faq_noindex" value="true" <?php checked( $noindex, 'true' ); ?> />
-				    <label for="faq_options[noindex]" rel="checkbox"> Apply <code>noindex</code> header tag to FAQs</label>
+				    <label for="faq_options[noindex]" rel="checkbox"> <?php _e('Apply <code>noindex</code> header tag to FAQs') ?></label>
 				</p>
 
 				<p>
 				    <input type="checkbox" name="faq_options[nofollow]" id="faq_nofollow" value="true" <?php checked( $nofollow, 'true' ); ?> />
-				    <label for="faq_options[nofollow]" rel="checkbox"> Apply <code>nofollow</code> header tag to FAQs</label>
+				    <label for="faq_options[nofollow]" rel="checkbox"> <?php _e('Apply <code>nofollow</code> header tag to FAQs') ?></label>
 				</p>
 
 				<p>
 				    <input type="checkbox" name="faq_options[noarchive]" id="faq_noarchive" value="true" <?php checked( $noarchive, 'true' ); ?> />
-				    <label for="faq_options[noarchive]" rel="checkbox"> Apply <code>noarchive</code> header tag to FAQs</label>
+				    <label for="faq_options[noarchive]" rel="checkbox"> <?php _e('Apply <code>noarchive</code> header tag to FAQs') ?></label>
 				</p>				
 
 				<p>
 					<input type="text" name="faq_options[single]" id="faq_single" size="20" value="<?php echo sanitize_title($singletext); ?>" />
-					<label for="faq_options[single]">Desired slug for single FAQs <em><small>(all lower case, no capitals or spaces)</small></em></label>
+					<label for="faq_options[single]"><?php _e('Desired slug for single FAQs <em><small>(all lower case, no capitals or spaces)</small></em>') ?></label>
 				</p>
 
 				<p>
 					<input type="text" name="faq_options[arch]" id="faq_arch" size="20" value="<?php echo sanitize_title($archtext); ?>" />
-					<label for="faq_options[arch]">Desired slug for FAQ archive page <em><small>(all lower case, no capitals or spaces)</small></em></label>
+					<label for="faq_options[arch]"><?php _e('Desired slug for FAQ archive page <em><small>(all lower case, no capitals or spaces)</small></em>') ?></label>
 				</p>
 
 				
     			<!-- submit -->
 	    		<p id="faq-submit" class="submit"><input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" /></p>
 
-				<p id="faq-desc" class="description"><strong>Note:</strong> You may need to flush your permalinks after changing settings. <a href="<?php echo admin_url( 'options-permalink.php'); ?>">Go to your Permalink Settings here</a></p>
+				<p id="faq-desc" class="description"><?php _e('<strong>Note:</strong> You may need to flush your permalinks after changing settings.') ?> <a href="<?php echo admin_url( 'options-permalink.php'); ?>"><?php _e('Go to your Permalink Settings here') ?></a></p>
 
 				</form>
 
@@ -428,57 +447,56 @@ class WP_FAQ_Manager
 		?>
         <div class="wrap">
         	<div id="icon-faq-admin" class="icon32"><br /></div>
-        	<h2><?php _e('FAQ Instructions') ?></h2>
+        	<h2><?php _e('FAQ Instructions'); ?></h2>
 			<div id="poststuff" class="metabox-holder has-right-sidebar">
 
 			<?php
 			echo $this->settings_side();
 			echo $this->settings_open();
 			?>
-    
-			<p>The FAQ Manager plugin uses a combination of custom post types, meta fields, and taxonomies. The plugin will automatically create single posts using your existing permalink structure. And the FAQ categories and tags can be added to your menu using the WP Menu Manager</p>
+			<p><?php _e('The FAQ Manager plugin uses a combination of custom post types, meta fields, and taxonomies. The plugin will automatically create single posts using your existing permalink structure. And the FAQ categories and tags can be added to your menu using the WP Menu Manager'); ?></p>
 
-			<h2 class="inst-title">Shortcodes</h2>
-			<p>The plugin also has the option of using shortcodes. To use them, follow the syntax accordingly in the HTML tab:</p>
-
+			<h2 class="inst-title"><?php _e('Shortcodes'); ?></h2>
+			<p><?php _e('The plugin also has the option of using shortcodes. To use them, follow the syntax accordingly in the HTML tab:'); ?></p>
 			<ul class="faqinfo">
-			<li><strong>For the complete list (including title and content):</strong></li>
-			<li>place <code>[faq]</code> on a post / page</li><br />
-			<li><strong>For the question title, and a link to the FAQ on a separate page:</strong></li>
-			<li>place <code>[faqlist]</code> on a post / page</li><br />
-			<li><strong>For a list with a group of titles that link to complete content later in page:</strong></li>
-			<li>place <code>[faqcombo]</code> on a post / page</li><br />
-			<li><strong>For a list of taxonomy titles that link to the related archive page:</strong></li>
-			<li>place <code>[faqtaxlist type="topics"]</code> or <code>[faqtaxlist type="tags"]</code> on a post / page</li>
-			<li>Show optional description: <code>[faqtaxlist type="topics" desc="true"]</code></li><br />
-			<li><em><strong>Please note:</strong> that the combo and taxonomy list shortcodes will not recognize the pagination and expand / collapse:</em></li><br />			
+			<li><strong><?php _e('For the complete list (including title and content):'); ?></strong></li>
+			<li><?php _e('place <code>[faq]</code> on a post / page'); ?></li><br />
+			<li><strong><?php _e('For the question title, and a link to the FAQ on a separate page:'); ?></strong></li>
+			<li><?php _e('place <code>[faqlist]</code> on a post / page'); ?></li><br />
+			<li><strong><?php _e('For a list with a group of titles that link to complete content later in page:'); ?></strong></li>
+			<li><?php _e('place <code>[faqcombo]</code> on a post / page'); ?></li><br />
+			<li><strong><?php _e('For a list of taxonomy titles that link to the related archive page:'); ?></strong></li>
+			<li><?php _e('place <code>[faqtaxlist type="topics"]</code> or <code>[faqtaxlist type="tags"]</code> on a post / page'); ?></li>
+			<li><?php _e('Show optional description: <code>[faqtaxlist type="topics" desc="true"]</code>'); ?></li><br />
+			<li><?php _e('<em><strong>Please note:</strong> the combo and taxonomy list shortcodes will not recognize the pagination and expand / collapse</em>'); ?></li><br />			
 			</ul>
 
-			<h2 class="inst-title">The following options apply to all the <code>shortcode</code> types</h2>
+			<h2 class="inst-title"><?php _e('The following options apply to all the <code>shortcode</code> types'); ?></h2>
 
-			<p>The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).</p>
+			<p><?php _e('The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).'); ?></p>
+			
 			<ul class="faqinfo">
-			<li><strong>To display only 5:</strong></li>
-			<li>place <code>[faq limit="5"]</code> on a post / page</li><br />
-			<li><strong>To display ALL:</strong></li>
-			<li>place <code>[faq limit="-1"]</code> on a post / page</li><br />
+			<li><strong><?php _e('To display only 5:'); ?></strong></li>
+			<li><?php _e('place <code>[faq limit="5"]</code> on a post / page'); ?></li><br />
+			<li><strong><?php _e('To display ALL:'); ?></strong></li>
+			<li><?php _e('place <code>[faq limit="-1"]</code> on a post / page'); ?></li><br />
 			</ul>
 
 			<ul class="faqinfo">
-			<li><strong>For a single FAQ:</strong></li>
-			<li>place <code>[faq faq_id="ID"]</code> on a post / page</li><br />
-			<li><strong>List all from a single FAQ topic category:</strong></li>
-			<li>place <code>[faq faq_topic="topic-slug"]</code> on a post / page</li><br />
-			<li><strong>List all from a single FAQ tag:</strong></li>
-			<li>place <code>[faq faq_tag="tag-slug"]</code> on a post / page</li><br />
+			<li><strong><?php _e('For a single FAQ:'); ?></strong></li>
+			<li><?php _e('place <code>[faq faq_id="ID"]</code> on a post / page'); ?></li><br />
+			<li><strong><?php _e('List all from a single FAQ topic category:'); ?></strong></li>
+			<li><?php _e('place <code>[faq faq_topic="topic-slug"]</code> on a post / page'); ?></li><br />
+			<li><strong><?php _e('List all from a single FAQ tag:'); ?></strong></li>
+			<li><?php _e('place <code>[faq faq_tag="tag-slug"]</code> on a post / page'); ?></li><br />
 			</ul>
 
-			<p><strong><em>Please note that the shortcode can't handle a query of multiple categories / topics in a single shortcode. However, you can stack them as such:</em></strong></p>
-			<p>...content....<p>
-			<p class="indent"><code>[faq faq_topic="topic-slug-one"]</code></p>
-			<p>...more content....<p>
-			<p class="indent"><code>[faq faq_topic="topic-slug-two"]</code></p>
-			<p>...even more content....<p>
+			<p><strong><em><?php _e('Please note that the shortcode cannot handle a query of multiple categories / topics in a single shortcode. However, you can stack them as such:'); ?></em></strong></p>
+			<p>...content....</p>
+			<p class="indent"><code><?php _e('[faq faq_topic="topic-slug-one"]'); ?></code></p>
+			<p><?php _e('...more content....'); ?></p>
+			<p class="indent"><code><?php _e('[faq faq_topic="topic-slug-two"]'); ?></code></p>
+			<p><?php _e('...even more content....'); ?></p>
 
 
 	<?php echo $this->settings_close(); ?>
@@ -498,18 +516,18 @@ class WP_FAQ_Manager
 	public function sort_page() {
 		$questions = new WP_Query('post_type=question&posts_per_page=-1&orderby=menu_order&order=ASC');
 	?>
-		<div class="wrap">
+		<div id="faq-admin-sort" class="wrap">
 		<div id="icon-faq-admin" class="icon32"><br /></div>
-		<h2>Sort FAQs <img src=" <?php echo admin_url(); ?>/images/loading.gif" id="loading-animation" /></h2>
+		<h2><?php _e('Sort FAQs'); ?> <img src=" <?php echo admin_url(); ?>/images/loading.gif" id="loading-animation" /></h2>
 			<?php if ( $questions->have_posts() ) : ?>
-	    	<p><strong>Note:</strong> this only affects the FAQs listed using the shortcode functions</p>
+	    	<p><?php _e('<strong>Note:</strong> this only affects the FAQs listed using the shortcode functions'); ?></p>
 			<ul id="custom-type-list">
 				<?php while ( $questions->have_posts() ) : $questions->the_post(); ?>
 					<li id="<?php the_id(); ?>"><?php the_title(); ?></li>			
 				<?php endwhile; ?>
 	    	</ul>
 			<?php else: ?>
-			<p>You have no FAQs to sort.</p>
+			<p><?php _e('You have no FAQs to sort.'); ?></p>
 			<?php endif; ?>
 		</div>
 	
@@ -579,6 +597,8 @@ class WP_FAQ_Manager
 		// get options from settings page
 		$faqopts	= get_option('faq_options');
 		$exspeed	= (isset($faqopts['exspeed'])									? $faqopts['exspeed']	: '200'	);
+		$exlink		= (isset($faqopts['exlink'])									? true					: false	);
+		$extext		= (isset($faqopts['extext']) && $faqopts['extext'] !== ''		? $faqopts['extext']	: 'Read More'	);
 		$expand_a	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-faq'			: ''	);
 		$expand_b	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-title'		: ''	);
 		$htype		= (isset($faqopts['htype'])										? $faqopts['htype']		: 'h3'	);
@@ -591,10 +611,17 @@ class WP_FAQ_Manager
 				$content	= get_the_content();
 				$title		= get_the_title();
 				$slug		= basename(get_permalink());
+				$link		= get_permalink();
 
 				$displayfaq .= '<div class="single-faq'.$expand_a.'">';
 				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq-question'.$expand_b.'">'.$title.'</'.$htype.'>';
-				$displayfaq .= '<div class="faq-answer" rel="'.$slug.'">'.wpautop($content, true).'</div>';
+				$displayfaq .= '<div class="faq-answer" rel="'.$slug.'">';
+//				$displayfaq .= wpautop($content, true);
+				$displayfaq .= apply_filters('the_content', $content);
+				if ($exlink == true)
+					$displayfaq .= '<p class="faq-link"><a href="'.$link.'" title="'.$title.'">'.$extext.'</a></p>';
+
+				$displayfaq .= '</div>';
 				$displayfaq .= '</div>';
 			
 			endwhile;
@@ -778,7 +805,8 @@ class WP_FAQ_Manager
 
 				$displayfaq .= '<div class="single-faq" rel="'.$slug.'">';
 				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq-question">'.$title.'</'.$htype.'>';
-				$displayfaq .= '<div class="faq-answer">'.wpautop($content, true).'</div>';
+//				$displayfaq .= '<div class="faq-answer">'.wpautop($content, true).'</div>';
+				$displayfaq .= '<div class="faq-answer">'.apply_filters('the_content', $content).'</div>';
 				$displayfaq .= '</div>';
 			
 			endwhile;
@@ -962,7 +990,7 @@ class WP_FAQ_Manager
 
 		if (!$query->is_feed) 
 			return $query;
-
+/* /// removed until I can determine how to check for any other customizations to the RSS
 			$args = array(
 				'public'	=> true,
 				'_builtin'	=> false
@@ -976,6 +1004,8 @@ class WP_FAQ_Manager
 			$post_types = array_merge( $post_types, array('post') ) ;
 		
 			$query->set( 'post_type' , $post_types );
+*/
+			$query->set( 'post_type' , array( 'post', 'question' ) );
 	
 		return $query;
 	}
@@ -1105,7 +1135,7 @@ class WP_FAQ_Manager
 	public function title_text( $title ){
 		$screen = get_current_screen();
 		if ( 'question' == $screen->post_type ) :
-			$title = 'Enter Question Title Here';
+			$title = __('Enter Question Title Here');
 		endif;
 		
 		return $title;
@@ -1132,16 +1162,17 @@ class WP_FAQ_Manager
 	 * @return WP_FAQ_Manager
 	 */
 
-	public function admin_scripts() {
-	
-		$screen = get_current_screen();
+	public function admin_scripts($hook) {
 
-		if ( 'question' == $screen->post_type ) :
+		if ( $hook == 'question_page_faq-manager' || 
+			 $hook == 'question_page_faq-options' || 
+			 $hook == 'question_page_faq-instructions' 
+			 ) :
 		
-			wp_enqueue_style( 'faq-admin', plugins_url('/inc/css/faq-admin.css', __FILE__) );
+			wp_enqueue_style( 'faq-admin', plugins_url('/inc/css/faq-admin.css', __FILE__), array(), FAQ_VER, 'all' );
 
 			wp_enqueue_script('jquery-ui-sortable');
-			wp_enqueue_script( 'faq-admin', plugins_url('/inc/js/faq.admin.init.js', __FILE__) , array('jquery'), null, true );
+			wp_enqueue_script( 'faq-admin', plugins_url('/inc/js/faq.admin.init.js', __FILE__) , array('jquery'), FAQ_VER, true );
 		
 		endif;
 
@@ -1157,19 +1188,19 @@ class WP_FAQ_Manager
 
 	public function front_style() {
 
-		wp_enqueue_style( 'faq-style', plugins_url('/inc/css/faq-style.css', __FILE__) );
+		wp_enqueue_style( 'faq-style', plugins_url('/inc/css/faq-style.css', __FILE__), array(), FAQ_VER, 'all' );
 
 	}
 
 	public function front_script() {
 
-		wp_enqueue_script( 'faq-init', plugins_url('/inc/js/faq.init.js', __FILE__) , array('jquery'), null, true );
+		wp_enqueue_script( 'faq-init', plugins_url('/inc/js/faq.init.js', __FILE__) , array('jquery'), FAQ_VER, true );
 
 	}
 
 	public function scroll_script() {
 
-		wp_enqueue_script( 'faq-scroll', plugins_url('/inc/js/faq.scroll.js', __FILE__) , array('jquery'), null, true );
+		wp_enqueue_script( 'faq-scroll', plugins_url('/inc/js/faq.scroll.js', __FILE__) , array('jquery'), FAQ_VER, true );
 
 	}
 
@@ -1186,9 +1217,9 @@ class WP_FAQ_Manager
 		<div id="side-info-column" class="inner-sidebar">
 			<div class="meta-box-sortables">
 				<div id="faq-admin-about" class="postbox">
-					<h3 class="hndle" id="about-sidebar"><?php _e('About the Plugin:') ?></h3>
+					<h3 class="hndle" id="about-sidebar"><?php _e('About the Plugin') ?></h3>
 					<div class="inside">
-						<p>Talk to <a href="http://twitter.com/norcross" target="_blank">@norcross</a> on twitter or visit the <a href="http://wordpress.org/support/plugin/wordpress-faq-manager/" target="_blank">plugin support form</a> for bugs or feature requests.</p>
+						<p><?php _e('Talk to') ?> <a href="http://twitter.com/norcross" target="_blank">@norcross</a> <?php _e('on twitter or visit the') ?> <a href="http://wordpress.org/support/plugin/wordpress-faq-manager/" target="_blank"><?php _e('plugin support form') ?></a> <?php _e('for bugs or feature requests.') ?></p>
 						<p><?php _e('<strong>Enjoy the plugin?</strong>') ?><br />
 						<a href="http://twitter.com/?status=I'm using @norcross's WordPress FAQ Manager plugin - check it out! http://l.norc.co/wpfaq/" target="_blank"><?php _e('Tweet about it') ?></a> <?php _e('and consider donating.') ?></p>
 						<p><?php _e('<strong>Donate:</strong> A lot of hard work goes into building plugins - support your open source developers. Include your twitter username and I\'ll send you a shout out for your generosity. Thank you!') ?><br />
@@ -1204,13 +1235,13 @@ class WP_FAQ_Manager
 			
 			<div class="meta-box-sortables">
 				<div id="faq-admin-more" class="postbox">
-					<h3 class="hndle" id="about-sidebar"><?php _e('Links:') ?></h3>
+					<h3 class="hndle" id="about-sidebar"><?php _e('Links') ?></h3>
 					<div class="inside">
 						<ul>
-						<li><a href="http://wordpress.org/extend/plugins/wordpress-faq-manager/" target="_blank">Plugin on WP.org</a></li>
-						<li><a href="https://github.com/norcross/WordPress-FAQ-Manager" target="_blank">Plugin on GitHub</a></li>
-						<li><a href="http://wordpress.org/support/plugin/wordpress-faq-manager" target="_blank">Support Forum</a><li>
-            			<li><a href="<?php echo menu_page_url( 'faq-instructions', 0 ); ?>">Instructions page</a></li>
+						<li><a href="http://wordpress.org/extend/plugins/wordpress-faq-manager/" target="_blank"><?php _e('Plugin on WP.org') ?></a></li>
+						<li><a href="https://github.com/norcross/WordPress-FAQ-Manager" target="_blank"><?php _e('Plugin on GitHub') ?></a></li>
+						<li><a href="http://wordpress.org/support/plugin/wordpress-faq-manager" target="_blank"><?php _e('Support Forum') ?></a><li>
+            			<li><a href="<?php echo menu_page_url( 'faq-instructions', 0 ); ?>"><?php _e('Instructions page') ?></a></li>
             			</ul>
 					</div>
 				</div>

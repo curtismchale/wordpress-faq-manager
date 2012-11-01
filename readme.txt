@@ -4,7 +4,7 @@ Donate link: http://andrewnorcross.com/donate
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 3.0
 Tested up to: 3.5
-Stable tag: 1.31
+Stable tag: 1.323
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,23 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 3. Example of expanded FAQs
 
 == Changelog ==
+
+= 1.323 =
+* applying filters to content output for shortcodes, etc
+* beginning internationalization support
+
+= 1.323 =
+* minor bugfix for conflicts with certain commerical forms plugins
+
+= 1.322 =
+* fixed RSS inclusion bug
+
+= 1.321 =
+* fixed IE9 expand / collapse bug
+* added version number to CSS and JS files
+
+= 1.32 =
+* added optional inclusion of permalink below expanded entries
 
 = 1.31 =
 * added ability to change single FAQ slugs
