@@ -30,6 +30,9 @@ if(!defined('FAQ_BASE'))
 if(!defined('FAQ_VER'))
 	define('FAQ_VER', '1.323');
 
+//call widgets file
+include('faq-widgets.php');
+
 class WP_FAQ_Manager
 {
 
@@ -39,6 +42,7 @@ class WP_FAQ_Manager
 	 * @return WP_FAQ_Manager
 	 */
 	public function __construct() {
+		add_action					( 'plugins_loaded', 				array( $this, 'textdomain'		) );
 		add_action					( 'init',							array( $this, '_register_faq'	) );
 		add_action					( 'admin_init', 					array( $this, 'reg_settings'	) );
 		add_action					( 'admin_menu',						array( $this, 'admin_pages'		) );
@@ -63,6 +67,19 @@ class WP_FAQ_Manager
 		add_shortcode				( 'faqtaxlist',						array( $this, 'shortcode_taxls'	) );
 
 	}
+
+	/**
+	 * load textdomain for
+	 *
+	 * @return WP_FAQ_Manager
+	 */
+
+
+	public function textdomain() {
+
+		load_plugin_textdomain( 'wpfaq', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	}
+	
 
 	/**
 	 * Declare filters
@@ -94,9 +111,9 @@ class WP_FAQ_Manager
 
 	public function admin_pages() {
 		
-		add_submenu_page('edit.php?post_type=question', __('Sort FAQs'), __('Sort FAQs'), apply_filters( 'faq-caps', 'manage_options', 'sort' ), basename(__FILE__), array( &$this, 'sort_page' ));
-		add_submenu_page('edit.php?post_type=question', __('Settings'), __('Settings'), apply_filters( 'faq-caps', 'manage_options', 'settings' ), 'faq-options', array( &$this, 'settings_page' ));
-		add_submenu_page('edit.php?post_type=question', __('Instructions'), __('Instructions'), apply_filters( 'faq-caps', 'manage_options', 'instructions' ), 'faq-instructions', array( &$this, 'instructions_page' ));
+		add_submenu_page('edit.php?post_type=question', __('Sort FAQs', 'wpfaq'), __('Sort FAQs', 'wpfaq'), apply_filters( 'faq-caps', 'manage_options', 'sort' ), basename(__FILE__), array( &$this, 'sort_page' ));
+		add_submenu_page('edit.php?post_type=question', __('Settings', 'wpfaq'), __('Settings', 'wpfaq'), apply_filters( 'faq-caps', 'manage_options', 'settings' ), 'faq-options', array( &$this, 'settings_page' ));
+		add_submenu_page('edit.php?post_type=question', __('Instructions', 'wpfaq'), __('Instructions', 'wpfaq'), apply_filters( 'faq-caps', 'manage_options', 'instructions' ), 'faq-instructions', array( &$this, 'instructions_page' ));
 	}
 
 
@@ -136,8 +153,8 @@ class WP_FAQ_Manager
     	// check to make sure we are on the correct plugin
     	if ($file == $this_plugin) {
         	
-			$settings_link	= '<a href="'.menu_page_url( 'faq-options', 0 ).'">'.__('Settings').'</a>';
-			$instruct_link	= '<a href="'.menu_page_url( 'faq-instructions', 0 ).'">'.__('How-To').'</a>';
+			$settings_link	= '<a href="'.menu_page_url( 'faq-options', 0 ).'">'.__('Settings', 'wpfaq').'</a>';
+			$instruct_link	= '<a href="'.menu_page_url( 'faq-instructions', 0 ).'">'.__('How-To', 'wpfaq').'</a>';
         
         	array_unshift($links, $settings_link, $instruct_link);
     	}
@@ -154,11 +171,11 @@ class WP_FAQ_Manager
 
 	public function column_setup($columns) {
 		$qcolumns['cb']			= '<input type="checkbox" />';
-		$qcolumns['title']		= _x('Question', 'column name');
-		$qcolumns['answers']	= __('Answer');
-		$qcolumns['topics']		= __('FAQ Topic');
-		$qcolumns['faq_tags']	= __('FAQ Tags');		
-		$qcolumns['date']		= _x('Date', 'column name');
+		$qcolumns['title']		= _x('Question', 'wpfaq');
+		$qcolumns['answers']	= __('Answer', 'wpfaq');
+		$qcolumns['topics']		= __('FAQ Topic', 'wpfaq');
+		$qcolumns['faq_tags']	= __('FAQ Tags', 'wpfaq');		
+		$qcolumns['date']		= _x('Date', 'wpfaq');
  
 		return $qcolumns;
 	}
@@ -301,11 +318,11 @@ class WP_FAQ_Manager
 	
         <div class="wrap">
         	<div id="icon-faq-admin" class="icon32"><br /></div>
-        	<h2><?php _e('FAQ Manager Settings') ?></h2>
+        	<h2><?php _e('FAQ Manager Settings', 'wpfaq') ?></h2>
 
 			<?php
 			if ( isset( $_GET['settings-updated'] ) )
-    			echo '<div id="message" class="updated below-h2"><p>'. __('FAQ Manager settings updated successfully.').'</p></div>';
+    			echo '<div id="message" class="updated below-h2"><p>'. __('FAQ Manager settings updated successfully.', 'wpfaq').'</p></div>';
 			?>
 
 
@@ -347,85 +364,85 @@ class WP_FAQ_Manager
 					<option value="h5" <?php selected( $faq_options['htype'], 'h5' ); ?>>H5</option>
 					<option value="h6" <?php selected( $faq_options['htype'], 'h6' ); ?>>H6</option>
 					</select>
-					<label type="select" for="faq_options[htype]"><?php _e('Choose your H type for FAQ title') ?></label>
+					<label type="select" for="faq_options[htype]"><?php _e('Choose your H type for FAQ title', 'wpfaq'); ?></label>
 				</p>               
 
 				<p>
 			    	<input type="checkbox" name="faq_options[paginate]" id="faq_paginate" value="true" <?php checked( $paginate, 'true' ); ?> />
-    				<label for="faq_options[paginate]" rel="checkbox"><?php _e('Paginate shortcode output') ?></label>
+    				<label for="faq_options[paginate]" rel="checkbox"><?php _e('Paginate shortcode output', 'wpfaq'); ?></label>
 				</p>
 
 				<p>
 				    <input type="checkbox" name="faq_options[expand]" id="faq_expand" value="true" <?php checked( $expand, 'true' ); ?> />
-				    <label for="faq_options[expand]" rel="checkbox"><?php _e('Include jQuery collapse / expand') ?></label>
+				    <label for="faq_options[expand]" rel="checkbox"><?php _e('Include jQuery collapse / expand', 'wpfaq'); ?></label>
 				</p>
 				
 				<div class="secondary-option" style="display:none;">
 
 				<p class="speedshow">
 					<input type="text" name="faq_options[exspeed]" id="faq_exspeed" size="20" class="small-text" value="<?php echo sanitize_title($exspeed); ?>" />
-					<label for="faq_options[exspeed]"><?php _e('Expand / collapse speed <em><small>(in milliseconds, i.e. 200 or 1000)</small></em>') ?></label>
+					<label for="faq_options[exspeed]"><?php _e('Expand / collapse speed <em><small>(in milliseconds, i.e. 200 or 1000)</small></em>', 'wpfaq'); ?></label>
 				</p>
 
 				<p class="expandlink">
 				    <input type="checkbox" name="faq_options[exlink]" id="faq_exlink" value="true" <?php checked( $exlink, 'true' ); ?> />
-				    <label for="faq_options[exlink]" rel="checkbox"><?php _e('Include permalink beneath expanded text.') ?></label>
+				    <label for="faq_options[exlink]" rel="checkbox"><?php _e('Include permalink beneath expanded text.', 'wpfaq'); ?></label>
 				</p>
 
 				<p class="extext" style="display:none;">
 					<input type="text" name="faq_options[extext]" id="faq_extext" size="20" value="<?php echo esc_attr($extext); ?>" />
-					<label for="faq_options[extext]"><?php _e('Permalink "read more" text') ?></label>
+					<label for="faq_options[extext]"><?php _e('Permalink "read more" text', 'wpfaq'); ?></label>
 				</p>				
 
 				</div>
 				
 				<p>
 				    <input type="checkbox" name="faq_options[scroll]" id="faq_scroll" value="true" <?php checked( $scroll, 'true' ); ?> />
-				    <label for="faq_options[scroll]" rel="checkbox"><?php _e('Include jQuery scrolling for Combo shortcode') ?></label>
+				    <label for="faq_options[scroll]" rel="checkbox"><?php _e('Include jQuery scrolling for Combo shortcode', 'wpfaq'); ?></label>
 				</p>
 
 				<p>
 				    <input type="checkbox" name="faq_options[css]" id="faq_css" value="true" <?php checked( $css, 'true' ); ?> />
-				    <label for="faq_options[css]" rel="checkbox"><?php _e('Load default CSS') ?></label>
+				    <label for="faq_options[css]" rel="checkbox"><?php _e('Load default CSS', 'wpfaq'); ?></label>
 				</p>
 
 				<p>
 				    <input type="checkbox" name="faq_options[rss]" id="faq_rss" value="true" <?php checked( $rss, 'true' ); ?> />
-				    <label for="faq_options[rss]" rel="checkbox"><?php _e('Include FAQs in main RSS feed <em><small>(Use with caution, as this will remove all non-posts from the native RSS feed)</small></em>') ?></label>
+				    <label for="faq_options[rss]" rel="checkbox"><?php _e('Include FAQs in main RSS feed <em><small>(Use with caution, as this will remove all non-posts from the native RSS feed)</small></em>', 'wpfaq'); ?></label>
 				</p>
 
 				<h2 class="inst-title"><?php _e('SEO Options') ?></h2>
 
 				<p>
 				    <input type="checkbox" name="faq_options[noindex]" id="faq_noindex" value="true" <?php checked( $noindex, 'true' ); ?> />
-				    <label for="faq_options[noindex]" rel="checkbox"> <?php _e('Apply <code>noindex</code> header tag to FAQs') ?></label>
+				    <label for="faq_options[noindex]" rel="checkbox"> <?php _e('Apply <code>noindex</code> header tag to FAQs', 'wpfaq'); ?></label>
 				</p>
 
 				<p>
 				    <input type="checkbox" name="faq_options[nofollow]" id="faq_nofollow" value="true" <?php checked( $nofollow, 'true' ); ?> />
-				    <label for="faq_options[nofollow]" rel="checkbox"> <?php _e('Apply <code>nofollow</code> header tag to FAQs') ?></label>
+				    <label for="faq_options[nofollow]" rel="checkbox"> <?php _e('Apply <code>nofollow</code> header tag to FAQs', 'wpfaq'); ?></label>
 				</p>
 
 				<p>
 				    <input type="checkbox" name="faq_options[noarchive]" id="faq_noarchive" value="true" <?php checked( $noarchive, 'true' ); ?> />
-				    <label for="faq_options[noarchive]" rel="checkbox"> <?php _e('Apply <code>noarchive</code> header tag to FAQs') ?></label>
+				    <label for="faq_options[noarchive]" rel="checkbox"> <?php _e('Apply <code>noarchive</code> header tag to FAQs', 'wpfaq'); ?></label>
 				</p>				
 
 				<p>
 					<input type="text" name="faq_options[single]" id="faq_single" size="20" value="<?php echo sanitize_title($singletext); ?>" />
-					<label for="faq_options[single]"><?php _e('Desired slug for single FAQs <em><small>(all lower case, no capitals or spaces)</small></em>') ?></label>
+					<label for="faq_options[single]"><?php _e('Desired slug for single FAQs <em><small>(all lower case, no capitals or spaces)</small></em>', 'wpfaq'); ?></label>
 				</p>
 
 				<p>
 					<input type="text" name="faq_options[arch]" id="faq_arch" size="20" value="<?php echo sanitize_title($archtext); ?>" />
-					<label for="faq_options[arch]"><?php _e('Desired slug for FAQ archive page <em><small>(all lower case, no capitals or spaces)</small></em>') ?></label>
+					<label for="faq_options[arch]"><?php _e('Desired slug for FAQ archive page <em><small>(all lower case, no capitals or spaces)</small></em>', 'wpfaq'); ?></label>
 				</p>
 
 				
     			<!-- submit -->
 	    		<p id="faq-submit" class="submit"><input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" /></p>
 
-				<p id="faq-desc" class="description"><?php _e('<strong>Note:</strong> You may need to flush your permalinks after changing settings.') ?> <a href="<?php echo admin_url( 'options-permalink.php'); ?>"><?php _e('Go to your Permalink Settings here') ?></a></p>
+				<p id="faq-desc" class="description"><?php _e('<strong>Note:</strong> You may need to flush your permalinks after changing settings.', 'wpfaq'); ?> <a href="<?php echo admin_url( 'options-permalink.php'); ?>"><?php _e('Go to your Permalink Settings here', 'wpfaq'); ?></a></p>
 
 				</form>
 
@@ -447,56 +464,56 @@ class WP_FAQ_Manager
 		?>
         <div class="wrap">
         	<div id="icon-faq-admin" class="icon32"><br /></div>
-        	<h2><?php _e('FAQ Instructions'); ?></h2>
+        	<h2><?php _e('FAQ Instructions', 'wpfaq'); ?></h2>
 			<div id="poststuff" class="metabox-holder has-right-sidebar">
 
 			<?php
 			echo $this->settings_side();
 			echo $this->settings_open();
 			?>
-			<p><?php _e('The FAQ Manager plugin uses a combination of custom post types, meta fields, and taxonomies. The plugin will automatically create single posts using your existing permalink structure. And the FAQ categories and tags can be added to your menu using the WP Menu Manager'); ?></p>
+			<p><?php _e('The FAQ Manager plugin uses a combination of custom post types, meta fields, and taxonomies. The plugin will automatically create single posts using your existing permalink structure. And the FAQ categories and tags can be added to your menu using the WP Menu Manager', 'wpfaq'); ?></p>
 
-			<h2 class="inst-title"><?php _e('Shortcodes'); ?></h2>
-			<p><?php _e('The plugin also has the option of using shortcodes. To use them, follow the syntax accordingly in the HTML tab:'); ?></p>
+			<h2 class="inst-title"><?php _e('Shortcodes', 'wpfaq'); ?></h2>
+			<p><?php _e('The plugin also has the option of using shortcodes. To use them, follow the syntax accordingly in the HTML tab:', 'wpfaq'); ?></p>
 			<ul class="faqinfo">
-			<li><strong><?php _e('For the complete list (including title and content):'); ?></strong></li>
-			<li><?php _e('place <code>[faq]</code> on a post / page'); ?></li><br />
-			<li><strong><?php _e('For the question title, and a link to the FAQ on a separate page:'); ?></strong></li>
-			<li><?php _e('place <code>[faqlist]</code> on a post / page'); ?></li><br />
-			<li><strong><?php _e('For a list with a group of titles that link to complete content later in page:'); ?></strong></li>
-			<li><?php _e('place <code>[faqcombo]</code> on a post / page'); ?></li><br />
-			<li><strong><?php _e('For a list of taxonomy titles that link to the related archive page:'); ?></strong></li>
-			<li><?php _e('place <code>[faqtaxlist type="topics"]</code> or <code>[faqtaxlist type="tags"]</code> on a post / page'); ?></li>
-			<li><?php _e('Show optional description: <code>[faqtaxlist type="topics" desc="true"]</code>'); ?></li><br />
-			<li><?php _e('<em><strong>Please note:</strong> the combo and taxonomy list shortcodes will not recognize the pagination and expand / collapse</em>'); ?></li><br />			
+			<li><strong><?php _e('For the complete list (including title and content):', 'wpfaq'); ?></strong></li>
+			<li><?php _e('place <code>[faq]</code> on a post / page', 'wpfaq'); ?></li><br />
+			<li><strong><?php _e('For the question title, and a link to the FAQ on a separate page:', 'wpfaq'); ?></strong></li>
+			<li><?php _e('place <code>[faqlist]</code> on a post / page', 'wpfaq'); ?></li><br />
+			<li><strong><?php _e('For a list with a group of titles that link to complete content later in page:', 'wpfaq'); ?></strong></li>
+			<li><?php _e('place <code>[faqcombo]</code> on a post / page', 'wpfaq'); ?></li><br />
+			<li><strong><?php _e('For a list of taxonomy titles that link to the related archive page:', 'wpfaq'); ?></strong></li>
+			<li><?php _e('place <code>[faqtaxlist type="topics"]</code> or <code>[faqtaxlist type="tags"]</code> on a post / page', 'wpfaq'); ?></li>
+			<li><?php _e('Show optional description: <code>[faqtaxlist type="topics" desc="true"]</code>', 'wpfaq'); ?></li><br />
+			<li><?php _e('<em><strong>Please note:</strong> the combo and taxonomy list shortcodes will not recognize the pagination and expand / collapse</em>', 'wpfaq'); ?></li><br />			
 			</ul>
 
-			<h2 class="inst-title"><?php _e('The following options apply to all the <code>shortcode</code> types'); ?></h2>
+			<h2 class="inst-title"><?php _e('The following options apply to all the <code>shortcode</code> types', 'wpfaq'); ?></h2>
 
-			<p><?php _e('The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).'); ?></p>
+			<p><?php _e('The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).', 'wpfaq'); ?></p>
 			
 			<ul class="faqinfo">
-			<li><strong><?php _e('To display only 5:'); ?></strong></li>
-			<li><?php _e('place <code>[faq limit="5"]</code> on a post / page'); ?></li><br />
-			<li><strong><?php _e('To display ALL:'); ?></strong></li>
-			<li><?php _e('place <code>[faq limit="-1"]</code> on a post / page'); ?></li><br />
+			<li><strong><?php _e('To display only 5:', 'wpfaq'); ?></strong></li>
+			<li><?php _e('place <code>[faq limit="5"]</code> on a post / page', 'wpfaq'); ?></li><br />
+			<li><strong><?php _e('To display ALL:', 'wpfaq'); ?></strong></li>
+			<li><?php _e('place <code>[faq limit="-1"]</code> on a post / page', 'wpfaq'); ?></li><br />
 			</ul>
 
 			<ul class="faqinfo">
-			<li><strong><?php _e('For a single FAQ:'); ?></strong></li>
-			<li><?php _e('place <code>[faq faq_id="ID"]</code> on a post / page'); ?></li><br />
-			<li><strong><?php _e('List all from a single FAQ topic category:'); ?></strong></li>
-			<li><?php _e('place <code>[faq faq_topic="topic-slug"]</code> on a post / page'); ?></li><br />
-			<li><strong><?php _e('List all from a single FAQ tag:'); ?></strong></li>
-			<li><?php _e('place <code>[faq faq_tag="tag-slug"]</code> on a post / page'); ?></li><br />
+			<li><strong><?php _e('For a single FAQ:', 'wpfaq'); ?></strong></li>
+			<li><?php _e('place <code>[faq faq_id="ID"]</code> on a post / page', 'wpfaq'); ?></li><br />
+			<li><strong><?php _e('List all from a single FAQ topic category:', 'wpfaq'); ?></strong></li>
+			<li><?php _e('place <code>[faq faq_topic="topic-slug"]</code> on a post / page', 'wpfaq'); ?></li><br />
+			<li><strong><?php _e('List all from a single FAQ tag:', 'wpfaq'); ?></strong></li>
+			<li><?php _e('place <code>[faq faq_tag="tag-slug"]</code> on a post / page', 'wpfaq'); ?></li><br />
 			</ul>
 
-			<p><strong><em><?php _e('Please note that the shortcode cannot handle a query of multiple categories / topics in a single shortcode. However, you can stack them as such:'); ?></em></strong></p>
-			<p>...content....</p>
-			<p class="indent"><code><?php _e('[faq faq_topic="topic-slug-one"]'); ?></code></p>
-			<p><?php _e('...more content....'); ?></p>
-			<p class="indent"><code><?php _e('[faq faq_topic="topic-slug-two"]'); ?></code></p>
-			<p><?php _e('...even more content....'); ?></p>
+			<p><strong><em><?php _e('Please note that the shortcode cannot handle a query of multiple categories / topics in a single shortcode. However, you can stack them as such:', 'wpfaq'); ?></em></strong></p>
+			<p><?php _e('...content....', 'wpfaq'); ?></p>
+			<p class="indent"><code><?php _e('[faq faq_topic="topic-slug-one"]', 'wpfaq'); ?></code></p>
+			<p><?php _e('...more content....', 'wpfaq'); ?></p>
+			<p class="indent"><code><?php _e('[faq faq_topic="topic-slug-two"]', 'wpfaq'); ?></code></p>
+			<p><?php _e('...even more content....', 'wpfaq'); ?></p>
 
 
 	<?php echo $this->settings_close(); ?>
@@ -518,16 +535,16 @@ class WP_FAQ_Manager
 	?>
 		<div id="faq-admin-sort" class="wrap">
 		<div id="icon-faq-admin" class="icon32"><br /></div>
-		<h2><?php _e('Sort FAQs'); ?> <img src=" <?php echo admin_url(); ?>/images/loading.gif" id="loading-animation" /></h2>
+		<h2><?php _e('Sort FAQs', 'wpfaq'); ?> <img src=" <?php echo admin_url(); ?>/images/loading.gif" id="loading-animation" /></h2>
 			<?php if ( $questions->have_posts() ) : ?>
-	    	<p><?php _e('<strong>Note:</strong> this only affects the FAQs listed using the shortcode functions'); ?></p>
+	    	<p><?php _e('<strong>Note:</strong> this only affects the FAQs listed using the shortcode functions', 'wpfaq'); ?></p>
 			<ul id="custom-type-list">
 				<?php while ( $questions->have_posts() ) : $questions->the_post(); ?>
 					<li id="<?php the_id(); ?>"><?php the_title(); ?></li>			
 				<?php endwhile; ?>
 	    	</ul>
 			<?php else: ?>
-			<p><?php _e('You have no FAQs to sort.'); ?></p>
+			<p><?php _e('You have no FAQs to sort.', 'wpfaq'); ?></p>
 			<?php endif; ?>
 		</div>
 	
@@ -887,18 +904,18 @@ class WP_FAQ_Manager
 		register_post_type( 'question',
 			array(
 				'labels'	=> array(
-					'name' 					=> __( 'FAQs' ),
-					'singular_name' 		=> __( 'FAQ' ),
-					'add_new'				=> __( 'Add New FAQ' ),
-					'add_new_item'			=> __( 'Add New FAQ' ),
-					'edit'					=> __( 'Edit' ),
-					'edit_item'				=> __( 'Edit FAQ' ),
-					'new_item'				=> __( 'New FAQ' ),
-					'view'					=> __( 'View FAQ' ),
-					'view_item'				=> __( 'View FAQ' ),
-					'search_items'			=> __( 'Search FAQ' ),
-					'not_found'				=> __( 'No FAQs found' ),
-					'not_found_in_trash'	=> __( 'No FAQs found in Trash' ),
+					'name' 					=> __( 'FAQs', 'wpfaq' ),
+					'singular_name' 		=> __( 'FAQ', 'wpfaq' ),
+					'add_new'				=> __( 'Add New FAQ', 'wpfaq' ),
+					'add_new_item'			=> __( 'Add New FAQ', 'wpfaq' ),
+					'edit'					=> __( 'Edit', 'wpfaq' ),
+					'edit_item'				=> __( 'Edit FAQ', 'wpfaq' ),
+					'new_item'				=> __( 'New FAQ', 'wpfaq' ),
+					'view'					=> __( 'View FAQ', 'wpfaq' ),
+					'view_item'				=> __( 'View FAQ', 'wpfaq' ),
+					'search_items'			=> __( 'Search FAQ', 'wpfaq' ),
+					'not_found'				=> __( 'No FAQs found', 'wpfaq' ),
+					'not_found_in_trash'	=> __( 'No FAQs found in Trash', 'wpfaq' ),
 				),
 				'public'	=> true,
 					'show_in_nav_menus'		=> true,
@@ -929,17 +946,17 @@ class WP_FAQ_Manager
 				'hierarchical'			=> true,
 				'query_var'				=> true,
 				'labels'	=> array(
-					'name' 					=> __( 'FAQ Topics' ),
-					'singular_name'			=> __( 'FAQ Topic' ),
-					'search_items'			=> __( 'Search FAQ Topics' ),
-					'popular_items'			=> __( 'Popular FAQ Topics' ),
-					'all_items'				=> __( 'All FAQ Topics' ),
-					'parent_item'			=> __( 'Parent FAQ Topic' ),
-					'parent_item_colon'		=> __( 'Parent FAQ Topic:' ),
-					'edit_item'				=> __( 'Edit FAQ Topics' ),
-					'update_item'			=> __( 'Update FAQ Topics' ),
-					'add_new_item'			=> __( 'Add New FAQ Topics' ),
-					'new_item_name'			=> __( 'New FAQ Topics' ),
+					'name' 					=> __( 'FAQ Topics', 'wpfaq' ),
+					'singular_name'			=> __( 'FAQ Topic', 'wpfaq' ),
+					'search_items'			=> __( 'Search FAQ Topics', 'wpfaq' ),
+					'popular_items'			=> __( 'Popular FAQ Topics', 'wpfaq' ),
+					'all_items'				=> __( 'All FAQ Topics', 'wpfaq' ),
+					'parent_item'			=> __( 'Parent FAQ Topic', 'wpfaq' ),
+					'parent_item_colon'		=> __( 'Parent FAQ Topic:', 'wpfaq' ),
+					'edit_item'				=> __( 'Edit FAQ Topics', 'wpfaq' ),
+					'update_item'			=> __( 'Update FAQ Topics', 'wpfaq' ),
+					'add_new_item'			=> __( 'Add New FAQ Topics', 'wpfaq' ),
+					'new_item_name'			=> __( 'New FAQ Topics', 'wpfaq' ),
 				),
 			)
 		);
@@ -957,17 +974,17 @@ class WP_FAQ_Manager
 				'hierarchical'			=> false,
 				'query_var'				=> true,
 				'labels'	=> array(
-					'name'					=> __( 'FAQ Tags' ),
-					'singular_name'			=> __( 'FAQ Tag' ),
-					'search_items'			=> __( 'Search FAQ Tags' ),
-					'popular_items'			=> __( 'Popular FAQ Tags' ),
-					'all_items'				=> __( 'All FAQ Tags' ),
-					'parent_item'			=> __( 'Parent FAQ Tags' ),
-					'parent_item_colon'		=> __( 'Parent FAQ Tag:' ),
-					'edit_item'				=> __( 'Edit FAQ Tag' ),
-					'update_item'			=> __( 'Update FAQ Tag' ),
-					'add_new_item'			=> __( 'Add New FAQ Tag' ),
-					'new_item_name'			=> __( 'New FAQ Tag' ),
+					'name'					=> __( 'FAQ Tags', 'wpfaq' ),
+					'singular_name'			=> __( 'FAQ Tag', 'wpfaq' ),
+					'search_items'			=> __( 'Search FAQ Tags', 'wpfaq' ),
+					'popular_items'			=> __( 'Popular FAQ Tags', 'wpfaq' ),
+					'all_items'				=> __( 'All FAQ Tags', 'wpfaq' ),
+					'parent_item'			=> __( 'Parent FAQ Tags', 'wpfaq' ),
+					'parent_item_colon'		=> __( 'Parent FAQ Tag:', 'wpfaq' ),
+					'edit_item'				=> __( 'Edit FAQ Tag', 'wpfaq' ),
+					'update_item'			=> __( 'Update FAQ Tag', 'wpfaq' ),
+					'add_new_item'			=> __( 'Add New FAQ Tag', 'wpfaq' ),
+					'new_item_name'			=> __( 'New FAQ Tag', 'wpfaq' ),
 				),
 			)
 		);
@@ -1135,7 +1152,7 @@ class WP_FAQ_Manager
 	public function title_text( $title ){
 		$screen = get_current_screen();
 		if ( 'question' == $screen->post_type ) :
-			$title = __('Enter Question Title Here');
+			$title = __('Enter Question Title Here', 'wpfaq');;
 		endif;
 		
 		return $title;
@@ -1217,12 +1234,12 @@ class WP_FAQ_Manager
 		<div id="side-info-column" class="inner-sidebar">
 			<div class="meta-box-sortables">
 				<div id="faq-admin-about" class="postbox">
-					<h3 class="hndle" id="about-sidebar"><?php _e('About the Plugin') ?></h3>
+					<h3 class="hndle" id="about-sidebar"><?php _e('About the Plugin', 'wpfaq'); ?></h3>
 					<div class="inside">
-						<p><?php _e('Talk to') ?> <a href="http://twitter.com/norcross" target="_blank">@norcross</a> <?php _e('on twitter or visit the') ?> <a href="http://wordpress.org/support/plugin/wordpress-faq-manager/" target="_blank"><?php _e('plugin support form') ?></a> <?php _e('for bugs or feature requests.') ?></p>
-						<p><?php _e('<strong>Enjoy the plugin?</strong>') ?><br />
-						<a href="http://twitter.com/?status=I'm using @norcross's WordPress FAQ Manager plugin - check it out! http://l.norc.co/wpfaq/" target="_blank"><?php _e('Tweet about it') ?></a> <?php _e('and consider donating.') ?></p>
-						<p><?php _e('<strong>Donate:</strong> A lot of hard work goes into building plugins - support your open source developers. Include your twitter username and I\'ll send you a shout out for your generosity. Thank you!') ?><br />
+						<p><?php _e('Talk to') ?> <a href="http://twitter.com/norcross" target="_blank">@norcross</a> <?php _e('on twitter or visit the', 'wpfaq'); ?> <a href="http://wordpress.org/support/plugin/wordpress-faq-manager/" target="_blank"><?php _e('plugin support form') ?></a> <?php _e('for bugs or feature requests.', 'wpfaq'); ?></p>
+						<p><?php _e('<strong>Enjoy the plugin?</strong>', 'wpfaq'); ?><br />
+						<a href="http://twitter.com/?status=I'm using @norcross's WordPress FAQ Manager plugin - check it out! http://l.norc.co/wpfaq/" target="_blank"><?php _e('Tweet about it', 'wpfaq'); ?></a> <?php _e('and consider donating.', 'wpfaq'); ?></p>
+						<p><?php _e('<strong>Donate:</strong> A lot of hard work goes into building plugins - support your open source developers. Include your twitter username and I\'ll send you a shout out for your generosity. Thank you!', 'wpfaq'); ?><br />
 						<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
 						<input type="hidden" name="cmd" value="_s-xclick">
 						<input type="hidden" name="hosted_button_id" value="11085100">
@@ -1235,13 +1252,13 @@ class WP_FAQ_Manager
 			
 			<div class="meta-box-sortables">
 				<div id="faq-admin-more" class="postbox">
-					<h3 class="hndle" id="about-sidebar"><?php _e('Links') ?></h3>
+					<h3 class="hndle" id="about-sidebar"><?php _e('Links', 'wpfaq'); ?></h3>
 					<div class="inside">
 						<ul>
-						<li><a href="http://wordpress.org/extend/plugins/wordpress-faq-manager/" target="_blank"><?php _e('Plugin on WP.org') ?></a></li>
-						<li><a href="https://github.com/norcross/WordPress-FAQ-Manager" target="_blank"><?php _e('Plugin on GitHub') ?></a></li>
-						<li><a href="http://wordpress.org/support/plugin/wordpress-faq-manager" target="_blank"><?php _e('Support Forum') ?></a><li>
-            			<li><a href="<?php echo menu_page_url( 'faq-instructions', 0 ); ?>"><?php _e('Instructions page') ?></a></li>
+						<li><a href="http://wordpress.org/extend/plugins/wordpress-faq-manager/" target="_blank"><?php _e('Plugin on WP.org', 'wpfaq'); ?></a></li>
+						<li><a href="https://github.com/norcross/WordPress-FAQ-Manager" target="_blank"><?php _e('Plugin on GitHub', 'wpfaq'); ?></a></li>
+						<li><a href="http://wordpress.org/support/plugin/wordpress-faq-manager" target="_blank"><?php _e('Support Forum', 'wpfaq'); ?></a><li>
+            			<li><a href="<?php echo menu_page_url( 'faq-instructions', 0 ); ?>"><?php _e('Instructions page', 'wpfaq'); ?></a></li>
             			</ul>
 					</div>
 				</div>
@@ -1276,396 +1293,6 @@ class WP_FAQ_Manager
 
 
 // Instantiate our class
+$WP_FAQ_Manager = new WP_FAQ_Manager();
 
-function WP_FAQ_Manager_init() {
-	$WP_FAQ_Manager = new WP_FAQ_Manager();
-}
 
-if(!function_exists('WP_FAQ_Manager_init')) {
-	WP_FAQ_Manager_init();
-}
-
-add_action('init', 'WP_FAQ_Manager_init', 1);
-
-
-	/**
-	 * setup widgets
-	 *
-	 * @return WP_FAQ_Manager
-	 */
-
-// FAQ Search
-class search_FAQ_Widget extends WP_Widget {
-	function search_FAQ_Widget() {
-		$widget_ops = array( 'classname' => 'faq-search-widget widget_search', 'description' => 'Puts a search box for just FAQs' );
-		$this->WP_Widget( 'faq_search', 'FAQ Widget - Search', $widget_ops );
-	}
-
-	function widget( $args, $instance ) {
-		extract( $args, EXTR_SKIP );
-		echo $before_widget;
-		$title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
-		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };		
-
-		echo '<form class="searchform" role="search" method="get" id="faq-search" action="' . home_url( '/' ) . '" >';
-		echo '<input type="text" value="' . get_search_query() . '" name="s" id="s" class="s" />';
-		echo '<input type="submit" class="searchsubmit" value="'. esc_attr__('Search') .'" />';
-		echo '<input type="hidden" name="post_type" value="question" />';
-		echo '</form>';
-		
-		echo $after_widget;
-		?>
-      
-        <?php }
-
-    /** @see WP_Widget::update */
-    function update($new_instance, $old_instance) {             
-    $instance = $old_instance;
-    $instance['title']  = strip_tags($new_instance['title']);
-        return $instance;
-    }
-
-    /** @see WP_Widget::form */
-    function form($instance) {              
-        $instance = wp_parse_args( (array) $instance, array( 
-            'title' => 'Search FAQs',
-            ));
-        $title  = strip_tags($instance['title']);
-        ?>
-        <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>">Widget Title:</label>
-            <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
-        </p>
-
-	<?php }
-
-
-} // class 
-
-
-// show randoms
-class random_FAQ_Widget extends WP_Widget {
-	function random_FAQ_Widget() {
-		$widget_ops = array( 'classname' => 'faq-random-widget', 'description' => 'Lists a single random FAQ on the sidebar' );
-		$this->WP_Widget( 'faq_random', 'FAQ Widget - Random', $widget_ops );
-	}
-
-	function widget( $args, $instance ) {
-		extract( $args, EXTR_SKIP );
-		echo $before_widget;
-		$title		= empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
-		$count		= empty($instance['count']) ? 1 : $instance['count'];
-		$seemore	= empty($instance['seemore']) ? 'See the entire answer' : $instance['seemore'];
-
-		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };
-			$args = array(
-				'post_type'		=> 'question',
-				'numberposts'	=> $count,
-				'orderby'		=> 'rand',
-				);
-			$faqs = get_posts( $args );
-			
-			foreach( $faqs as $faq ) :
-				$text = wpautop( $faq->post_content );
- 			
-				echo '<h5 class="faq-widget-title">'.$faq->post_title.'</h5>';
-				echo wp_trim_words( $text, 15, null );
-				echo '<p><a href="'.get_permalink($faq->ID).'">'.$seemore.'</a></p>';
-        
-        	endforeach;
-		wp_reset_query();
-		echo $after_widget;
-		?>
-      
-        <?php }
-
-    /** @see WP_Widget::update */
-    function update($new_instance, $old_instance) {             
-    $instance = $old_instance;
-    $instance['title']		= strip_tags($new_instance['title']);
-    $instance['seemore']	= strip_tags($new_instance['seemore']);
-    $instance['count']		= strip_tags($new_instance['count']);
-        return $instance;
-    }
-
-    /** @see WP_Widget::form */
-    function form($instance) {              
-        $instance = wp_parse_args( (array) $instance, array( 
-            'title'		=> 'Frequently Asked Question',
-            'seemore'	=> 'See the entire answer',
-            'count'		=> '1',
-            ));
-        $title		= strip_tags($instance['title']);
-        $seemore	= strip_tags($instance['seemore']);
-        $count		= strip_tags($instance['count']);
-        ?>
-        <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>">Widget Title:</label>
-            <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
-        </p>
-        <p>
-            <label for="<?php echo $this->get_field_id('seemore'); ?>">"See More" text:</label>
-            <input class="widefat" id="<?php echo $this->get_field_id('seemore'); ?>" name="<?php echo $this->get_field_name('seemore'); ?>" type="text" value="<?php echo esc_attr($seemore); ?>" />
-        </p>
-        <p>
-            <label for="<?php echo $this->get_field_id('count'); ?>">Post Count:</label>
-            <input class="small-text" id="<?php echo $this->get_field_id('count'); ?>" name="<?php echo $this->get_field_name('count'); ?>" type="text" value="<?php echo esc_attr($count); ?>" />
-        </p>
-	<?php }
-
-
-} // class 
-
-
-// Recent Questions
-
-class recent_FAQ_Widget extends WP_Widget {
-	function recent_FAQ_Widget() {
-		$widget_ops = array( 'classname' => 'recent-questions-widget', 'description' => 'List recent questions' );
-		$this->WP_Widget( 'recent_questions', 'FAQ Widget - Recent', $widget_ops );
-	}
-
-	function widget( $args, $instance ) {
-		extract( $args, EXTR_SKIP );
-		echo $before_widget;
-		$title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
-		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };
-			$args = array(
-				'posts_per_page'	=>	$instance['count'],
-				'post_type' 		=> 'question',
-				'post_status'		=> 'publish',
-			);
-
-			$faqs = get_posts( $args );
-		echo '<ul>';
-			foreach( $faqs as $post ) :	setup_postdata($post);
-				global $post;
-				echo '<li><a href="'.get_permalink($post->ID).'" title="'.get_the_title($post->ID).'">'.get_the_title($post->ID).'</a></li>';
-
-        	endforeach;
-		echo '</ul>';
-		wp_reset_query();
-		echo $after_widget;
-		?>
-
-        <?php }
-
-    /** @see WP_Widget::update */
-
-    function update($new_instance, $old_instance) {				
-	$instance = $old_instance;
-	$instance['title']	= strip_tags($new_instance['title']);
-	$instance['count']	= strip_tags($new_instance['count']);
-        return $instance;
-    }
-
-
-
-    /** @see WP_Widget::form */
-    function form($instance) {				
-        $instance = wp_parse_args( (array) $instance, array( 
-			'title'		=> 'Recent Questions',
-			'count'		=> '5',
-		));
-		$title	= strip_tags($instance['title']);
-		$count	= strip_tags($instance['count']);
-
-        ?>
-
-        <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>">Widget Title:</label>
-            <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
-        </p>
-
-        <p>
-            <label for="<?php echo $this->get_field_id('count'); ?>">Post Count:</label>
-            <input class="widefat" id="<?php echo $this->get_field_id('count'); ?>" name="<?php echo $this->get_field_name('count'); ?>" type="text" value="<?php echo esc_attr($count); ?>" />
-        </p>
-		<?php }
-
-
-
-} // class 
-
-
-// FAQ Taxonomy List
-class topics_FAQ_Widget extends WP_Widget {
-	function topics_FAQ_Widget() {
-		$widget_ops = array( 'classname' => 'recent-faqtax-widget', 'description' => 'List FAQ topics or tags' );
-		$this->WP_Widget( 'recent_faqtax', 'FAQ Widget - Taxonomies', $widget_ops );
-	}
-
-	function widget( $args, $instance ) {
-		extract( $args, EXTR_SKIP );
-		echo $before_widget;
-		$title	= empty($instance['title'])	? ''			: apply_filters('widget_title', $instance['title']);
-		$tax	= empty($instance['tax'])	? 'faq-topic'	: $instance['tax'];
-
-		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };
-		echo '<ul>';
-			// set query variables
-			$orderby		= 'name';
-			$show_count		= 0; // 1 for yes, 0 for no
-			$pad_counts		= 0; // 1 for yes, 0 for no
-			$hierarchical	= 1; // 1 for yes, 0 for no
-			$taxonomy		= $tax;
-			$title			= '';
-			$style			= 'list';
-	
-			$topic_args = array(
-				'orderby'		=> $orderby,
-				'show_count'	=> $show_count,
-				'pad_counts'	=> $pad_counts,
-				'hierarchical'	=> $hierarchical,
-				'taxonomy'		=> $taxonomy,
-				'title_li'		=> $title,
-				'style'			=> $style
-			);
-
-			wp_list_categories($topic_args);
-		echo '</ul>';
-		echo $after_widget;
-		?>
-
-        
-
-        <?php }
-
-
-    /** @see WP_Widget::form */
-	function update( $new_instance, $old_instance ) {
-		$instance = $old_instance;
-		$instance['title'] = strip_tags($new_instance['title']);
-			if ( in_array( $new_instance['tax'], array( 'faq-topic', 'faq-tags' ) ) ) {
-				$instance['tax'] = $new_instance['tax'];
-			} else {
-				$instance['tax'] = 'faq-topic';
-			}
-		return $instance;
-	}
-
-    /** @see WP_Widget::form */
-	function form( $instance ) {
-
-		//Defaults
-		$instance = wp_parse_args( (array) $instance, array(
-			'tax'	=> 'faq-topic',
-			'title' => '',
-		) );
-		$title = esc_attr( $instance['title'] );
-	?>
-
-        <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>"><?php _e( 'Widget Title:' ); ?></label>
-            <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
-        </p>
-
-		<p>
-			<label for="<?php echo $this->get_field_id('tax'); ?>"><?php _e( 'Taxonomy:' ); ?></label>
-			<select name="<?php echo $this->get_field_name('tax'); ?>" id="<?php echo $this->get_field_id('tax'); ?>" class="widefat">
-				<option value="faq-topic"<?php selected( $instance['tax'], 'faq-topic' ); ?>><?php _e('FAQ Topics'); ?></option>
-				<option value="faq-tags"<?php selected( $instance['tax'], 'faq-tags' ); ?>><?php _e('FAQ Tags'); ?></option>
-			</select>
-		</p>
-
-		<?php }
-
-
-
-} // class 
-
-
-// FAQ Tag Cloud
-
-class cloud_FAQ_Widget extends WP_Widget {
-	function cloud_FAQ_Widget() {
-		$widget_ops = array( 'classname' => 'faq-cloud-widget', 'description' => 'A tag cloud of FAQ topics and tags' );
-		$this->WP_Widget( 'faq_cloud', 'FAQ Widget - Cloud', $widget_ops );
-	}
-
-	function widget( $args, $instance ) {
-		extract( $args, EXTR_SKIP );
-		
-		echo $before_widget;
-		
-		$ok_topic	= isset($instance['to_include']) ? $instance['to_include'] : false;
-		$ok_tag		= isset($instance['ta_include']) ? $instance['ta_include'] : false;
-		$title		= empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
-
-		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };
-
-		echo '<div class="faqcloud">';
-			if ($ok_topic)
-				$cloud_args = array('taxonomy' => 'faq-topic' );
-
-			if($ok_tag)
-				$cloud_args = array('taxonomy' => 'faq-tags' );
-
-			if($ok_topic && $ok_tag)
-				$cloud_args = array('taxonomy' => array ('faq-tags', 'faq-topic' ));
-
-        echo wp_tag_cloud( $cloud_args ); 
-		
-		echo '</div>';
-		echo $after_widget;
-    }
-
-
-
-    /** @see WP_Widget::update */
-
-    function update($new_instance, $old_instance) {				
-		$instance = $old_instance;
-		$instance['title'] = strip_tags($new_instance['title']);
-		$instance['to_include'] = !empty($new_instance['to_include']) ? 1 : 0;
-		$instance['ta_include'] = !empty($new_instance['ta_include']) ? 1 : 0;
-	        return $instance;
-    }	
-
-
-    /** @see WP_Widget::form */
-    function form($instance) {				
-        $instance = wp_parse_args( (array) $instance, array( 
-			'title'			=> 'Recent Topics',
-			'to_include'	=> 0,
-			'ta_include'	=> 1,
-		));
-
-		$title = strip_tags($instance['title']);
-		
-		foreach ( $instance as $field => $val ) :
-			if ( isset($new_instance[$field]) )
-				$instance[$field] = 1;
-		
-		endforeach;
-        ?>
-
-        <p>
-            <label for="<?php echo $this->get_field_id('title'); ?>">Widget Title:</label>
-            <input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
-        </p>
-
-       	<p>
-       		<input class="checkbox" type="checkbox" <?php checked($instance['to_include'], true) ?> id="<?php echo $this->get_field_id('to_include'); ?>" name="<?php echo $this->get_field_name('to_include'); ?>" />
-	        <label for="<?php echo $this->get_field_id('to_include'); ?>"><?php _e('Include FAQ Topics'); ?></label>
-	    </p>
-
-       	<p>
-       		<input class="checkbox" type="checkbox" <?php checked($instance['ta_include'], true) ?> id="<?php echo $this->get_field_id('ta_include'); ?>" name="<?php echo $this->get_field_name('ta_include'); ?>" />
-			<label for="<?php echo $this->get_field_id('ta_include'); ?>"><?php _e('Include FAQ Tags'); ?></label>
-		</p>
-
-		<?php }
-
-
-
-} // class 
-
-
-
-// register widget
-add_action( 'widgets_init', create_function( '', "register_widget('search_FAQ_Widget');" ) );
-add_action( 'widgets_init', create_function( '', "register_widget('random_FAQ_Widget');" ) );
-add_action( 'widgets_init', create_function( '', "register_widget('recent_FAQ_Widget');" ) );
-add_action( 'widgets_init', create_function( '', "register_widget('topics_FAQ_Widget');" ) );
-add_action( 'widgets_init', create_function( '', "register_widget('cloud_FAQ_Widget');" ) );

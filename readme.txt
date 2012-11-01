@@ -78,6 +78,7 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 = 1.323 =
 * applying filters to content output for shortcodes, etc
 * beginning internationalization support
+* moved widgets into a separate file for organization
 
 = 1.323 =
 * minor bugfix for conflicts with certain commerical forms plugins
