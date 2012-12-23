@@ -10,7 +10,7 @@
 
 /* list style shortcode */
 
-#faq-block li.faqlist-question,  
+#faq-block li.faqlist-question,
 #faq-block li.faqlist-question a {
 	color:#000;
 	padding-bottom:4px;
@@ -31,6 +31,12 @@
 
 #faq-block .single-faq .expand-title {
 	cursor:pointer;
+}
+
+/* combo shortcode */
+
+#faq-block p.scroll-back {
+	font-size: 90%;
 }
 
 /* pagination */

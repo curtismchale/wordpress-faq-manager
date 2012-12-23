@@ -1,16 +1,15 @@
 <?php
 /*  
-Keeping a separate file for the widgets just for orgaization purposes
+Keeping a separate file for the widgets for orgaization purposes
 */
 
 
 	/**
-	 * setup widgets
+	 * FAQ Search
 	 *
 	 * @return WP_FAQ_Manager
 	 */
 
-// FAQ Search
 class search_FAQ_Widget extends WP_Widget {
 	function search_FAQ_Widget() {
 		$widget_ops = array( 'classname' => 'faq-search-widget widget_search', 'description' => 'Puts a search box for just FAQs' );
@@ -58,8 +57,13 @@ class search_FAQ_Widget extends WP_Widget {
 
 } // class 
 
+	/**
+	 * Random FAQ widget
+	 *
+	 * @return WP_FAQ_Manager
+	 */
 
-// show randoms
+
 class random_FAQ_Widget extends WP_Widget {
 	function random_FAQ_Widget() {
 		$widget_ops = array( 'classname' => 'faq-random-widget', 'description' => 'Lists a single random FAQ on the sidebar' );
@@ -132,8 +136,12 @@ class random_FAQ_Widget extends WP_Widget {
 
 } // class 
 
+	/**
+	 * Recent FAQ 
+	 *
+	 * @return WP_FAQ_Manager
+	 */
 
-// Recent Questions
 
 class recent_FAQ_Widget extends WP_Widget {
 	function recent_FAQ_Widget() {
@@ -203,8 +211,13 @@ class recent_FAQ_Widget extends WP_Widget {
 
 } // class 
 
+	/**
+	 * FAQ taxonomy list
+	 *
+	 * @return WP_FAQ_Manager
+	 */
 
-// FAQ Taxonomy List
+
 class topics_FAQ_Widget extends WP_Widget {
 	function topics_FAQ_Widget() {
 		$widget_ops = array( 'classname' => 'recent-faqtax-widget', 'description' => 'List FAQ topics or tags' );
@@ -291,7 +304,12 @@ class topics_FAQ_Widget extends WP_Widget {
 } // class 
 
 
-// FAQ Tag Cloud
+
+	/**
+	 * FAQ Tag Cloud
+	 *
+	 * @return WP_FAQ_Manager
+	 */
 
 class cloud_FAQ_Widget extends WP_Widget {
 	function cloud_FAQ_Widget() {
@@ -377,9 +395,13 @@ class cloud_FAQ_Widget extends WP_Widget {
 
 } // class 
 
+	/**
+	 * Register all widgets
+	 *
+	 * @return WP_FAQ_Manager
+	 */
 
 
-// register widget
 add_action( 'widgets_init', create_function( '', "register_widget('search_FAQ_Widget');" ) );
 add_action( 'widgets_init', create_function( '', "register_widget('random_FAQ_Widget');" ) );
 add_action( 'widgets_init', create_function( '', "register_widget('recent_FAQ_Widget');" ) );

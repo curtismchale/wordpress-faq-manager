@@ -25,6 +25,24 @@ jQuery(document).ready(function ($) {
 	});
 
 //********************************************************
+// optional return to top
+//********************************************************
+
+	$('div.faq-content div.single-faq').each(function() {
+		// now clickin
+		$(this).find('p.scroll-back a').click (function (e) {
+
+			// now scroll to my FAQ
+			$('html, body').animate({
+				scrollTop: $('div#faq-block').offset().top -55
+			}, 500);
+			// this removes the hash in the URL for cleaner UI
+			e.preventDefault();
+
+		});
+	});
+
+//********************************************************
 // what, you're still here? it's over. go home.
 //********************************************************
 

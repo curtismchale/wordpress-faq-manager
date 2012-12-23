@@ -4,7 +4,7 @@ Donate link: http://andrewnorcross.com/donate
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 3.0
 Tested up to: 3.5
-Stable tag: 1.324
+Stable tag: 1.329
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -31,41 +31,41 @@ It uses the custom post type feature to create a dedicated FAQ section in your W
 
 Each FAQ acts like a "post". You can assign your own categories (called topics) or tags and organize as you see fit. You can also use shortcodes to place them on any page as follows:
 
-* For the complete list: 
+* For the complete list:
 	place `[faq]` on a post / page
-	
-* For a single FAQ: 
+
+* For a single FAQ:
 	place `[faq faq_id="ID"]` on a post / page
-	
-* List all from a single FAQ topic category: 
+
+* List all from a single FAQ topic category:
 	place `[faq faq_topic="topic-slug"]` on a post / page
-	
-* List all from a single FAQ tag: 
+
+* List all from a single FAQ tag:
 	place `[faq faq_tag="tag-slug"]` on a post / page
-	
+
 Please note that the shortcode can't handle a query of multiple categories in a single shortcode. However, you can stack them as such:
 	...content....
 	`[faq faq_topic="topic-slug-one"]`
 	`[faq faq_tag="tag-slug-two"]`
 
-The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order). 
-* To display only 5: 
+The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).
+* To display only 5:
 	place `[faq limit="5"]` on a post / page
 
-* To display ALL: 
+* To display ALL:
 	place `[faq limit="-1"]` on a post / page
 
-* For a list with a title and link to full FAQ: 
+* For a list with a title and link to full FAQ:
 	place `[faqlist]` on a post / page
 
-* For a list with a group of titles that link to complete content later in page: 
-	place `[faqcombo]` on a post / page	
+* For a list with a group of titles that link to complete content later in page:
+	place `[faqcombo]` on a post / page
 
-* For a list of taxonomies (topics or tags) with a link to their respective archive page: 
-	place `[faqtaxlist type="topics"]` or `[faqtaxlist type="tags"]` on a post / page	
+* For a list of taxonomies (topics or tags) with a link to their respective archive page:
+	place `[faqtaxlist type="topics"]` or `[faqtaxlist type="tags"]` on a post / page
 
-* For a list of taxonomies (topics or tags) with their description: 
-	place `[faqtaxlist type="topics (or tags)" desc="true"]` on a post / page	
+* For a list of taxonomies (topics or tags) with their description:
+	place `[faqtaxlist type="topics (or tags)" desc="true"]` on a post / page
 
 == Screenshots ==
 
@@ -74,6 +74,23 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 3. Example of expanded FAQs
 
 == Changelog ==
+
+= 1.329 =
+* replaced custom function with native admin columns for FAQ taxonomies
+* removed 'answers' from FAQ table due to translation issues
+* tweaked CSS to include FAQ icon in all related areas.
+
+= 1.328 =
+* small bugfix on markup for shortcode combo
+
+= 1.327 =
+* added optional 'back to top' link for combo FAQ list
+
+= 1.326 =
+* added option to redirect all FAQ content to a single FAQ page
+
+= 1.325 =
+* added option to disable content_filter on output (added on 1.324)
 
 = 1.324 =
 * applying filters to content output for shortcodes, etc
@@ -138,7 +155,7 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 
 = 1.22 =
 * bugfix with URL source of files
-* added a user permissions filter `faq-cap` to all related admin menu pages. [See the Codex](http://codex.wordpress.org/Plugin_API/Filter_Reference/user_has_cap "See the Codex") on `user_has_cap` filter to adjust. 
+* added a user permissions filter `faq-cap` to all related admin menu pages. [See the Codex](http://codex.wordpress.org/Plugin_API/Filter_Reference/user_has_cap "See the Codex") on `user_has_cap` filter to adjust.
 
 = 1.21 =
 * updated FAQ sort page to match user permissions of settings page

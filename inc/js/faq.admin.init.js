@@ -11,7 +11,7 @@ jQuery(document).ready(function($) {
 //********************************************************
 
 	var htype = $('div.faq-form-options select#faq_htype').hasClass('default');
-	
+
 	if (htype === true)
 		$('div.faq-form-options select.faq_htype option[value="h3"]').prop('selected',true);
 
@@ -25,7 +25,7 @@ jQuery(document).ready(function($) {
 
 
 //********************************************************
-// show / hide some options
+// show / hide some options on load
 //********************************************************
 
 	$('input#faq_expand').each(function() { // for initial load
@@ -50,6 +50,32 @@ jQuery(document).ready(function($) {
 
 	});
 
+	$('input#faq_scroll').each(function() { // for initial load
+		var checkval = $(this).is(':checked');
+
+		if (checkval === true)
+			$('p.scrolltop').show();
+
+		if (checkval === false)
+			$('p.scrolltop').hide();
+
+	});
+
+	$('input#faq_redirect').each(function() { // for initial load
+		var checkval = $(this).is(':checked');
+
+		if (checkval === true)
+			$('p.redirectid').show();
+
+		if (checkval === false)
+			$('p.redirectid').hide();
+
+	});
+
+//********************************************************
+// show / hide some options on change
+//********************************************************
+
 	$('input#faq_expand').change( function() { // for value change
 		var checkval = $(this).is(':checked');
 
@@ -58,7 +84,7 @@ jQuery(document).ready(function($) {
 
 		if (checkval === false)
 			$('div.secondary-option').hide(200);
-		
+
 	});
 
 	$('input#faq_exlink').change( function() { // for value change
@@ -69,7 +95,33 @@ jQuery(document).ready(function($) {
 
 		if (checkval === false)
 			$('p.extext').hide(200);
-		
+
+	});
+
+	$('input#faq_scroll').change( function() { // for value change
+		var checkval = $(this).is(':checked');
+
+		if (checkval === true)
+			$('p.scrolltop').slideToggle(200);
+
+		if (checkval === false) {
+			$('p.scrolltop').hide(200);
+			$('p.scrolltop select').val('none');
+		}
+
+	});
+
+	$('input#faq_redirect').change( function() { // for value change
+		var checkval = $(this).is(':checked');
+
+		if (checkval === true)
+			$('p.redirectid').slideToggle(200);
+
+		if (checkval === false) {
+			$('p.redirectid').hide(200);
+			$('p.redirectid select').val('none');
+		}
+
 	});
 
 //********************************************************
@@ -119,11 +171,11 @@ jQuery(document).ready(function($) {
 	$('div#faq-admin-sort').each(function() {
 
 		var sortList = $('ul#custom-type-list');
-	 
+
 		sortList.sortable({
 			update: function(event, ui) {
 				$('#loading-animation').show(); // Show the animate loading gif while waiting
-	 
+
 				opts = {
 					url: ajaxurl, // ajaxurl is defined by WordPress and points to /wp-admin/admin-ajax.php
 					type: 'POST',
@@ -149,7 +201,7 @@ jQuery(document).ready(function($) {
 				$.ajax(opts);
 			}
 		});
-	
+
 	});
 
 //********************************************************

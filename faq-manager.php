@@ -4,7 +4,7 @@ Plugin Name: WordPress FAQ Manager
 Plugin URI: http://andrewnorcross.com/plugins/wordpress-faq-manager/
 Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
 Author: Andrew Norcross
-Version: 1.324
+Version: 1.329
 Requires at least: 3.0
 Author URI: http://andrewnorcross.com
 */
@@ -28,7 +28,7 @@ if(!defined('FAQ_BASE'))
 	define('FAQ_BASE', plugin_basename(__FILE__) );
 
 if(!defined('FAQ_VER'))
-	define('FAQ_VER', '1.324');
+	define('FAQ_VER', '1.329');
 
 //call widgets file
 include('faq-widgets.php');
@@ -42,29 +42,28 @@ class WP_FAQ_Manager
 	 * @return WP_FAQ_Manager
 	 */
 	public function __construct() {
-		add_action					( 'plugins_loaded', 				array( $this, 'textdomain'		) );
-		add_action					( 'init',							array( $this, '_register_faq'	) );
-		add_action					( 'admin_init', 					array( $this, 'reg_settings'	) );
-		add_action					( 'admin_menu',						array( $this, 'admin_pages'		) );
-		add_action					( 'admin_footer',					array( $this, 'flush_rewrite'	) );
-		add_action					( 'the_posts', 						array( $this, 'style_loader'	) );
-		add_action					( 'the_posts', 						array( $this, 'script_loader'	) );
-		add_action					( 'the_posts',						array( $this, 'combo_wrapper'	) );
-		add_action					( 'wp_ajax_save_sort',				array( $this, 'save_sort'		) );
-		add_action					( 'wp_head', 						array( $this, 'seo_head'		), 5  );
-		add_action					( 'wp_head', 						array( $this, 'print_css'		), 999  );
-		add_action					( 'admin_enqueue_scripts', 			array( $this, 'admin_scripts'	), 10 );
-		add_action					( 'manage_posts_custom_column',		array( $this, 'column_data'		), 10, 2);
-		add_filter					( 'manage_edit-question_columns',	array( $this, 'column_setup'	) );
-		add_filter					( 'enter_title_here',				array( $this, 'title_text'		) );
-		add_filter					( 'pre_get_posts',					array( $this, 'rss_include'		) );
-		add_filter					( 'faq-caps',						array( $this, 'menu_filter'		), 10, 2);
-		add_filter 					( 'plugin_action_links', 			array( $this, 'quick_link'		), 10, 2 );
-		add_filter					( 'post_class', 					array( $this, 'faq_post_class'	) );
-		add_shortcode				( 'faq',							array( $this, 'shortcode_main'	) );
-		add_shortcode				( 'faqlist',						array( $this, 'shortcode_list'	) );
-		add_shortcode				( 'faqcombo',						array( $this, 'shortcode_combo'	) );
-		add_shortcode				( 'faqtaxlist',						array( $this, 'shortcode_taxls'	) );
+		add_action					( 'plugins_loaded', 				array( $this, 'textdomain'		) 			);
+		add_action					( 'init',							array( $this, '_register_faq'	) 			);
+		add_action					( 'admin_init', 					array( $this, 'reg_settings'	) 			);
+		add_action					( 'admin_menu',						array( $this, 'admin_pages'		) 			);
+		add_action					( 'admin_footer',					array( $this, 'flush_rewrite'	) 			);
+		add_action					( 'the_posts', 						array( $this, 'style_loader'	) 			);
+		add_action					( 'the_posts', 						array( $this, 'script_loader'	) 			);
+		add_action					( 'the_posts',						array( $this, 'combo_wrapper'	) 			);
+		add_action					( 'wp_ajax_save_sort',				array( $this, 'save_sort'		) 			);
+		add_action					( 'template_redirect',				array( $this, 'faq_redirect'	), 1		);
+		add_action					( 'wp_head', 						array( $this, 'seo_head'		), 5		);
+		add_action					( 'wp_head', 						array( $this, 'print_css'		), 999		);
+		add_action					( 'admin_enqueue_scripts', 			array( $this, 'admin_scripts'	), 10		);
+		add_filter					( 'enter_title_here',				array( $this, 'title_text'		) 			);
+		add_filter					( 'pre_get_posts',					array( $this, 'rss_include'		) 			);
+		add_filter					( 'faq-caps',						array( $this, 'menu_filter'		), 10, 2	);
+		add_filter 					( 'plugin_action_links', 			array( $this, 'quick_link'		), 10, 2	);
+		add_filter					( 'post_class', 					array( $this, 'faq_post_class'	) 			);
+		add_shortcode				( 'faq',							array( $this, 'shortcode_main'	) 			);
+		add_shortcode				( 'faqlist',						array( $this, 'shortcode_list'	) 			);
+		add_shortcode				( 'faqcombo',						array( $this, 'shortcode_combo'	) 			);
+		add_shortcode				( 'faqtaxlist',						array( $this, 'shortcode_taxls'	) 			);
 
 	}
 
@@ -79,7 +78,7 @@ class WP_FAQ_Manager
 
 		load_plugin_textdomain( 'wpfaq', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
-	
+
 
 	/**
 	 * Declare filters
@@ -90,14 +89,14 @@ class WP_FAQ_Manager
 
 	public function menu_filter( $capability, $menu ) {
 
-		// Anybody who can publish posts has access to the sort menu		
+		// Anybody who can publish posts has access to the sort menu
 		if( $menu === 'sort' )
 			return 'manage_options';
-  
+
   		// Anybody who can edit posts has access to the instructions page
   		if( $menu === 'instructions' )
 			return 'manage_options';
-  		
+
   		// Anybody who can manage options has access to the settings page
   		// If another function has changed this capability already, we'll respect that by just passing the value we were given
 		return $capability;
@@ -110,7 +109,7 @@ class WP_FAQ_Manager
 	 */
 
 	public function admin_pages() {
-		
+
 		add_submenu_page('edit.php?post_type=question', __('Sort FAQs', 'wpfaq'), __('Sort FAQs', 'wpfaq'), apply_filters( 'faq-caps', 'manage_options', 'sort' ), basename(__FILE__), array( &$this, 'sort_page' ));
 		add_submenu_page('edit.php?post_type=question', __('Settings', 'wpfaq'), __('Settings', 'wpfaq'), apply_filters( 'faq-caps', 'manage_options', 'settings' ), 'faq-options', array( &$this, 'settings_page' ));
 		add_submenu_page('edit.php?post_type=question', __('Instructions', 'wpfaq'), __('Instructions', 'wpfaq'), apply_filters( 'faq-caps', 'manage_options', 'instructions' ), 'faq-instructions', array( &$this, 'instructions_page' ));
@@ -124,7 +123,7 @@ class WP_FAQ_Manager
 	 */
 
 	public function flush_rewrite() {
-		
+
 		global $wp_rewrite;
 		$screen = get_current_screen();
 
@@ -145,77 +144,22 @@ class WP_FAQ_Manager
     public function quick_link( $links, $file ) {
 
 		static $this_plugin;
-		
+
 		if (!$this_plugin) {
 			$this_plugin = FAQ_BASE;
 		}
- 
+
     	// check to make sure we are on the correct plugin
     	if ($file == $this_plugin) {
-        	
+
 			$settings_link	= '<a href="'.menu_page_url( 'faq-options', 0 ).'">'.__('Settings', 'wpfaq').'</a>';
 			$instruct_link	= '<a href="'.menu_page_url( 'faq-instructions', 0 ).'">'.__('How-To', 'wpfaq').'</a>';
-        
+
         	array_unshift($links, $settings_link, $instruct_link);
     	}
- 
+
 		return $links;
 
-	}	
-
-	/**
-	 * Custom column setup
-	 *
-	 * @return WP_FAQ_Manager
-	 */
-
-	public function column_setup($columns) {
-		$qcolumns['cb']			= '<input type="checkbox" />';
-		$qcolumns['title']		= _x('Question', 'wpfaq');
-		$qcolumns['answers']	= __('Answer', 'wpfaq');
-		$qcolumns['topics']		= __('FAQ Topic', 'wpfaq');
-		$qcolumns['faq_tags']	= __('FAQ Tags', 'wpfaq');		
-		$qcolumns['date']		= _x('Date', 'wpfaq');
- 
-		return $qcolumns;
-	}
-
-	/**
-	 * Custom column data
-	 *
-	 * @return WP_FAQ_Manager
-	 */
-
-	function column_data($column_name, $id) {
-		global $post;
-		switch ($column_name) {
- 		case 'answers':
- 			$text = get_the_content($post->ID);
- 			echo wp_trim_words( $text, 15, null );
-		        break;
- 		case 'topics':
- 			$terms = get_the_terms( $post->ID, 'faq-topic' );
-			if ( $terms && ! is_wp_error( $terms ) ) : 
- 			foreach ($terms as $term) {
- 				$title = $term->name;
-				$link = '<a href="' . get_edit_term_link( $term->term_id, $term->taxonomy ) . '" title="' . $title . '">' . $title . '</a>';
-				echo apply_filters( 'edit_term_link', $link, $term->term_id );
-			}
-			endif;
-		        break;
- 		case 'faq_tags':
- 			$terms = get_the_terms( $post->ID, 'faq-tags' );
- 			if ( $terms && ! is_wp_error( $terms ) ) : 
- 			foreach ($terms as $term) {
- 				$title = $term->name;
-				$link = '<a href="' . get_edit_term_link( $term->term_id, $term->taxonomy ) . '" title="' . $title . '">' . $title . '</a>';
-				echo apply_filters( 'edit_term_link', $link, $term->term_id );
-			}
-			endif;
-		        break;
-		default:
-			break;
-		} // end switch
 	}
 
 	/**
@@ -225,12 +169,12 @@ class WP_FAQ_Manager
 	 */
 
 	public function print_css() { ?>
-		
+
 		<style media="print" type="text/css">
 			div.faq_answer {display: block!important;}
 			p.faq_nav {display: none;}
 		</style>
-		
+
 	<?php }
 
 	/**
@@ -247,7 +191,7 @@ class WP_FAQ_Manager
 
 		// set some defaults
 		$faq_options	= get_option('faq_options');
-		
+
 		$noindex		= (isset($faq_options['noindex'])	? 'noindex'   : '' );
 		$nofollow		= (isset($faq_options['nofollow'])	? 'nofollow'  : '' );
 		$noarchive		= (isset($faq_options['noarchive'])	? 'noarchive' : '' );
@@ -281,10 +225,43 @@ class WP_FAQ_Manager
 
 
 		$meta = array_filter( $meta );
-		
+
 		/** Add meta if any exist */
 		if ( $meta )
 			printf( '<meta name="robots" content="%s" />' . "\n", implode( ',', $meta ) );
+
+	}
+
+	/**
+	 * redirect to FAQ page based on user setting
+	 *
+	 * @return WP_FAQ_Manager
+	 */
+
+	public function faq_redirect() {
+
+		// grab some settings
+		$faq_options	= get_option('faq_options');
+		$redirect		= (isset($faq_options['redirect'])		? true   						: false );
+		$redirectid		= (isset($faq_options['redirectid'])	? $faq_options['redirectid']	: false );
+
+		// bail if they never set it
+		if ( $redirect === false )
+			return;
+
+		// bail if they set it to "none"
+		if ( $redirectid == 'none' )
+			return;
+
+        // redirect to page selected by user
+        if (is_singular('question') || is_post_type_archive('question') || is_tax('faq-topic') || is_tax('faq-tags')) :
+
+            $faq_page = get_permalink($redirectid);
+
+            wp_redirect( esc_url_raw( $faq_page ), 301 );
+            exit();
+
+        endif;
 
 	}
 
@@ -300,9 +277,31 @@ class WP_FAQ_Manager
 			$classes[] = 'post';
 			$classes[] = 'type-post';
 		endif;
-		
+
 		return $classes;
-	
+
+	}
+
+	/**
+	 * Helper for getting pages for redirect
+	 *
+	 * @return WP_FAQ_Manager
+	 */
+
+	private function redirect_pages() {
+
+		$args = array(
+			'sort_order'	=> 'ASC',
+			'sort_column'	=> 'post_title',
+			'hierarchical'	=> 1,
+			'post_type'		=> 'page',
+			'post_status'	=> 'publish'
+		);
+
+		$pages = get_pages($args);
+
+		return $pages;
+
 	}
 
 	/**
@@ -310,12 +309,12 @@ class WP_FAQ_Manager
 	 *
 	 * @return WP_FAQ_Manager
 	 */
-	 
+
 	public function settings_page() {
 		if (!current_user_can('manage_options') )
 			return;
 		?>
-	
+
         <div class="wrap">
         	<div id="icon-faq-admin" class="icon32"><br /></div>
         	<h2><?php _e('FAQ Manager Settings', 'wpfaq') ?></h2>
@@ -332,29 +331,33 @@ class WP_FAQ_Manager
 			echo $this->settings_side();
 			echo $this->settings_open();
 			?>
-	            
+
 	            <form method="post" action="options.php">
 			    <?php
                 settings_fields( 'faq_options' );
 				$faq_options	= get_option('faq_options');
 
-				$htype		= (isset($faq_options['htype'])		? 'choice'					: 'default'		);
-				$paginate	= (isset($faq_options['paginate'])	? $faq_options['paginate']	: 'false'		);
-				$expand		= (isset($faq_options['expand'])	? $faq_options['expand']	: 'false'		);
-				$exspeed	= (isset($faq_options['exspeed'])	? $faq_options['exspeed']	: '200'			);
-				$exlink		= (isset($faq_options['exlink'])	? $faq_options['exlink']	: 'false'		);
-				$extext		= (isset($faq_options['extext'])	? $faq_options['extext']	: 'Read More'	);
-				$scroll		= (isset($faq_options['scroll'])	? $faq_options['scroll']	: 'false'		);
-				$css		= (isset($faq_options['css'])		? $faq_options['css']		: 'false'		);
-				$rss		= (isset($faq_options['rss'])		? $faq_options['rss']		: 'false'		);
-				$noindex	= (isset($faq_options['noindex'])	? $faq_options['noindex']	: 'false'		);
-				$nofollow	= (isset($faq_options['nofollow'])	? $faq_options['nofollow']	: 'false'		);
-				$noarchive	= (isset($faq_options['noarchive'])	? $faq_options['noarchive']	: 'false'		);
-				$archtext	= (isset($faq_options['arch'])		? $faq_options['arch']		: 'questions'	);
-				$singletext	= (isset($faq_options['single'])	? $faq_options['single']	: 'question'	);
+				$htype		= (isset($faq_options['htype'])			? 'choice'					: 'default'		);
+				$paginate	= (isset($faq_options['paginate'])		? $faq_options['paginate']	: 'false'		);
+				$expand		= (isset($faq_options['expand'])		? $faq_options['expand']	: 'false'		);
+				$exspeed	= (isset($faq_options['exspeed'])		? $faq_options['exspeed']	: '200'			);
+				$exlink		= (isset($faq_options['exlink'])		? $faq_options['exlink']	: 'false'		);
+				$extext		= (isset($faq_options['extext'])		? $faq_options['extext']	: 'Read More'	);
+				$scroll		= (isset($faq_options['scroll'])		? $faq_options['scroll']	: 'false'		);
+				$backtop	= (isset($faq_options['backtop'])		? $faq_options['backtop']	: 'false'		);
+				$css		= (isset($faq_options['css'])			? $faq_options['css']		: 'false'		);
+				$rss		= (isset($faq_options['rss'])			? $faq_options['rss']		: 'false'		);
+				$nofilter	= (isset($faq_options['nofilter'])		? $faq_options['nofilter']	: 'false'		);
+				$noindex	= (isset($faq_options['noindex'])		? $faq_options['noindex']	: 'false'		);
+				$nofollow	= (isset($faq_options['nofollow'])		? $faq_options['nofollow']	: 'false'		);
+				$noarchive	= (isset($faq_options['noarchive'])		? $faq_options['noarchive']	: 'false'		);
+				$archtext	= (isset($faq_options['arch'])			? $faq_options['arch']		: 'questions'	);
+				$singletext	= (isset($faq_options['single'])		? $faq_options['single']	: 'question'	);
+				$redirect	= (isset($faq_options['redirect'])		? $faq_options['redirect']	: 'false'		);
+				$redirectid	= (isset($faq_options['redirectid'])	? $faq_options['redirectid']: 'none'		);
 				?>
-				
-				<h2 class="inst-title"><?php _e('Standard Options') ?></h2>
+
+				<h2 class="inst-title"><?php _e('Display Options') ?></h2>
 				<p>
 					<select class="faq_htype <?php echo $htype; ?>" name="faq_options[htype]" id="faq_htype">
 		            <option value="h1" <?php selected( $faq_options['htype'], 'h1' ); ?>>H1</option>
@@ -365,7 +368,7 @@ class WP_FAQ_Manager
 					<option value="h6" <?php selected( $faq_options['htype'], 'h6' ); ?>>H6</option>
 					</select>
 					<label type="select" for="faq_options[htype]"><?php _e('Choose your H type for FAQ title', 'wpfaq'); ?></label>
-				</p>               
+				</p>
 
 				<p>
 			    	<input type="checkbox" name="faq_options[paginate]" id="faq_paginate" value="true" <?php checked( $paginate, 'true' ); ?> />
@@ -376,7 +379,7 @@ class WP_FAQ_Manager
 				    <input type="checkbox" name="faq_options[expand]" id="faq_expand" value="true" <?php checked( $expand, 'true' ); ?> />
 				    <label for="faq_options[expand]" rel="checkbox"><?php _e('Include jQuery collapse / expand', 'wpfaq'); ?></label>
 				</p>
-				
+
 				<div class="secondary-option" style="display:none;">
 
 				<p class="speedshow">
@@ -392,13 +395,18 @@ class WP_FAQ_Manager
 				<p class="extext" style="display:none;">
 					<input type="text" name="faq_options[extext]" id="faq_extext" size="20" value="<?php echo esc_attr($extext); ?>" />
 					<label for="faq_options[extext]"><?php _e('Permalink "read more" text', 'wpfaq'); ?></label>
-				</p>				
+				</p>
 
 				</div>
-				
-				<p>
+
+				<p class="scroll">
 				    <input type="checkbox" name="faq_options[scroll]" id="faq_scroll" value="true" <?php checked( $scroll, 'true' ); ?> />
 				    <label for="faq_options[scroll]" rel="checkbox"><?php _e('Include jQuery scrolling for Combo shortcode', 'wpfaq'); ?></label>
+				</p>
+
+				<p class="scrolltop secondary-option" style="display:none;">
+				    <input type="checkbox" name="faq_options[backtop]" id="faq_backtop" value="true" <?php checked( $backtop, 'true' ); ?> />
+				    <label for="faq_options[backtop]" rel="checkbox"><?php _e('Include a "back to top" link below each FAQ', 'wpfaq'); ?></label>
 				</p>
 
 				<p>
@@ -406,9 +414,43 @@ class WP_FAQ_Manager
 				    <label for="faq_options[css]" rel="checkbox"><?php _e('Load default CSS', 'wpfaq'); ?></label>
 				</p>
 
+				<h2 class="inst-title"><?php _e('Content Options') ?></h2>
+
+				<p>
+				    <input type="checkbox" name="faq_options[nofilter]" id="faq_nofilter" value="true" <?php checked( $nofilter, 'true' ); ?> />
+				    <label for="faq_options[nofilter]" rel="checkbox"><?php _e('Disable content filter on shortcode output <em><small>(Use when certain plugins add sharing buttons, etc)</small></em>', 'wpfaq'); ?></label>
+				</p>
+
 				<p>
 				    <input type="checkbox" name="faq_options[rss]" id="faq_rss" value="true" <?php checked( $rss, 'true' ); ?> />
 				    <label for="faq_options[rss]" rel="checkbox"><?php _e('Include FAQs in main RSS feed <em><small>(Use with caution, as this will remove all non-posts from the native RSS feed)</small></em>', 'wpfaq'); ?></label>
+				</p>
+
+				<p class="redirect">
+				    <input type="checkbox" name="faq_options[redirect]" id="faq_redirect" value="true" <?php checked( $redirect, 'true' ); ?> />
+				    <label for="faq_options[redirect]" rel="checkbox"> <?php _e('Redirect all FAQ archive and single posts to a single FAQ page', 'wpfaq'); ?></label>
+				</p>
+
+				<p class="redirectid" style="display:none;">
+					<select class="faq_redirectid" name="faq_options[redirectid]" id="faq_redirectid">
+
+		            <option value="none" <?php selected( $redirectid, 'none' ); ?>>(Select)  </option>
+		            <?php
+		            $pages = $this->redirect_pages();
+					foreach ( $pages as $page ) {
+						$page_id = $page->ID;
+
+						$option = '<option value="' . $page_id . '" '.selected( $faq_options['redirectid'], $page_id ).'>';
+						$option .= $page->post_title;
+						$option .= '</option>';
+
+						echo $option;
+
+  					}
+		            ?>
+					</select>
+
+					<label type="select" for="faq_options[redirectid]"><?php _e('Select the page to redirect', 'wpfaq'); ?></label>
 				</p>
 
 				<h2 class="inst-title"><?php _e('SEO Options') ?></h2>
@@ -426,7 +468,7 @@ class WP_FAQ_Manager
 				<p>
 				    <input type="checkbox" name="faq_options[noarchive]" id="faq_noarchive" value="true" <?php checked( $noarchive, 'true' ); ?> />
 				    <label for="faq_options[noarchive]" rel="checkbox"> <?php _e('Apply <code>noarchive</code> header tag to FAQs', 'wpfaq'); ?></label>
-				</p>				
+				</p>
 
 				<p>
 					<input type="text" name="faq_options[single]" id="faq_single" size="20" value="<?php echo sanitize_title($singletext); ?>" />
@@ -438,7 +480,7 @@ class WP_FAQ_Manager
 					<label for="faq_options[arch]"><?php _e('Desired slug for FAQ archive page <em><small>(all lower case, no capitals or spaces)</small></em>', 'wpfaq'); ?></label>
 				</p>
 
-				
+
     			<!-- submit -->
 	    		<p id="faq-submit" class="submit"><input type="submit" class="button-primary" value="<?php _e('Save Changes') ?>" /></p>
 
@@ -449,9 +491,9 @@ class WP_FAQ_Manager
 	<?php echo $this->settings_close(); ?>
 
 	</div>
-	</div>   
+	</div>
 
-	
+
 	<?php }
 
 	/**
@@ -485,13 +527,13 @@ class WP_FAQ_Manager
 			<li><strong><?php _e('For a list of taxonomy titles that link to the related archive page:', 'wpfaq'); ?></strong></li>
 			<li><?php _e('place <code>[faqtaxlist type="topics"]</code> or <code>[faqtaxlist type="tags"]</code> on a post / page', 'wpfaq'); ?></li>
 			<li><?php _e('Show optional description: <code>[faqtaxlist type="topics" desc="true"]</code>', 'wpfaq'); ?></li><br />
-			<li><?php _e('<em><strong>Please note:</strong> the combo and taxonomy list shortcodes will not recognize the pagination and expand / collapse</em>', 'wpfaq'); ?></li><br />			
+			<li><?php _e('<em><strong>Please note:</strong> the combo and taxonomy list shortcodes will not recognize the pagination and expand / collapse</em>', 'wpfaq'); ?></li><br />
 			</ul>
 
 			<h2 class="inst-title"><?php _e('The following options apply to all the <code>shortcode</code> types', 'wpfaq'); ?></h2>
 
 			<p><?php _e('The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).', 'wpfaq'); ?></p>
-			
+
 			<ul class="faqinfo">
 			<li><strong><?php _e('To display only 5:', 'wpfaq'); ?></strong></li>
 			<li><?php _e('place <code>[faq limit="5"]</code> on a post / page', 'wpfaq'); ?></li><br />
@@ -519,9 +561,9 @@ class WP_FAQ_Manager
 	<?php echo $this->settings_close(); ?>
 
 	</div>
-	</div>  
+	</div>
 
-	<?php }	
+	<?php }
 
 	/**
 	 * Sort Page
@@ -540,14 +582,14 @@ class WP_FAQ_Manager
 	    	<p><?php _e('<strong>Note:</strong> this only affects the FAQs listed using the shortcode functions', 'wpfaq'); ?></p>
 			<ul id="custom-type-list">
 				<?php while ( $questions->have_posts() ) : $questions->the_post(); ?>
-					<li id="<?php the_id(); ?>"><?php the_title(); ?></li>			
+					<li id="<?php the_id(); ?>"><?php the_title(); ?></li>
 				<?php endwhile; ?>
 	    	</ul>
 			<?php else: ?>
 			<p><?php _e('You have no FAQs to sort.', 'wpfaq'); ?></p>
 			<?php endif; ?>
 		</div>
-	
+
 	<?php }
 
 	/**
@@ -558,10 +600,10 @@ class WP_FAQ_Manager
 
 	public function save_sort() {
 		global $wpdb; // WordPress database class
- 
+
 		$order = explode(',', $_POST['order']);
 		$counter = 0;
- 
+
 		foreach ($order as $item_id) {
 			$wpdb->update($wpdb->posts, array( 'menu_order' => $counter ), array( 'ID' => $item_id) );
 			$counter++;
@@ -582,7 +624,7 @@ class WP_FAQ_Manager
 			'faq_id'		=> '',
 			'limit'			=> '10',
 		), $atts));
-		
+
 		// pagination call. required regardless of whether pagination is active or not
 		if( isset( $_GET['faq_page'] ) && $faq_page = absint( $_GET['faq_page'] ) )
 			$paged = $faq_page;
@@ -606,7 +648,7 @@ class WP_FAQ_Manager
 			'order'				=>	'ASC',
 			'paged'				=>	$paged,
 		);
-		
+
 		$wp_query = new WP_Query($args);
 
 		if($wp_query->have_posts()) :
@@ -615,15 +657,16 @@ class WP_FAQ_Manager
 		$faqopts	= get_option('faq_options');
 		$exspeed	= (isset($faqopts['exspeed'])									? $faqopts['exspeed']	: '200'	);
 		$exlink		= (isset($faqopts['exlink'])									? true					: false	);
+		$nofilter	= (isset($faqopts['nofilter'])									? true					: false	);
 		$extext		= (isset($faqopts['extext']) && $faqopts['extext'] !== ''		? $faqopts['extext']	: 'Read More'	);
 		$expand_a	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-faq'			: ''	);
 		$expand_b	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-title'		: ''	);
 		$htype		= (isset($faqopts['htype'])										? $faqopts['htype']		: 'h3'	);
-		
+
 		$displayfaq = '<div id="faq-block"><div class="faq-list" data-speed="'.$exspeed.'">';
-			
+
 			while ($wp_query->have_posts()) : $wp_query->the_post();
-			
+
 			global $post;
 				$content	= get_the_content();
 				$title		= get_the_title();
@@ -633,14 +676,13 @@ class WP_FAQ_Manager
 				$displayfaq .= '<div class="single-faq'.$expand_a.'">';
 				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq-question'.$expand_b.'">'.$title.'</'.$htype.'>';
 				$displayfaq .= '<div class="faq-answer" rel="'.$slug.'">';
-//				$displayfaq .= wpautop($content, true);
-				$displayfaq .= apply_filters('the_content', $content);
+				$displayfaq .= $nofilter == true ? $content : apply_filters('the_content', $content);
 				if ($exlink == true)
 					$displayfaq .= '<p class="faq-link"><a href="'.$link.'" title="'.$title.'">'.$extext.'</a></p>';
 
 				$displayfaq .= '</div>';
 				$displayfaq .= '</div>';
-			
+
 			endwhile;
 
 				if (isset($faqopts['paginate'])) {
@@ -658,8 +700,8 @@ class WP_FAQ_Manager
 				}
 				wp_reset_query();
 		$displayfaq .= '</div></div>';
-		endif;	
-		
+		endif;
+
 		// now send it all back
 		return $displayfaq;
 	}
@@ -677,7 +719,7 @@ class WP_FAQ_Manager
 			'faq_id'		=> '',
 			'limit'			=> '10',
 		), $atts));
-		
+
 		// pagination call. required regardless of whether pagination is active or not
 		if( isset( $_GET['faq_page'] ) && $faq_page = absint( $_GET['faq_page'] ) )
 			$paged = $faq_page;
@@ -701,16 +743,16 @@ class WP_FAQ_Manager
 			'order'				=>	'ASC',
 			'paged'				=>	$paged,
 		);
-		
+
 		$wp_query = new WP_Query($args);
 
 		if($wp_query->have_posts()) :
-		
+
 		$displayfaq = '<div id="faq-block"><div class="faq-list">';
-			
+
 			$displayfaq .= '<ul>';
 			while ($wp_query->have_posts()) : $wp_query->the_post();
-			
+
 			global $post;
 			$title		= get_the_title();
 			$link		= get_permalink();
@@ -721,11 +763,11 @@ class WP_FAQ_Manager
 			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
 
 				$displayfaq .= '<li class="faqlist-question"><a href="'.$link.'" title="Permanent link to '.$title.'" >'.$title.'</a></li>';
-				
-			
+
+
 			endwhile;
 			$displayfaq .= '</ul>';
-			
+
 				if (isset($faqopts['paginate'])) {
 					// pagination links
 					$displayfaq .= '<p class="faq-nav">';
@@ -743,8 +785,8 @@ class WP_FAQ_Manager
 				}
 				wp_reset_query();
 		$displayfaq .= '</div></div>';
-		endif;	
-		
+		endif;
+
 		// now send it all back
 		return $displayfaq;
 	}
@@ -761,7 +803,7 @@ class WP_FAQ_Manager
 			'faq_tag'		=> '',
 			'faq_id'		=> '',
 		), $atts));
-		
+
 		// no pagination
 
 		// clean up text
@@ -778,17 +820,17 @@ class WP_FAQ_Manager
 			'orderby'			=>	'menu_order',
 			'order'				=>	'ASC',
 		);
-		
+
 		$wp_query = new WP_Query($args);
 
 		if($wp_query->have_posts()) :
-		
-		$displayfaq = '<div id="faq-block">';
+
+		$displayfaq = '<div id="faq-block" rel="faq-top">';
 		$displayfaq .= '<div class="faq-list">';
-			
+
 			$displayfaq .= '<ul>';
 			while ($wp_query->have_posts()) : $wp_query->the_post();
-			
+
 			global $post;
 			$title		= get_the_title();
 			$slug		= basename(get_permalink());
@@ -798,42 +840,45 @@ class WP_FAQ_Manager
 			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
 
 				$displayfaq .= '<li class="faqlist-question"><a href="#'.$slug.'" rel="'.$slug.'">'.$title.'</a></li>';
-				
-			
+
+
 			endwhile;
 		$displayfaq .= '</ul>';
 		$displayfaq .= '</div>';
 
-		$displayfaq .= '<div class="faq-content">';			
+		$displayfaq .= '<div class="faq-content">';
 			// second part of query
 			while ($wp_query->have_posts()) : $wp_query->the_post();
-			
+
 			global $post;
+			// get FAQ content
+			$content	= get_the_content();
 			$title		= get_the_title();
 			$slug		= basename(get_permalink());
 
 			// get options from settings page
 			$faqopts	= get_option('faq_options');
-			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
+			$htype		= (isset($faqopts['htype'])		? $faqopts['htype']  : 'h3' );
+			$nofilter	= (isset($faqopts['nofilter'])	? true : false	);
+			$backtop	= (isset($faqopts['backtop'])	? true : false	);
 
-			$content	= get_the_content();
-			$title		= get_the_title();
-			$slug		= basename(get_permalink());
 
 				$displayfaq .= '<div class="single-faq" rel="'.$slug.'">';
 				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq-question">'.$title.'</'.$htype.'>';
-//				$displayfaq .= '<div class="faq-answer">'.wpautop($content, true).'</div>';
-				$displayfaq .= '<div class="faq-answer">'.apply_filters('the_content', $content).'</div>';
+				$displayfaq .= '<div class="faq-answer">';
+				$displayfaq .= $nofilter == true ? '<p>'.$content.'</p>' : apply_filters('the_content', $content);
+				$displayfaq .= '<p class="scroll-back"><a href="#faq-block">Back To Top</a></p>';
 				$displayfaq .= '</div>';
-			
+				$displayfaq .= '</div>';
+
 			endwhile;
 
 		$displayfaq .= '</div>';
 		wp_reset_query();
 
 		$displayfaq .= '</div>';
-		endif;	
-		
+		endif;
+
 		// now send it all back
 		return $displayfaq;
 	}
@@ -877,13 +922,13 @@ class WP_FAQ_Manager
 			// optional description
 			if ($disp_desc == true && !empty($item->description) )
 				$displayfaq .= '<p>'.$item->description.'</p>';
-			
+
 			$displayfaq .= '</div>';
 		endforeach;
-			
+
 
 		$displayfaq .= '</div>';
-		
+
 		// now send it all back
 		return $displayfaq;
 	}
@@ -941,6 +986,7 @@ class WP_FAQ_Manager
 				'show_in_nav_menus'		=> true,
 				'show_ui'				=> true,
 				'publicly_queryable'	=> true,
+				'show_admin_column'		=> true,
 				'exclude_from_search'	=> false,
 				'rewrite'				=> array( 'slug' => 'topics', 'with_front' => true ),
 				'hierarchical'			=> true,
@@ -969,6 +1015,7 @@ class WP_FAQ_Manager
 				'show_in_nav_menus'		=> true,
 				'show_ui'				=> true,
 				'publicly_queryable'	=> true,
+				'show_admin_column'		=> true,
 				'exclude_from_search'	=> false,
 				'rewrite'				=> array( 'slug' => 'faq-tags', 'with_front' => true ),
 				'hierarchical'			=> false,
@@ -999,31 +1046,31 @@ class WP_FAQ_Manager
 	 */
 
 	public function rss_include( $query ) {
-	
+
 		$faqopts = get_option('faq_options');
 
 		if(!isset($faqopts['rss']) )
 			return $query;
 
-		if (!$query->is_feed) 
+		if (!$query->is_feed)
 			return $query;
 /* /// removed until I can determine how to check for any other customizations to the RSS
 			$args = array(
 				'public'	=> true,
 				'_builtin'	=> false
 			);
-		
+
 			$output		= 'names';
 			$operator	= 'and';
 			$post_types = get_post_types( $args , $output , $operator );
-		
+
 			// remove 'pages' from the RSS
 			$post_types = array_merge( $post_types, array('post') ) ;
-		
+
 			$query->set( 'post_type' , $post_types );
 */
 			$query->set( 'post_type' , array( 'post', 'question' ) );
-	
+
 		return $query;
 	}
 
@@ -1036,32 +1083,32 @@ class WP_FAQ_Manager
 
 
 	public function style_loader($posts) {
-		
+
 		$faqopts = get_option('faq_options');
 
 		if(!isset($faqopts['css']) )
-			return $posts;		
-		
+			return $posts;
+
 		if ( empty($posts) )
 			return $posts;
-		
+
 		// false because we have to search through the posts first
 		$found = false;
-		 
+
 		// search through each post
 		foreach ($posts as $post) {
 			// check the post content for the short code
 			$content	= $post->post_content;
 			if ( preg_match('/faq(.*)/', $content) ) // we have found a post with the short code
 				$found = true;
-				
+
 				// stop the search
 				break;
 		}
-		 
+
 		if ($found == true )
 			$this->front_style();
-		
+
 
 		return $posts;
 	}
@@ -1081,24 +1128,24 @@ class WP_FAQ_Manager
 
 		if ( empty($posts) )
 			return $posts;
-		
+
 		// false because we have to search through the posts first
 		$found = false;
-		 
+
 		// search through each post
 		foreach ($posts as $post) {
 			// check the post content for the short code
 			$content	= $post->post_content;
 			if ( preg_match('/faqcombo(.*)/', $content) ) // we have found a post with the short code
 				$found = true;
-				
+
 				// stop the search
 				break;
 		}
-		 
+
 		if ($found == true )
 			$this->scroll_script();
-		
+
 
 		return $posts;
 	}
@@ -1112,32 +1159,32 @@ class WP_FAQ_Manager
 
 
 	public function script_loader($posts) {
-		
+
 		$faqopts = get_option('faq_options');
 
 		if(!isset($faqopts['paginate']) && !isset($faqopts['expand']) )
-			return $posts;		
-		
+			return $posts;
+
 		if ( empty($posts) )
 			return $posts;
-		
+
 		// false because we have to search through the posts first
 		$found = false;
-		 
+
 		// search through each post
 		foreach ($posts as $post) {
 			// check the post content for the short code
 			$content	= $post->post_content;
 			if ( preg_match('/faq(.*)/', $content) ) // we have found a post with the short code
 				$found = true;
-				
+
 				// stop the search
 				break;
 		}
-		 
+
 		if ($found == true )
 			$this->front_script();
-		
+
 
 		return $posts;
 	}
@@ -1154,7 +1201,7 @@ class WP_FAQ_Manager
 		if ( 'question' == $screen->post_type ) :
 			$title = __('Enter Question Title Here', 'wpfaq');;
 		endif;
-		
+
 		return $title;
 	}
 
@@ -1168,7 +1215,7 @@ class WP_FAQ_Manager
 
 
 	public function reg_settings() {
-		register_setting( 'faq_options', 'faq_options');		
+		register_setting( 'faq_options', 'faq_options');
 
 	}
 
@@ -1181,16 +1228,24 @@ class WP_FAQ_Manager
 
 	public function admin_scripts($hook) {
 
-		if ( $hook == 'question_page_faq-manager' || 
-			 $hook == 'question_page_faq-options' || 
-			 $hook == 'question_page_faq-instructions' 
+		$screen = get_current_screen();
+
+		if ( is_object($screen) && 'question' == $screen->post_type ) :
+
+			wp_enqueue_style( 'faq-admin', plugins_url('/inc/css/faq-admin.css', __FILE__), array(), FAQ_VER, 'all' );
+
+		endif;
+
+		if ( $hook == 'question_page_faq-manager' ||
+			 $hook == 'question_page_faq-options' ||
+			 $hook == 'question_page_faq-instructions'
 			 ) :
-		
+
 			wp_enqueue_style( 'faq-admin', plugins_url('/inc/css/faq-admin.css', __FILE__), array(), FAQ_VER, 'all' );
 
 			wp_enqueue_script('jquery-ui-sortable');
 			wp_enqueue_script( 'faq-admin', plugins_url('/inc/js/faq.admin.init.js', __FILE__) , array('jquery'), FAQ_VER, true );
-		
+
 		endif;
 
 
@@ -1224,7 +1279,7 @@ class WP_FAQ_Manager
     /**
      * Some extra stuff for the settings page
      *
-     * this is just to keep the area cleaner 
+     * this is just to keep the area cleaner
      *
      * @return WP_FAQ_Manager
      */
@@ -1249,7 +1304,7 @@ class WP_FAQ_Manager
 					</div>
 				</div>
 			</div>
-			
+
 			<div class="meta-box-sortables">
 				<div id="faq-admin-more" class="postbox">
 					<h3 class="hndle" id="about-sidebar"><?php _e('Links', 'wpfaq'); ?></h3>
@@ -1286,7 +1341,7 @@ class WP_FAQ_Manager
 			</div>
 		</div>
 
-    <?php }		
+    <?php }
 
 /// end class
 }
