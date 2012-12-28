@@ -4,7 +4,7 @@ Donate link: http://andrewnorcross.com/donate
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 3.0
 Tested up to: 3.5
-Stable tag: 1.330
+Stable tag: 1.331
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -74,6 +74,9 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 3. Example of expanded FAQs
 
 == Changelog ==
+
+= 1.331 =
+* added German language support. Props @PowieT
 
 = 1.330 =
 * added French language support. Props @straw94
