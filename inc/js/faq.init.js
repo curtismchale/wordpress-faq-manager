@@ -26,7 +26,7 @@ jQuery(document).ready(function($) {
 //********************************************************
 
 	function show_me_some_more() {
-		jQuery('p.faq-nav a').live('click', function(e){
+		jQuery('p.faq-nav').on('click','a', function(e){
 			e.preventDefault();
 			var link = jQuery(this).attr('href');
 			jQuery('div#faq-block').fadeOut(500).load(link + ' div.faq-list', function() {
