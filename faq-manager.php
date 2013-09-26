@@ -663,7 +663,7 @@ class WP_FAQ_Manager
 		$expand_b	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-title'		: ''	);
 		$htype		= (isset($faqopts['htype'])										? $faqopts['htype']		: 'h3'	);
 
-		$displayfaq = '<div id="faq-block"><div class="faq-list" data-speed="'.$exspeed.'">';
+		$displayfaq = '<div id="faq-block" name="faq-block"><div class="faq-list" data-speed="'.$exspeed.'">';
 
 			while ($wp_query->have_posts()) : $wp_query->the_post();
 
@@ -674,7 +674,7 @@ class WP_FAQ_Manager
 				$link		= get_permalink();
 
 				$displayfaq .= '<div class="single-faq'.$expand_a.'">';
-				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq-question'.$expand_b.'">'.$title.'</'.$htype.'>';
+				$displayfaq .= '<'.$htype.' id="'.$slug.'" name="'.$slug.'" class="faq-question'.$expand_b.'">'.$title.'</'.$htype.'>';
 				$displayfaq .= '<div class="faq-answer" rel="'.$slug.'">';
 				$displayfaq .= $nofilter == true ? $content : apply_filters('the_content', $content);
 				if ($exlink == true)
@@ -748,7 +748,7 @@ class WP_FAQ_Manager
 
 		if($wp_query->have_posts()) :
 
-		$displayfaq = '<div id="faq-block"><div class="faq-list">';
+		$displayfaq = '<div id="faq-block" name="faq-block"><div class="faq-list">';
 
 			$displayfaq .= '<ul>';
 			while ($wp_query->have_posts()) : $wp_query->the_post();
@@ -825,7 +825,7 @@ class WP_FAQ_Manager
 
 		if($wp_query->have_posts()) :
 
-		$displayfaq = '<div id="faq-block" rel="faq-top">';
+		$displayfaq = '<div id="faq-block" name="faq-block" rel="faq-top">';
 		$displayfaq .= '<div class="faq-list">';
 
 			$displayfaq .= '<ul>';
@@ -864,7 +864,7 @@ class WP_FAQ_Manager
 
 
 				$displayfaq .= '<div class="single-faq" rel="'.$slug.'">';
-				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq-question">'.$title.'</'.$htype.'>';
+				$displayfaq .= '<'.$htype.' id="'.$slug.'" name="'.$slug.'" class="faq-question">'.$title.'</'.$htype.'>';
 				$displayfaq .= '<div class="faq-answer">';
 				$displayfaq .= $nofilter == true ? '<p>'.$content.'</p>' : apply_filters('the_content', $content);
 				$displayfaq .= '<p class="scroll-back"><a href="#faq-block">Back To Top</a></p>';
@@ -912,7 +912,7 @@ class WP_FAQ_Manager
 		$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
 
 		// begin build
-		$displayfaq = '<div id="faq-block" class="faq-taxonomy">';
+		$displayfaq = '<div id="faq-block" name="faq-block" class="faq-taxonomy">';
 
 		// now loop through the topics
 		foreach ( $taxitems as $item ) :
