@@ -8,7 +8,7 @@ jQuery(document).ready(function ($) {
 		// now clickin
 		$(this).find('a').click (function (e) {
 			// determine where I'm going
-			var jump = $(this).prop('rel');
+			var jump = $(this).attr('rel');
 
 			// set some variables for later
 			var title_size		= $('.faq-question').css('font-size');
