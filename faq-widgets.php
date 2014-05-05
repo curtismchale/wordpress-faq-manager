@@ -394,16 +394,3 @@ class cloud_FAQ_Widget extends WP_Widget {
 
 
 } // class 
-
-	/**
-	 * Register all widgets
-	 *
-	 * @return WP_FAQ_Manager
-	 */
-
-
-add_action( 'widgets_init', create_function( '', "register_widget('search_FAQ_Widget');" ) );
-add_action( 'widgets_init', create_function( '', "register_widget('random_FAQ_Widget');" ) );
-add_action( 'widgets_init', create_function( '', "register_widget('recent_FAQ_Widget');" ) );
-add_action( 'widgets_init', create_function( '', "register_widget('topics_FAQ_Widget');" ) );
-add_action( 'widgets_init', create_function( '', "register_widget('cloud_FAQ_Widget');" ) );
