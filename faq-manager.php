@@ -55,6 +55,7 @@ class WP_FAQ_Manager
 		add_action					( 'wp_head', 						array( $this, 'seo_head'		), 5		);
 		add_action					( 'wp_head', 						array( $this, 'print_css'		), 999		);
 		add_action					( 'admin_enqueue_scripts', 			array( $this, 'admin_scripts'	), 10		);
+		add_action					( 'widgets_init',					array( $this, 'register_widgets')			);
 		add_filter					( 'enter_title_here',				array( $this, 'title_text'		) 			);
 		add_filter					( 'pre_get_posts',					array( $this, 'rss_include'		) 			);
 		add_filter					( 'faq-caps',						array( $this, 'menu_filter'		), 10, 2	);
@@ -65,6 +66,25 @@ class WP_FAQ_Manager
 		add_shortcode				( 'faqcombo',						array( $this, 'shortcode_combo'	) 			);
 		add_shortcode				( 'faqtaxlist',						array( $this, 'shortcode_taxls'	) 			);
 
+	}
+
+	public function register_widgets() {
+		if( class_exists( 'search_FAQ_Widget' ) ) {
+			register_widget('search_FAQ_Widget');
+		}
+
+		if( class_exists( 'random_FAQ_Widget' ) ) {
+			register_widget('random_FAQ_Widget');
+		}
+		if( class_exists( 'recent_FAQ_Widget' ) ) {
+			register_widget('recent_FAQ_Widget');
+		}
+		if( class_exists( 'topics_FAQ_Widget' ) ) {
+			register_widget('topics_FAQ_Widget');
+		}
+		if( class_exists( 'cloud_FAQ_Widget' ) ) {
+			register_widget('cloud_FAQ_Widget' );
+		}
 	}
 
 	/**
