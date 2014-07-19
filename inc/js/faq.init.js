@@ -18,6 +18,9 @@ jQuery(document).ready(function($) {
 			jQuery('div.faq-list').find('div.faq-answer[rel="' + faq + '"]').slideToggle(speed);
 			jQuery('div.faq-list').find('div.faq-answer').not('[rel="' + faq + '"]').hide(speed);
 		});
+		jQuery('.expand-faq').click(function (event) {
+			jQuery(this).toggleClass('active').siblings().removeClass('active');
+		});
 
 	}
 
