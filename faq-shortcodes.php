@@ -28,60 +28,57 @@ class FAQ_Shortcodes {
 			$paged = $faq_page;
 		else
 			$paged = 1;
-		$old_link = trailingslashit(get_permalink());
-		// end paginaton
+			$old_link = trailingslashit(get_permalink());
+			// end paginaton
 
-		// clean up text
-		$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_topic);
-		$faq_tag	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_tag);
+			// clean up text
+			$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_topic);
+			$faq_tag	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_tag);
 
-		// FAQ query
-		$args = array (
-			'p'					=> ''.$faq_id.'',
-			'faq-topic'			=> ''.$faq_topic.'',
-			'faq-tags'			=> ''.$faq_tag.'',
-			'post_type'			=>	'question',
-			'posts_per_page'	=>	''.$limit.'',
-			'orderby'			=>	'menu_order',
-			'order'				=>	'ASC',
-			'paged'				=>	$paged,
-		);
+			// FAQ query
+			$args = array (
+				'p'					=> ''.$faq_id.'',
+				'faq-topic'			=> ''.$faq_topic.'',
+				'faq-tags'			=> ''.$faq_tag.'',
+				'post_type'			=>	'question',
+				'posts_per_page'	=>	''.$limit.'',
+				'orderby'			=>	'menu_order',
+				'order'				=>	'ASC',
+				'paged'				=>	$paged,
+			);
 
-		$wp_query = new WP_Query($args);
+			$wp_query = new WP_Query($args);
 
-		if($wp_query->have_posts()) :
+			if($wp_query->have_posts()) :
+				// get options from settings page
+				$faqopts	= get_option('faq_options');
+				$exspeed	= (isset($faqopts['exspeed'])									? $faqopts['exspeed']	: '200'	);
+				$exlink		= (isset($faqopts['exlink'])									? true					: false	);
+				$nofilter	= (isset($faqopts['nofilter'])									? true					: false	);
+				$extext		= (isset($faqopts['extext']) && $faqopts['extext'] !== ''		? $faqopts['extext']	: 'Read More'	);
+				$expand_a	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-faq'			: ''	);
+				$expand_b	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-title'		: ''	);
+				$htype		= (isset($faqopts['htype'])										? $faqopts['htype']		: 'h3'	);
 
-		// get options from settings page
-		$faqopts	= get_option('faq_options');
-		$exspeed	= (isset($faqopts['exspeed'])									? $faqopts['exspeed']	: '200'	);
-		$exlink		= (isset($faqopts['exlink'])									? true					: false	);
-		$nofilter	= (isset($faqopts['nofilter'])									? true					: false	);
-		$extext		= (isset($faqopts['extext']) && $faqopts['extext'] !== ''		? $faqopts['extext']	: 'Read More'	);
-		$expand_a	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-faq'			: ''	);
-		$expand_b	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-title'		: ''	);
-		$htype		= (isset($faqopts['htype'])										? $faqopts['htype']		: 'h3'	);
+				$displayfaq = '<div id="faq-block"><div class="faq-list" data-speed="'.$exspeed.'">';
 
-		$displayfaq = '<div id="faq-block"><div class="faq-list" data-speed="'.$exspeed.'">';
+				while ($wp_query->have_posts()) : $wp_query->the_post();
+					global $post;
+					$content	= get_the_content();
+					$title		= get_the_title();
+					$slug		= basename(get_permalink());
+					$link		= get_permalink();
 
-			while ($wp_query->have_posts()) : $wp_query->the_post();
+					$displayfaq .= '<div class="single-faq'.$expand_a.'">';
+					$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq-question'.$expand_b.'">'.$title.'</'.$htype.'>';
+					$displayfaq .= '<div class="faq-answer" rel="'.$slug.'">';
+					$displayfaq .= $nofilter == true ? $content : apply_filters('the_content', $content);
+					if ($exlink == true)
+						$displayfaq .= '<p class="faq-link"><a href="'.$link.'" title="'.$title.'">'.$extext.'</a></p>';
 
-			global $post;
-				$content	= get_the_content();
-				$title		= get_the_title();
-				$slug		= basename(get_permalink());
-				$link		= get_permalink();
-
-				$displayfaq .= '<div class="single-faq'.$expand_a.'">';
-				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq-question'.$expand_b.'">'.$title.'</'.$htype.'>';
-				$displayfaq .= '<div class="faq-answer" rel="'.$slug.'">';
-				$displayfaq .= $nofilter == true ? $content : apply_filters('the_content', $content);
-				if ($exlink == true)
-					$displayfaq .= '<p class="faq-link"><a href="'.$link.'" title="'.$title.'">'.$extext.'</a></p>';
-
-				$displayfaq .= '</div>';
-				$displayfaq .= '</div>';
-
-			endwhile;
+					$displayfaq .= '</div>';
+					$displayfaq .= '</div>';
+				endwhile;
 
 				if (isset($faqopts['paginate'])) {
 					// pagination links
@@ -94,10 +91,10 @@ class FAQ_Shortcodes {
 					  'current' => $paged,
 					));
 					$displayfaq .= '</p>';
-				// end pagination links
-				}
-				wp_reset_query();
-		$displayfaq .= '</div></div>';
+					// end pagination links
+			}
+			wp_reset_query();
+			$displayfaq .= '</div></div>';
 		endif;
 
 		// now send it all back
