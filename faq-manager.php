@@ -358,6 +358,8 @@ class WP_FAQ_Manager
 				$singletext	= (isset($faq_options['single'])		? $faq_options['single']	: 'question'	);
 				$redirect	= (isset($faq_options['redirect'])		? $faq_options['redirect']	: 'false'		);
 				$redirectid	= (isset($faq_options['redirectid'])	? $faq_options['redirectid']: 'none'		);
+
+				$deprecated_option_message = __( "<br />- <strong>Deprecated</strong>: You only see this option because you previously changed it from it's default state. If you uncheck and save, you won't see it again.", 'wp-faq-manager' );
 				?>
 
 				<h2 class="inst-title"><?php _e('Display Options') ?></h2>
@@ -427,6 +429,7 @@ class WP_FAQ_Manager
 				<p>
 				    <input type="checkbox" name="faq_options[rss]" id="faq_rss" value="true" <?php checked( $rss, 'true' ); ?> />
 				    <label for="faq_options[rss]" rel="checkbox"><?php _e('Include FAQs in main RSS feed <em><small>(Use with caution, as this will remove all non-posts from the native RSS feed)</small></em>', 'wpfaq'); ?></label>
+
 				</p>
 
 				<p class="redirect">
@@ -458,20 +461,29 @@ class WP_FAQ_Manager
 
 				<h2 class="inst-title"><?php _e('SEO Options') ?></h2>
 
+				<?php if( 'true' === $noindex ) { ?>
 				<p>
 				    <input type="checkbox" name="faq_options[noindex]" id="faq_noindex" value="true" <?php checked( $noindex, 'true' ); ?> />
 				    <label for="faq_options[noindex]" rel="checkbox"> <?php _e('Apply <code>noindex</code> header tag to FAQs', 'wpfaq'); ?></label>
+				    <?php echo $deprecated_option_message; ?>
 				</p>
+				<?php } ?>
 
+				<?php if( 'true' === $nofollow ) { ?>
 				<p>
 				    <input type="checkbox" name="faq_options[nofollow]" id="faq_nofollow" value="true" <?php checked( $nofollow, 'true' ); ?> />
 				    <label for="faq_options[nofollow]" rel="checkbox"> <?php _e('Apply <code>nofollow</code> header tag to FAQs', 'wpfaq'); ?></label>
+				    <?php echo $deprecated_option_message; ?>
 				</p>
+				<?php } ?>
 
+				<?php if( 'true' === $noarchive ) { ?>
 				<p>
 				    <input type="checkbox" name="faq_options[noarchive]" id="faq_noarchive" value="true" <?php checked( $noarchive, 'true' ); ?> />
 				    <label for="faq_options[noarchive]" rel="checkbox"> <?php _e('Apply <code>noarchive</code> header tag to FAQs', 'wpfaq'); ?></label>
+				    <?php echo $deprecated_option_message; ?>
 				</p>
+				<?php } ?>
 
 				<p>
 					<input type="text" name="faq_options[single]" id="faq_single" size="20" value="<?php echo sanitize_title($singletext); ?>" />
