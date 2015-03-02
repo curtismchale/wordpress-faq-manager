@@ -1,0 +1,50 @@
+/* Main FAQ block */
+
+#faq-block .faq-list {
+	padding-left:15px;
+}
+
+.faq-taxonomy {
+	padding:0 0 15px 15px;
+}
+
+/* list style shortcode */
+
+#faq-block li.faqlist-question,
+#faq-block li.faqlist-question a {
+	color:#000;
+	padding-bottom:4px;
+	font-weight:bold;
+	font-size:110%;
+	cursor:pointer;
+}
+
+/* standard shortcode */
+
+#faq-block .single-faq .faq-question,
+#faq-block .single-faq .faq-question a {
+	color:#000;
+	padding-bottom:4px;
+	font-weight:bold;
+	font-size:110%;
+}
+
+#faq-block .single-faq .expand-title {
+	cursor:pointer;
+}
+
+/* combo shortcode */
+
+#faq-block p.scroll-back {
+	font-size: 90%;
+}
+
+/* pagination */
+
+#faq-block .faq-list p.faq-nav a:hover {
+	text-decoration:none;
+}
+
+#faq-block .faq-list p.faq-nav span.current {
+	font-weight:bold;
+}

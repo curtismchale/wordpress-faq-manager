@@ -1,0 +1,519 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: wpfaq\n"
+"POT-Creation-Date: 2012-12-23 14:28-0500\n"
+"PO-Revision-Date: 2012-12-23 14:28-0500\n"
+"Last-Translator: Andrew Norcross <andrew@andrewnorcross.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+"X-Poedit-KeywordsList: _;__;_e\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPath-1: inc\n"
+
+#: faq-manager.php:113 faq-manager.php:581
+msgid "Sort FAQs"
+msgstr ""
+
+#: faq-manager.php:114 faq-manager.php:155
+msgid "Settings"
+msgstr ""
+
+#: faq-manager.php:115
+msgid "Instructions"
+msgstr ""
+
+#: faq-manager.php:156
+msgid "How-To"
+msgstr ""
+
+#: faq-manager.php:321
+msgid "FAQ Manager Settings"
+msgstr ""
+
+#: faq-manager.php:325
+msgid "FAQ Manager settings updated successfully."
+msgstr ""
+
+#: faq-manager.php:361
+msgid "Display Options"
+msgstr ""
+
+#: faq-manager.php:371
+msgid "Choose your H type for FAQ title"
+msgstr ""
+
+#: faq-manager.php:376
+msgid "Paginate shortcode output"
+msgstr ""
+
+#: faq-manager.php:381
+msgid "Include jQuery collapse / expand"
+msgstr ""
+
+#: faq-manager.php:388
+msgid ""
+"Expand / collapse speed <em><small>(in milliseconds, i.e. 200 or 1000)</"
+"small></em>"
+msgstr ""
+
+#: faq-manager.php:393
+msgid "Include permalink beneath expanded text."
+msgstr ""
+
+#: faq-manager.php:398
+msgid "Permalink \"read more\" text"
+msgstr ""
+
+#: faq-manager.php:405
+msgid "Include jQuery scrolling for Combo shortcode"
+msgstr ""
+
+#: faq-manager.php:410
+msgid "Include a \"back to top\" link below each FAQ"
+msgstr ""
+
+#: faq-manager.php:415
+msgid "Load default CSS"
+msgstr ""
+
+#: faq-manager.php:418
+msgid "Content Options"
+msgstr ""
+
+#: faq-manager.php:422
+msgid ""
+"Disable content filter on shortcode output <em><small>(Use when certain "
+"plugins add sharing buttons, etc)</small></em>"
+msgstr ""
+
+#: faq-manager.php:427
+msgid ""
+"Include FAQs in main RSS feed <em><small>(Use with caution, as this will "
+"remove all non-posts from the native RSS feed)</small></em>"
+msgstr ""
+
+#: faq-manager.php:432
+msgid "Redirect all FAQ archive and single posts to a single FAQ page"
+msgstr ""
+
+#: faq-manager.php:454
+msgid "Select the page to redirect"
+msgstr ""
+
+#: faq-manager.php:457
+msgid "SEO Options"
+msgstr ""
+
+#: faq-manager.php:461
+msgid "Apply <code>noindex</code> header tag to FAQs"
+msgstr ""
+
+#: faq-manager.php:466
+msgid "Apply <code>nofollow</code> header tag to FAQs"
+msgstr ""
+
+#: faq-manager.php:471
+msgid "Apply <code>noarchive</code> header tag to FAQs"
+msgstr ""
+
+#: faq-manager.php:476
+msgid ""
+"Desired slug for single FAQs <em><small>(all lower case, no capitals or "
+"spaces)</small></em>"
+msgstr ""
+
+#: faq-manager.php:481
+msgid ""
+"Desired slug for FAQ archive page <em><small>(all lower case, no capitals or "
+"spaces)</small></em>"
+msgstr ""
+
+#: faq-manager.php:486
+msgid "Save Changes"
+msgstr ""
+
+#: faq-manager.php:488
+msgid ""
+"<strong>Note:</strong> You may need to flush your permalinks after changing "
+"settings."
+msgstr ""
+
+#: faq-manager.php:488
+msgid "Go to your Permalink Settings here"
+msgstr ""
+
+#: faq-manager.php:510
+msgid "FAQ Instructions"
+msgstr ""
+
+#: faq-manager.php:517
+msgid ""
+"The FAQ Manager plugin uses a combination of custom post types, meta fields, "
+"and taxonomies. The plugin will automatically create single posts using your "
+"existing permalink structure. And the FAQ categories and tags can be added "
+"to your menu using the WP Menu Manager"
+msgstr ""
+
+#: faq-manager.php:519
+msgid "Shortcodes"
+msgstr ""
+
+#: faq-manager.php:520
+msgid ""
+"The plugin also has the option of using shortcodes. To use them, follow the "
+"syntax accordingly in the HTML tab:"
+msgstr ""
+
+#: faq-manager.php:522
+msgid "For the complete list (including title and content):"
+msgstr ""
+
+#: faq-manager.php:523
+msgid "place <code>[faq]</code> on a post / page"
+msgstr ""
+
+#: faq-manager.php:524
+msgid "For the question title, and a link to the FAQ on a separate page:"
+msgstr ""
+
+#: faq-manager.php:525
+msgid "place <code>[faqlist]</code> on a post / page"
+msgstr ""
+
+#: faq-manager.php:526
+msgid ""
+"For a list with a group of titles that link to complete content later in "
+"page:"
+msgstr ""
+
+#: faq-manager.php:527
+msgid "place <code>[faqcombo]</code> on a post / page"
+msgstr ""
+
+#: faq-manager.php:528
+msgid "For a list of taxonomy titles that link to the related archive page:"
+msgstr ""
+
+#: faq-manager.php:529
+msgid ""
+"place <code>[faqtaxlist type=\"topics\"]</code> or <code>[faqtaxlist type="
+"\"tags\"]</code> on a post / page"
+msgstr ""
+
+#: faq-manager.php:530
+msgid ""
+"Show optional description: <code>[faqtaxlist type=\"topics\" desc=\"true\"]</"
+"code>"
+msgstr ""
+
+#: faq-manager.php:531
+msgid ""
+"<em><strong>Please note:</strong> the combo and taxonomy list shortcodes "
+"will not recognize the pagination and expand / collapse</em>"
+msgstr ""
+
+#: faq-manager.php:534
+msgid "The following options apply to all the <code>shortcode</code> types"
+msgstr ""
+
+#: faq-manager.php:536
+msgid ""
+"The list will show 10 FAQs based on your sorting (if none has been done, it "
+"will be in date order)."
+msgstr ""
+
+#: faq-manager.php:539
+msgid "To display only 5:"
+msgstr ""
+
+#: faq-manager.php:540
+msgid "place <code>[faq limit=\"5\"]</code> on a post / page"
+msgstr ""
+
+#: faq-manager.php:541
+msgid "To display ALL:"
+msgstr ""
+
+#: faq-manager.php:542
+msgid "place <code>[faq limit=\"-1\"]</code> on a post / page"
+msgstr ""
+
+#: faq-manager.php:546
+msgid "For a single FAQ:"
+msgstr ""
+
+#: faq-manager.php:547
+msgid "place <code>[faq faq_id=\"ID\"]</code> on a post / page"
+msgstr ""
+
+#: faq-manager.php:548
+msgid "List all from a single FAQ topic category:"
+msgstr ""
+
+#: faq-manager.php:549
+msgid "place <code>[faq faq_topic=\"topic-slug\"]</code> on a post / page"
+msgstr ""
+
+#: faq-manager.php:550
+msgid "List all from a single FAQ tag:"
+msgstr ""
+
+#: faq-manager.php:551
+msgid "place <code>[faq faq_tag=\"tag-slug\"]</code> on a post / page"
+msgstr ""
+
+#: faq-manager.php:554
+msgid ""
+"Please note that the shortcode cannot handle a query of multiple "
+"categories / topics in a single shortcode. However, you can stack them as "
+"such:"
+msgstr ""
+
+#: faq-manager.php:555
+msgid "...content...."
+msgstr ""
+
+#: faq-manager.php:556
+msgid "[faq faq_topic=\"topic-slug-one\"]"
+msgstr ""
+
+#: faq-manager.php:557
+msgid "...more content...."
+msgstr ""
+
+#: faq-manager.php:558
+msgid "[faq faq_topic=\"topic-slug-two\"]"
+msgstr ""
+
+#: faq-manager.php:559
+msgid "...even more content...."
+msgstr ""
+
+#: faq-manager.php:583
+msgid ""
+"<strong>Note:</strong> this only affects the FAQs listed using the shortcode "
+"functions"
+msgstr ""
+
+#: faq-manager.php:590
+msgid "You have no FAQs to sort."
+msgstr ""
+
+#: faq-manager.php:781
+msgid "&laquo;"
+msgstr ""
+
+#: faq-manager.php:782
+msgid "&raquo;"
+msgstr ""
+
+#: faq-manager.php:953
+msgid "FAQs"
+msgstr ""
+
+#: faq-manager.php:954
+msgid "FAQ"
+msgstr ""
+
+#: faq-manager.php:955 faq-manager.php:956
+msgid "Add New FAQ"
+msgstr ""
+
+#: faq-manager.php:957
+msgid "Edit"
+msgstr ""
+
+#: faq-manager.php:958
+msgid "Edit FAQ"
+msgstr ""
+
+#: faq-manager.php:959
+msgid "New FAQ"
+msgstr ""
+
+#: faq-manager.php:960 faq-manager.php:961
+msgid "View FAQ"
+msgstr ""
+
+#: faq-manager.php:962
+msgid "Search FAQ"
+msgstr ""
+
+#: faq-manager.php:963
+msgid "No FAQs found"
+msgstr ""
+
+#: faq-manager.php:964
+msgid "No FAQs found in Trash"
+msgstr ""
+
+#: faq-manager.php:996 faq-widgets.php:295
+msgid "FAQ Topics"
+msgstr ""
+
+#: faq-manager.php:997
+msgid "FAQ Topic"
+msgstr ""
+
+#: faq-manager.php:998
+msgid "Search FAQ Topics"
+msgstr ""
+
+#: faq-manager.php:999
+msgid "Popular FAQ Topics"
+msgstr ""
+
+#: faq-manager.php:1000
+msgid "All FAQ Topics"
+msgstr ""
+
+#: faq-manager.php:1001
+msgid "Parent FAQ Topic"
+msgstr ""
+
+#: faq-manager.php:1002
+msgid "Parent FAQ Topic:"
+msgstr ""
+
+#: faq-manager.php:1003
+msgid "Edit FAQ Topics"
+msgstr ""
+
+#: faq-manager.php:1004
+msgid "Update FAQ Topics"
+msgstr ""
+
+#: faq-manager.php:1005
+msgid "Add New FAQ Topics"
+msgstr ""
+
+#: faq-manager.php:1006
+msgid "New FAQ Topics"
+msgstr ""
+
+#: faq-manager.php:1025 faq-widgets.php:296
+msgid "FAQ Tags"
+msgstr ""
+
+#: faq-manager.php:1026
+msgid "FAQ Tag"
+msgstr ""
+
+#: faq-manager.php:1027
+msgid "Search FAQ Tags"
+msgstr ""
+
+#: faq-manager.php:1028
+msgid "Popular FAQ Tags"
+msgstr ""
+
+#: faq-manager.php:1029
+msgid "All FAQ Tags"
+msgstr ""
+
+#: faq-manager.php:1030
+msgid "Parent FAQ Tags"
+msgstr ""
+
+#: faq-manager.php:1031
+msgid "Parent FAQ Tag:"
+msgstr ""
+
+#: faq-manager.php:1032
+msgid "Edit FAQ Tag"
+msgstr ""
+
+#: faq-manager.php:1033
+msgid "Update FAQ Tag"
+msgstr ""
+
+#: faq-manager.php:1034
+msgid "Add New FAQ Tag"
+msgstr ""
+
+#: faq-manager.php:1035
+msgid "New FAQ Tag"
+msgstr ""
+
+#: faq-manager.php:1203
+msgid "Enter Question Title Here"
+msgstr ""
+
+#: faq-manager.php:1285
+msgid "About the Plugin"
+msgstr ""
+
+#: faq-manager.php:1287
+msgid "Talk to"
+msgstr ""
+
+#: faq-manager.php:1287
+msgid "on twitter or visit the"
+msgstr ""
+
+#: faq-manager.php:1287
+msgid "plugin support form"
+msgstr ""
+
+#: faq-manager.php:1287
+msgid "for bugs or feature requests."
+msgstr ""
+
+#: faq-manager.php:1288
+msgid "<strong>Enjoy the plugin?</strong>"
+msgstr ""
+
+#: faq-manager.php:1289
+msgid "Tweet about it"
+msgstr ""
+
+#: faq-manager.php:1289
+msgid "and consider donating."
+msgstr ""
+
+#: faq-manager.php:1290
+msgid ""
+"<strong>Donate:</strong> A lot of hard work goes into building plugins - "
+"support your open source developers. Include your twitter username and I'll "
+"send you a shout out for your generosity. Thank you!"
+msgstr ""
+
+#: faq-manager.php:1303
+msgid "Links"
+msgstr ""
+
+#: faq-manager.php:1306
+msgid "Plugin on WP.org"
+msgstr ""
+
+#: faq-manager.php:1307
+msgid "Plugin on GitHub"
+msgstr ""
+
+#: faq-manager.php:1308
+msgid "Support Forum"
+msgstr ""
+
+#: faq-manager.php:1309
+msgid "Instructions page"
+msgstr ""
+
+#: faq-widgets.php:288
+msgid "Widget Title:"
+msgstr ""
+
+#: faq-widgets.php:293
+msgid "Taxonomy:"
+msgstr ""
+
+#: faq-widgets.php:384
+msgid "Include FAQ Topics"
+msgstr ""
+
+#: faq-widgets.php:389
+msgid "Include FAQ Tags"
+msgstr ""
