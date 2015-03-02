@@ -51,6 +51,23 @@ class FAQ_Shortcodes {
 	}
 
 	/**
+	 * Format the shortcode title
+	 */
+	function format_shortcode_title( $title_data ) {
+		$html_title = '<' . $title_data['htype'] . ' id="' . $$title_data['slug'] . '" class="' . $title_data['class'] . '">' . $title_data['title'] . '</' . $title_data['htype'] . '>';
+
+		// create a data array for the wp_faq_title_html_filter
+		$html_title_data = array(
+			'context' => $title_data['context'],
+			'title'   => $title_data['title'], // just the title
+			'slug'    => $title_data['slug'],
+			'class'   => $title_data['class'] // original classes
+		);
+
+		return apply_filters( 'wp_faq_title_html', $html_title, $html_title_data );
+	}
+
+	/**
 	 * load primary shortcode
 	 *
 	 * @return WP_FAQ_Manager
@@ -86,13 +103,19 @@ class FAQ_Shortcodes {
 
 			while ($wp_query->have_posts()) : $wp_query->the_post();
 				global $post;
-				$content	= get_the_content();
-				$title		= get_the_title();
-				$slug		= basename(get_permalink());
-				$link		= get_permalink();
+				$content = get_the_content();
+				$title	 = get_the_title();
+				$slug		 = basename(get_permalink());
+				$link		 = get_permalink();
 
 				$displayfaq .= '<div class="single-faq'.$expand_a.'">';
-				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq-question'.$expand_b.'">'.$title.'</'.$htype.'>';
+				$displayfaq .= $this->format_shortcode_title( array(
+					'context' => 'main',
+					'title'   => $title,
+					'slug'    => $slug,
+					'htype'   => $htype,
+					'class'   => 'faq-question' . $expand_b
+				) );
 				$displayfaq .= '<div class="faq-answer" rel="'.$slug.'">';
 				$displayfaq .= $nofilter == true ? $content : apply_filters('the_content', $content);
 				if ($exlink == true)
@@ -252,7 +275,13 @@ class FAQ_Shortcodes {
 				$backtop	= (isset($faqopts['backtop'])	? true : false	);
 
 				$displayfaq .= '<div class="single-faq" rel="'.$slug.'">';
-				$displayfaq .= '<'.$htype.' id="'.$slug.'" class="faq-question">'.$title.'</'.$htype.'>';
+				$displayfaq .= $this->format_shortcode_title( array(
+					'context' => 'combo',
+					'title'   => $title,
+					'slug'    => $slug,
+					'htype'   => $htype,
+					'class'   => 'faq-question'
+				) );
 				$displayfaq .= '<div class="faq-answer">';
 				$displayfaq .= $nofilter == true ? '<p>'.$content.'</p>' : apply_filters('the_content', $content);
 				$displayfaq .= '<p class="scroll-back"><a href="#faq-block">Back To Top</a></p>';

@@ -579,6 +579,55 @@ class WP_FAQ_Manager
 			<p><?php _e('...even more content....', 'wpfaq'); ?></p>
 
 
+			<h2 class="inst-title"><?php _e('Available Filters', 'wpfaq'); ?></h2>
+			<p><?php _e( 'There are a few different filters that you can use to manipulate the output from your shortcodes. Currently, they are:' ); ?></p>
+
+			<ul>
+				<li>
+					<h3>wp_faq_title_html( $html_title, $data )</h3>
+					<ul class="faqinfo">
+						<li>
+							<strong><?php _e( '$html_title' ); ?></strong>
+							<ul class="faqinfo">
+								<li>(string) The unaltered HTML title</li>
+							</ul>
+						</li>
+						<li>
+							<strong><?php _e( '$data' ); ?></strong>
+							<ul class="faqinfo">
+								<li>
+									(array) All of the data that is used to generate the HTML title. This provides you with everything you need to recreate it, or pieces of it.
+									<ul class="faqinfo">
+										<li><strong>context</strong> - Which shortcode is calling this (main, combo, list)</li>
+										<li><strong>title</strong> - The raw title</li>
+										<li><strong>slug</strong> - The raw slug</li>
+										<li><strong>class</strong> - The classes that were going to be applied</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<h4><?php _e( 'Example Implementation:' ); ?></h4>
+							<ul class="faqinfo">
+								<li><pre style="overflow: scroll"><code><?php echo htmlspecialchars("/**
+ * Example use case of wp_faq_title_html
+ */
+add_filter( 'wp_faq_title_html', 'custom_faq_title', 10, 2);
+function custom_faq_title( \$html, \$data ) {
+	// customize title for the [faq] shortcode
+	if( 'main' === \$data['context'] ) {
+		return '<small id=\"' . \$data['slug'] . '\" class=\"' . \$data['class'] . ' custom-class\">' . \$data['title'] . '</small>';
+	} else {
+		return \$html;
+	}
+}"); ?></code></pre></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+
+
 	<?php echo $this->settings_close(); ?>
 
 	</div>
