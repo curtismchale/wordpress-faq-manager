@@ -426,11 +426,13 @@ class WP_FAQ_Manager
 				    <label for="faq_options[nofilter]" rel="checkbox"><?php _e('Disable content filter on shortcode output <em><small>(Use when certain plugins add sharing buttons, etc)</small></em>', 'wpfaq'); ?></label>
 				</p>
 
+				<?php if( 'true' === $rss ) { ?>
 				<p>
 				    <input type="checkbox" name="faq_options[rss]" id="faq_rss" value="true" <?php checked( $rss, 'true' ); ?> />
 				    <label for="faq_options[rss]" rel="checkbox"><?php _e('Include FAQs in main RSS feed <em><small>(Use with caution, as this will remove all non-posts from the native RSS feed)</small></em>', 'wpfaq'); ?></label>
-
+				    <?php echo $deprecated_option_message; ?>
 				</p>
+				<?php } ?>
 
 				<p class="redirect">
 				    <input type="checkbox" name="faq_options[redirect]" id="faq_redirect" value="true" <?php checked( $redirect, 'true' ); ?> />
