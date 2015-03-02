@@ -359,10 +359,12 @@ class WP_FAQ_Manager
 				$redirect	= (isset($faq_options['redirect'])		? $faq_options['redirect']	: 'false'		);
 				$redirectid	= (isset($faq_options['redirectid'])	? $faq_options['redirectid']: 'none'		);
 
-				$deprecated_option_message = __( "<br />- <strong>Deprecated</strong>: You only see this option because you previously changed it from it's default state. If you uncheck and save, you won't see it again.", 'wp-faq-manager' );
+				// Set a message to show next to options that are set but deprecated
+				$deprecated_option_message = __( "<br />- <strong>Deprecated</strong>: You only see this option because you previously changed it from it's default state. If you revert it and save, you won't see it again.", 'wp-faq-manager' );
 				?>
 
 				<h2 class="inst-title"><?php _e('Display Options') ?></h2>
+				<?php if( 'h1' !== $faq_options['htype'] ) { ?>
 				<p>
 					<select class="faq_htype <?php echo $htype; ?>" name="faq_options[htype]" id="faq_htype">
 		            <option value="h1" <?php selected( $faq_options['htype'], 'h1' ); ?>>H1</option>
@@ -373,7 +375,9 @@ class WP_FAQ_Manager
 					<option value="h6" <?php selected( $faq_options['htype'], 'h6' ); ?>>H6</option>
 					</select>
 					<label type="select" for="faq_options[htype]"><?php _e('Choose your H type for FAQ title', 'wpfaq'); ?></label>
+					<?php echo $deprecated_option_message; ?>
 				</p>
+				<?php } ?>
 
 				<p>
 			    	<input type="checkbox" name="faq_options[paginate]" id="faq_paginate" value="true" <?php checked( $paginate, 'true' ); ?> />
