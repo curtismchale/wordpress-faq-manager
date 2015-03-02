@@ -15,33 +15,36 @@ class FAQ_Shortcodes {
 	 *
 	 * @return WP_Query
 	 */
-	public function shortcode_query( $topic, $tag, $id, $limit = NULL ) {
+	public function shortcode_query( $shortcode_args ) {
 		// set up $paged
 		if( isset( $_GET['faq_page'] ) && $faq_page = absint( $_GET['faq_page'] ) ) {
 			$paged = $faq_page;
 		} else {
 			$paged = 1;
-			$old_link = trailingslashit(get_permalink());
 		}
 
 		// clean up text
-		$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $topic);
-		$faq_tag = preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $tag);
+		$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $shortcode_args['topic']);
+		$faq_tag = preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $shortcode_args['tag']);
 
 		// FAQ query
 		$args = array (
-			'p'				       => '' . $id . '',
-			'faq-topic'			 => '' . $faq_topic . '',
-			'faq-tags'			 => '' . $faq_tag . '',
-			'post_type'			 =>	'question',
-			'orderby'			   =>	'menu_order',
-			'order'				   =>	'ASC',
-			'paged'				   =>	$paged,
+			'p'				  => '' . $shortcode_args['id'] . '',
+			'faq-topic'	=> '' . $faq_topic . '',
+			'faq-tags'	=> '' . $faq_tag . '',
+			'post_type'	=> 'question',
+			'orderby'		=> 'menu_order',
+			'order'			=> 'ASC',
 		);
 
 		// handle optional limit
-		if( null !== $limit ) {
-			$args['posts_per_page'] =	'' . $limit . '';
+		if( isset( $shortcode_args['limit'] ) ) {
+			$args['posts_per_page'] =	'' . $shortcode_args['limit'] . '';
+		}
+
+		// handle optional pagination
+		if( isset( $shortcode_args['pagination'] ) ) {
+			$args['paged'] = $paged;
 		}
 
 		return new WP_Query($args);
@@ -60,7 +63,13 @@ class FAQ_Shortcodes {
 			'limit'			=> '10',
 		), $atts));
 
-		$wp_query = $this->shortcode_query( $faq_topic, $faq_tag, $faq_id, $limit );
+		$wp_query = $this->shortcode_query( array(
+			'topic'      => $faq_topic,
+			'tag'        => $faq_tag,
+			'id'         => $faq_id,
+			'limit'      => $limit,
+			'pagination' => true
+		) );
 
 		if($wp_query->have_posts()) :
 			// get options from settings page
@@ -94,6 +103,8 @@ class FAQ_Shortcodes {
 			endwhile;
 
 			if (isset($faqopts['paginate'])) {
+				$old_link = trailingslashit(get_permalink());
+
 				// pagination links
 				$displayfaq .= '<p class="faq-nav">';
 				$displayfaq .= paginate_links(array(
@@ -129,7 +140,13 @@ class FAQ_Shortcodes {
 			'limit'			=> '10',
 		), $atts));
 
-		$wp_query = $this->shortcode_query( $faq_topic, $faq_tag, $faq_id, $limit );
+		$wp_query = $this->shortcode_query( array(
+			'topic'      => $faq_topic,
+			'tag'        => $faq_tag,
+			'id'         => $faq_id,
+			'limit'      => $limit,
+			'pagination' => true
+		) );
 
 		if($wp_query->have_posts()) :
 
@@ -154,6 +171,8 @@ class FAQ_Shortcodes {
 			$displayfaq .= '</ul>';
 
 				if (isset($faqopts['paginate'])) {
+					$old_link = trailingslashit(get_permalink());
+
 					// pagination links
 					$displayfaq .= '<p class="faq-nav">';
 					$displayfaq .= paginate_links(array(
@@ -188,24 +207,12 @@ class FAQ_Shortcodes {
 			'faq_id'		=> '',
 		), $atts));
 
-		// no pagination
-
-		// clean up text
-		$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_topic);
-		$faq_tag	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_tag);
-
-		// FAQ query
-		$args = array (
-			'p'					=> ''.$faq_id.'',
-			'faq-topic'			=> ''.$faq_topic.'',
-			'faq-tags'			=> ''.$faq_tag.'',
-			'post_type'			=>	'question',
-			'posts_per_page'	=>	-1,
-			'orderby'			=>	'menu_order',
-			'order'				=>	'ASC',
-		);
-
-		$wp_query = new WP_Query($args);
+		$wp_query = $this->shortcode_query( array(
+			'topic' => $faq_topic,
+			'tag'   => $faq_tag,
+			'id'    => $faq_id,
+			'limit' => -1
+		) );
 
 		if($wp_query->have_posts()) :
 
