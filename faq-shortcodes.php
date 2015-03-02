@@ -129,31 +129,7 @@ class FAQ_Shortcodes {
 			'limit'			=> '10',
 		), $atts));
 
-		// pagination call. required regardless of whether pagination is active or not
-		if( isset( $_GET['faq_page'] ) && $faq_page = absint( $_GET['faq_page'] ) )
-			$paged = $faq_page;
-		else
-			$paged = 1;
-		$old_link = trailingslashit(get_permalink());
-		// end paginaton
-
-		// clean up text
-		$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_topic);
-		$faq_tag	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_tag);
-
-		// FAQ query
-		$args = array (
-			'p'					=> ''.$faq_id.'',
-			'faq-topic'			=> ''.$faq_topic.'',
-			'faq-tags'			=> ''.$faq_tag.'',
-			'post_type'			=>	'question',
-			'posts_per_page'	=>	''.$limit.'',
-			'orderby'			=>	'menu_order',
-			'order'				=>	'ASC',
-			'paged'				=>	$paged,
-		);
-
-		$wp_query = new WP_Query($args);
+		$wp_query = $this->shortcode_query( $faq_topic, $faq_tag, $faq_id, $limit );
 
 		if($wp_query->have_posts()) :
 
