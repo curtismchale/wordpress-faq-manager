@@ -52,19 +52,33 @@ class FAQ_Shortcodes {
 
 	/**
 	 * Format the shortcode title
+	 * $title_data array(
+	 *   'context' => 'main',
+	 *   'title'   => $title,
+	 *   'slug'    => $slug,
+	 *   'htype'   => $htype,
+	 *   'class'   => 'faq-question' . $expand_b
+	 *  )
 	 */
 	function format_shortcode_title( $title_data ) {
 		$html_title = '<' . $title_data['htype'] . ' id="' . $$title_data['slug'] . '" class="' . $title_data['class'] . '">' . $title_data['title'] . '</' . $title_data['htype'] . '>';
 
-		// create a data array for the wp_faq_title_html_filter
-		$html_title_data = array(
-			'context' => $title_data['context'],
-			'title'   => $title_data['title'], // just the title
-			'slug'    => $title_data['slug'],
-			'class'   => $title_data['class'] // original classes
-		);
+		return apply_filters( 'wp_faq_title_html', $html_title, $title_data );
+	}
 
-		return apply_filters( 'wp_faq_title_html', $html_title, $html_title_data );
+	/**
+	 * Format the read more link
+	 * $read_more_data array(
+	 *	'link'  => $link,
+	 *	'title' => $title,
+	 *	'text'  => $extext,
+	 *	'class' => 'faq-link'
+	 * )
+	 */
+	function format_read_more( $read_more_data ) {
+		$read_more_html = '<p class="' . $read_more_data['class'] . '"><a href="' . $read_more_data['link'] . '" title="' . $read_more_data['title'] . '">' . $read_more_data['text'] . '</a></p>';
+
+		return apply_filters( 'wp_faq_read_more_html', $read_more_html, $read_more_data );
 	}
 
 	/**
@@ -91,13 +105,13 @@ class FAQ_Shortcodes {
 		if($wp_query->have_posts()) :
 			// get options from settings page
 			$faqopts	= get_option('faq_options');
-			$exspeed	= (isset($faqopts['exspeed'])									? $faqopts['exspeed']	: '200'	);
-			$exlink		= (isset($faqopts['exlink'])									? true					: false	);
-			$nofilter	= (isset($faqopts['nofilter'])									? true					: false	);
-			$extext		= (isset($faqopts['extext']) && $faqopts['extext'] !== ''		? $faqopts['extext']	: 'Read More'	);
-			$expand_a	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-faq'			: ''	);
-			$expand_b	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-title'		: ''	);
-			$htype		= (isset($faqopts['htype'])										? $faqopts['htype']		: 'h3'	);
+			$exspeed	= (isset($faqopts['exspeed'])								                	? $faqopts['exspeed']	: '200'	);
+			$exlink		= (isset($faqopts['exlink'])							                		? true					      : false	);
+			$nofilter	= (isset($faqopts['nofilter'])								                ? true					      : false	);
+			$extext		= (isset($faqopts['extext']) && $faqopts['extext'] !== ''		  ? $faqopts['extext']	: 'Read More'	);
+			$expand_a	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-faq'			  : ''	);
+			$expand_b	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-title'		  : ''	);
+			$htype		= (isset($faqopts['htype'])										                ? $faqopts['htype']		: 'h3'	);
 
 			$displayfaq = '<div id="faq-block"><div class="faq-list" data-speed="'.$exspeed.'">';
 
@@ -119,7 +133,12 @@ class FAQ_Shortcodes {
 				$displayfaq .= '<div class="faq-answer" rel="'.$slug.'">';
 				$displayfaq .= $nofilter == true ? $content : apply_filters('the_content', $content);
 				if ($exlink == true)
-					$displayfaq .= '<p class="faq-link"><a href="'.$link.'" title="'.$title.'">'.$extext.'</a></p>';
+					$displayfaq .= $this->format_read_more( array(
+						'link'  => $link,
+						'title' => $title,
+						'text'  => $extext,
+						'class' => 'faq-link'
+					) );
 
 				$displayfaq .= '</div>';
 				$displayfaq .= '</div>';

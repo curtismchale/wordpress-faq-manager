@@ -584,7 +584,7 @@ class WP_FAQ_Manager
 
 			<ul>
 				<li>
-					<h3>wp_faq_title_html( $html_title, $data )</h3>
+					<h3>wp_faq_title_html( $html_title, $title_data )</h3>
 					<ul class="faqinfo">
 						<li>
 							<strong><?php _e( '$html_title' ); ?></strong>
@@ -593,7 +593,7 @@ class WP_FAQ_Manager
 							</ul>
 						</li>
 						<li>
-							<strong><?php _e( '$data' ); ?></strong>
+							<strong><?php _e( '$title_data' ); ?></strong>
 							<ul class="faqinfo">
 								<li>
 									(array) All of the data that is used to generate the HTML title. This provides you with everything you need to recreate it, or pieces of it.
@@ -613,13 +613,54 @@ class WP_FAQ_Manager
  * Example use case of wp_faq_title_html
  */
 add_filter( 'wp_faq_title_html', 'custom_faq_title', 10, 2);
-function custom_faq_title( \$html, \$data ) {
+function custom_faq_title( \$html, \$title_data ) {
 	// customize title for the [faq] shortcode
-	if( 'main' === \$data['context'] ) {
-		return '<small id=\"' . \$data['slug'] . '\" class=\"' . \$data['class'] . ' custom-class\">' . \$data['title'] . '</small>';
+	if( 'main' === \$title_data['context'] ) {
+		return '<small id=\"' . \$title_data['slug'] . '\" class=\"' . \$title_data['class'] . ' custom-class\">' . \$title_data['title'] . '</small>';
 	} else {
 		return \$html;
 	}
+}"); ?></code></pre></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+
+			<ul>
+				<li>
+					<h3>wp_faq_read_more_html( $html_read_more, $data )</h3>
+					<ul class="faqinfo">
+						<li>
+							<strong><?php _e( '$html_read_more' ); ?></strong>
+							<ul class="faqinfo">
+								<li>(string) The unaltered HTML read more link</li>
+							</ul>
+						</li>
+						<li>
+							<strong><?php _e( '$read_more_data' ); ?></strong>
+							<ul class="faqinfo">
+								<li>
+									(array) All of the data that is used to generate the HTML read more link. This provides you with everything you need to recreate it, or pieces of it.
+									<ul class="faqinfo">
+										<li><strong>link</strong> - The <code>href</code> of the link</li>
+										<li><strong>title</strong> - The raw title</li>
+										<li><strong>text</strong> - The 'Read More' custom text you set in the Settings page</li>
+										<li><strong>class</strong> - The classes that were going to be applied</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<h4><?php _e( 'Example Implementation:' ); ?></h4>
+							<ul class="faqinfo">
+								<li><pre style="overflow: scroll"><code><?php echo htmlspecialchars("/**
+ * Example use case of wp_faq_read_more_html
+ */
+add_filter( 'wp_faq_read_more_html', 'custom_faq_read_more', 10, 2 );
+function custom_faq_read_more( \$html, \$read_more_data ) {
+	// customize read more
+	return '<div class=\"read-more\"><a href=\"' . \$read_more_data['link'] . '\" title=\"' . \$read_more_data['title'] . '\" class=\"' . \$read_more_data['class'] . '\">' . \$read_more_data['text'] . '</a></div>';
 }"); ?></code></pre></li>
 							</ul>
 						</li>
