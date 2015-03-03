@@ -64,11 +64,6 @@ class WP_FAQ_Manager
 		add_filter					( 'faq-caps',						array( $this, 'menu_filter'		), 10, 2	);
 		add_filter 					( 'plugin_action_links', 			array( $this, 'quick_link'		), 10, 2	);
 		add_filter					( 'post_class', 					array( $this, 'faq_post_class'	) 			);
-		add_shortcode				( 'faq',							array( $this, 'shortcode_main'	) 			);
-		add_shortcode				( 'faqlist',						array( $this, 'shortcode_list'	) 			);
-		add_shortcode				( 'faqcombo',						array( $this, 'shortcode_combo'	) 			);
-		add_shortcode				( 'faqtaxlist',						array( $this, 'shortcode_taxls'	) 			);
-
 	}
 
 	public function register_widgets() {
