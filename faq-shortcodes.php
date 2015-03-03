@@ -63,6 +63,8 @@ class FAQ_Shortcodes {
 	function format_faq_title( $title_data ) {
 		$html_title = '';
 
+		$title_data = array_map( 'sanitize_text_field' , $title_data );
+
 		switch( $title_data['context'] ) {
 			case 'list':
 				$html_title = '<li class="' . $title_data['class'] . '"><a href="' . $title_data['link'] . '" title="Permanent link to ' . $title_data['title'] . '" >' . $title_data['title'] . '</a></li>';
