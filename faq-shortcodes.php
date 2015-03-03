@@ -110,10 +110,10 @@ class FAQ_Shortcodes {
 		), $atts));
 
 		$wp_query = $this->shortcode_query( array(
-			'topic'      => $faq_topic,
-			'tag'        => $faq_tag,
-			'id'         => $faq_id,
-			'limit'      => $limit,
+			'topic'      => sanitize_text_field( $faq_topic ),
+			'tag'        => sanitize_text_field( $faq_tag ),
+			'id'         => absint( $faq_id ),
+			'limit'      => intval( $limit ),
 			'pagination' => true
 		) );
 
@@ -202,10 +202,10 @@ class FAQ_Shortcodes {
 		), $atts));
 
 		$wp_query = $this->shortcode_query( array(
-			'topic'      => $faq_topic,
-			'tag'        => $faq_tag,
-			'id'         => $faq_id,
-			'limit'      => $limit,
+			'topic'      => sanitize_text_field( $faq_topic ),
+			'tag'        => sanitize_text_field( $faq_tag ),
+			'id'         => absint( $faq_id ),
+			'limit'      => intval( $limit ),
 			'pagination' => true
 		) );
 
@@ -281,9 +281,9 @@ class FAQ_Shortcodes {
 		), $atts));
 
 		$wp_query = $this->shortcode_query( array(
-			'topic' => $faq_topic,
-			'tag'   => $faq_tag,
-			'id'    => $faq_id,
+			'topic' => sanitize_text_field( $faq_topic ),
+			'tag'   => sanitize_text_field( $faq_tag ),
+			'id'    => absint( $faq_id ),
 			'limit' => -1
 		) );
 
