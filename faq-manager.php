@@ -598,7 +598,7 @@ class WP_FAQ_Manager
 								<li>
 									(array) All of the data that is used to generate the HTML title. This provides you with everything you need to recreate it, or pieces of it.
 									<ul class="faqinfo">
-										<li><strong>context</strong> - Which shortcode is calling this (main, combo, list)</li>
+										<li><strong>context</strong> - Which shortcode is calling this (main, combo-link, combo-answer, list)</li>
 										<li><strong>title</strong> - The raw title</li>
 										<li><strong>slug</strong> - The raw slug</li>
 										<li><strong>class</strong> - The classes that were going to be applied</li>
@@ -668,6 +668,34 @@ function custom_faq_read_more( \$html, \$read_more_data ) {
 				</li>
 			</ul>
 
+			<h2 class="inst-title"><?php _e('Available Hooks', 'wpfaq'); ?></h2>
+			<p><?php _e( 'There are a few different hooks that you can use to add to the output from your shortcodes. Currently, they are:' ); ?></p>
+
+			<ul>
+				<li>
+					<h3>load_wp_faqs( $context )</h3>
+					<ul class="faqinfo">
+						<li>
+							<strong><?php _e( '$context' ); ?></strong>
+							<ul class="faqinfo">
+								<li>(string) Which shortcode loaded FAQs in (main || combo)</li>
+							</ul>
+						</li>
+						<li>
+							<h4><?php _e( 'Example Implementation:' ); ?></h4>
+							<ul class="faqinfo">
+								<li><pre style="overflow: scroll"><code><?php echo htmlspecialchars("/**
+ * Example use of load_wp_faqs hook
+ */
+add_action( 'load_wp_faqs', 'custom_faq_loaded', 10, 1 );
+function custom_faq_loaded( \$context ) {
+	var_dump( \$context );
+}"); ?></code></pre></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
 
 	<?php echo $this->settings_close(); ?>
 

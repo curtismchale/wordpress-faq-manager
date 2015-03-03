@@ -51,7 +51,7 @@ class FAQ_Shortcodes {
 	}
 
 	/**
-	 * Format the shortcode title
+	 * Format the faq title
 	 * $title_data array(
 	 *   'context' => 'main',
 	 *   'title'   => $title,
@@ -60,8 +60,23 @@ class FAQ_Shortcodes {
 	 *   'class'   => 'faq-question' . $expand_b
 	 *  )
 	 */
-	function format_shortcode_title( $title_data ) {
-		$html_title = '<' . $title_data['htype'] . ' id="' . $$title_data['slug'] . '" class="' . $title_data['class'] . '">' . $title_data['title'] . '</' . $title_data['htype'] . '>';
+	function format_faq_title( $title_data ) {
+		$html_title = '';
+
+		switch( $title_data['context'] ) {
+			case 'list':
+				$html_title = '<li class="' . $title_data['class'] . '"><a href="' . $title_data['link'] . '" title="Permanent link to ' . $title_data['title'] . '" >' . $title_data['title'] . '</a></li>';
+				break;
+			case 'combo-link':
+				$html_title .= '<li class="' . $title_data['class'] . '"><a href="#' . $title_data['slug'] . '" rel="' . $title_data['slug'] . '">' . $title_data['title'] . '</a></li>';
+				break;
+			case 'combo-answer':
+				$html_title = '<' . $title_data['htype'] . ' id="' . $title_data['slug'] . '" class="' . $title_data['class'] . '">' . $title_data['title'] . '</' . $title_data['htype'] . '>';
+				break;
+			case 'main':
+				$html_title = '<' . $title_data['htype'] . ' id="' . $title_data['slug'] . '" class="' . $title_data['class'] . '">' . $title_data['title'] . '</' . $title_data['htype'] . '>';
+				break;
+		}
 
 		return apply_filters( 'wp_faq_title_html', $html_title, $title_data );
 	}
@@ -102,6 +117,8 @@ class FAQ_Shortcodes {
 			'pagination' => true
 		) );
 
+		$context = 'main';
+
 		if($wp_query->have_posts()) :
 			// get options from settings page
 			$faqopts	= get_option('faq_options');
@@ -123,8 +140,8 @@ class FAQ_Shortcodes {
 				$link		 = get_permalink();
 
 				$displayfaq .= '<div class="single-faq'.$expand_a.'">';
-				$displayfaq .= $this->format_shortcode_title( array(
-					'context' => 'main',
+				$displayfaq .= $this->format_faq_title( array(
+					'context' => $context,
 					'title'   => $title,
 					'slug'    => $slug,
 					'htype'   => $htype,
@@ -165,6 +182,8 @@ class FAQ_Shortcodes {
 
 		endif;
 
+		do_action( 'load_wp_faqs', $context );
+
 		// now send it all back
 		return $displayfaq;
 	}
@@ -190,6 +209,8 @@ class FAQ_Shortcodes {
 			'pagination' => true
 		) );
 
+		$context = 'list';
+
 		if($wp_query->have_posts()) :
 
 		$displayfaq = '<div id="faq-block"><div class="faq-list">';
@@ -206,7 +227,15 @@ class FAQ_Shortcodes {
 			$faqopts	= get_option('faq_options');
 			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
 
-				$displayfaq .= '<li class="faqlist-question"><a href="'.$link.'" title="Permanent link to '.$title.'" >'.$title.'</a></li>';
+				// $displayfaq .= '<li class="faqlist-question"><a href="'.$link.'" title="Permanent link to '.$title.'" >'.$title.'</a></li>';
+
+				$displayfaq .= $this->format_faq_title( array(
+					'context' => $context,
+					'title'   => $title,
+					'slug'    => $slug,
+					'link'    => $link,
+					'class'   => 'faqlist-question'
+				) );
 
 
 			endwhile;
@@ -233,6 +262,8 @@ class FAQ_Shortcodes {
 		$displayfaq .= '</div></div>';
 		endif;
 
+		do_action( 'load_wp_faqs', $context );
+
 		// now send it all back
 		return $displayfaq;
 	}
@@ -256,6 +287,8 @@ class FAQ_Shortcodes {
 			'limit' => -1
 		) );
 
+		$context = 'combo';
+
 		if($wp_query->have_posts()) :
 
 			$displayfaq = '<div id="faq-block" rel="faq-top">';
@@ -271,7 +304,13 @@ class FAQ_Shortcodes {
 				// get options from settings page
 				$faqopts	= get_option('faq_options');
 				$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
-				$displayfaq .= '<li class="faqlist-question"><a href="#'.$slug.'" rel="'.$slug.'">'.$title.'</a></li>';
+				$displayfaq .= $this->format_faq_title( array(
+					'context' => $context . '-link',
+					'title'   => $title,
+					'slug'    => $slug,
+					'htype'   => $htype,
+					'class'   => 'faqfaqlist-question'
+				) );;
 			endwhile;
 
 			$displayfaq .= '</ul>';
@@ -294,8 +333,8 @@ class FAQ_Shortcodes {
 				$backtop	= (isset($faqopts['backtop'])	? true : false	);
 
 				$displayfaq .= '<div class="single-faq" rel="'.$slug.'">';
-				$displayfaq .= $this->format_shortcode_title( array(
-					'context' => 'combo',
+				$displayfaq .= $this->format_faq_title( array(
+					'context' => $context . '-answer',
 					'title'   => $title,
 					'slug'    => $slug,
 					'htype'   => $htype,
@@ -313,6 +352,8 @@ class FAQ_Shortcodes {
 
 			$displayfaq .= '</div>';
 		endif;
+
+		do_action( 'load_wp_faqs', $context );
 
 		// now send it all back
 		return $displayfaq;
