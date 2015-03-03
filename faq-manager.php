@@ -33,6 +33,9 @@ if(!defined('FAQ_VER'))
 //call widgets file
 include('faq-widgets.php');
 
+//call shortcodes file
+include('faq-shortcodes.php');
+
 class WP_FAQ_Manager
 {
 
@@ -375,9 +378,14 @@ class WP_FAQ_Manager
 				$singletext	= (isset($faq_options['single'])		? $faq_options['single']	: 'question'	);
 				$redirect	= (isset($faq_options['redirect'])		? $faq_options['redirect']	: 'false'		);
 				$redirectid	= (isset($faq_options['redirectid'])	? $faq_options['redirectid']: 'none'		);
+
+				// Set a message to show next to options that are set but deprecated
+				$deprecated_option_message = __( "<br />- <strong>Deprecated</strong>: You only see this option because you previously changed it from it's default state. If you revert it and save, you won't see it again.", 'wp-faq-manager' );
 				?>
 
-				<h2 class="inst-title"><?php _e('Display Options') ?></h2>
+				<h2 class="inst-title"><?php _e( 'Display Options', 'wpfaq' ) ?></h2>
+
+				<?php if( 'h1' !== $faq_options['htype'] && !empty( $faq_options['htype'] ) ) { ?>
 				<p>
 					<select class="faq_htype <?php echo $htype; ?>" name="faq_options[htype]" id="faq_htype">
 		            <option value="h1" <?php selected( $faq_options['htype'], 'h1' ); ?>>H1</option>
@@ -387,12 +395,14 @@ class WP_FAQ_Manager
 					<option value="h5" <?php selected( $faq_options['htype'], 'h5' ); ?>>H5</option>
 					<option value="h6" <?php selected( $faq_options['htype'], 'h6' ); ?>>H6</option>
 					</select>
-					<label type="select" for="faq_options[htype]"><?php _e('Choose your H type for FAQ title', 'wpfaq'); ?></label>
+					<label type="select" for="faq_options[htype]"><?php _e( 'Choose your H type for FAQ title', 'wpfaq' ); ?></label>
+					<?php echo $deprecated_option_message; ?>
 				</p>
+				<?php } ?>
 
 				<p>
 			    	<input type="checkbox" name="faq_options[paginate]" id="faq_paginate" value="true" <?php checked( $paginate, 'true' ); ?> />
-    				<label for="faq_options[paginate]" rel="checkbox"><?php _e('Paginate shortcode output', 'wpfaq'); ?></label>
+    				<label for="faq_options[paginate]" rel="checkbox"><?php _e( 'Paginate shortcode output', 'wpfaq' ); ?></label>
 				</p>
 
 				<p>
@@ -441,10 +451,13 @@ class WP_FAQ_Manager
 				    <label for="faq_options[nofilter]" rel="checkbox"><?php _e('Disable content filter on shortcode output <em><small>(Use when certain plugins add sharing buttons, etc)</small></em>', 'wpfaq'); ?></label>
 				</p>
 
+				<?php if( 'true' === $rss ) { ?>
 				<p>
 				    <input type="checkbox" name="faq_options[rss]" id="faq_rss" value="true" <?php checked( $rss, 'true' ); ?> />
 				    <label for="faq_options[rss]" rel="checkbox"><?php _e('Include FAQs in main RSS feed <em><small>(Use with caution, as this will remove all non-posts from the native RSS feed)</small></em>', 'wpfaq'); ?></label>
+				    <?php echo $deprecated_option_message; ?>
 				</p>
+				<?php } ?>
 
 				<p class="redirect">
 				    <input type="checkbox" name="faq_options[redirect]" id="faq_redirect" value="true" <?php checked( $redirect, 'true' ); ?> />
@@ -475,20 +488,29 @@ class WP_FAQ_Manager
 
 				<h2 class="inst-title"><?php _e('SEO Options') ?></h2>
 
+				<?php if( 'true' === $noindex ) { ?>
 				<p>
 				    <input type="checkbox" name="faq_options[noindex]" id="faq_noindex" value="true" <?php checked( $noindex, 'true' ); ?> />
 				    <label for="faq_options[noindex]" rel="checkbox"> <?php _e('Apply <code>noindex</code> header tag to FAQs', 'wpfaq'); ?></label>
+				    <?php echo $deprecated_option_message; ?>
 				</p>
+				<?php } ?>
 
+				<?php if( 'true' === $nofollow ) { ?>
 				<p>
 				    <input type="checkbox" name="faq_options[nofollow]" id="faq_nofollow" value="true" <?php checked( $nofollow, 'true' ); ?> />
 				    <label for="faq_options[nofollow]" rel="checkbox"> <?php _e('Apply <code>nofollow</code> header tag to FAQs', 'wpfaq'); ?></label>
+				    <?php echo $deprecated_option_message; ?>
 				</p>
+				<?php } ?>
 
+				<?php if( 'true' === $noarchive ) { ?>
 				<p>
 				    <input type="checkbox" name="faq_options[noarchive]" id="faq_noarchive" value="true" <?php checked( $noarchive, 'true' ); ?> />
 				    <label for="faq_options[noarchive]" rel="checkbox"> <?php _e('Apply <code>noarchive</code> header tag to FAQs', 'wpfaq'); ?></label>
+				    <?php echo $deprecated_option_message; ?>
 				</p>
+				<?php } ?>
 
 				<p>
 					<input type="text" name="faq_options[single]" id="faq_single" size="20" value="<?php echo sanitize_title($singletext); ?>" />
@@ -577,6 +599,123 @@ class WP_FAQ_Manager
 			<p class="indent"><code><?php _e('[faq faq_topic="topic-slug-two"]', 'wpfaq'); ?></code></p>
 			<p><?php _e('...even more content....', 'wpfaq'); ?></p>
 
+			<h2 class="inst-title"><?php _e( 'Available Filters', 'wpfaq' ); ?></h2>
+			<p><?php _e( 'There are a few different filters that you can use to manipulate the output from your shortcodes. Currently, they are:' ); ?></p>
+
+			<ul>
+				<li>
+					<h3>wp_faq_title_html( $html_title, $title_data )</h3>
+					<ul class="faqinfo">
+						<li>
+							<strong><?php _e( '$html_title', 'wpfaq' ); ?></strong>
+							<ul class="faqinfo">
+								<li>(string) The unaltered HTML title</li>
+							</ul>
+						</li>
+						<li>
+							<strong><?php _e( '$title_data', 'wpfaq' ); ?></strong>
+							<ul class="faqinfo">
+								<li>
+									(array) All of the data that is used to generate the HTML title. This provides you with everything you need to recreate it, or pieces of it.
+									<ul class="faqinfo">
+										<li><strong>context</strong> - Which shortcode is calling this (main, combo-link, combo-answer, list)</li>
+										<li><strong>title</strong> - The raw title</li>
+										<li><strong>slug</strong> - The raw slug</li>
+										<li><strong>class</strong> - The classes that were going to be applied</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<h4><?php _e( 'Example Implementation:', 'wpfaq' ); ?></h4>
+							<ul class="faqinfo">
+								<li><pre style="overflow: scroll"><code><?php echo htmlspecialchars("/**
+ * Example use case of wp_faq_title_html
+ */
+add_filter( 'wp_faq_title_html', 'custom_faq_title', 10, 2);
+function custom_faq_title( \$html, \$title_data ) {
+	// customize title for the [faq] shortcode
+	if( 'main' === \$title_data['context'] ) {
+		return '<small id=\"' . \$title_data['slug'] . '\" class=\"' . \$title_data['class'] . ' custom-class\">' . \$title_data['title'] . '</small>';
+	} else {
+		return \$html;
+	}
+}"); ?></code></pre></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+
+			<ul>
+				<li>
+					<h3>wp_faq_read_more_html( $html_read_more, $data )</h3>
+					<ul class="faqinfo">
+						<li>
+							<strong><?php _e( '$html_read_more', 'wpfaq' ); ?></strong>
+							<ul class="faqinfo">
+								<li>(string) The unaltered HTML read more link</li>
+							</ul>
+						</li>
+						<li>
+							<strong><?php _e( '$read_more_data', 'wpfaq' ); ?></strong>
+							<ul class="faqinfo">
+								<li>
+									(array) All of the data that is used to generate the HTML read more link. This provides you with everything you need to recreate it, or pieces of it.
+									<ul class="faqinfo">
+										<li><strong>link</strong> - The <code>href</code> of the link</li>
+										<li><strong>title</strong> - The raw title</li>
+										<li><strong>text</strong> - The 'Read More' custom text you set in the Settings page</li>
+										<li><strong>class</strong> - The classes that were going to be applied</li>
+									</ul>
+								</li>
+							</ul>
+						</li>
+						<li>
+							<h4><?php _e( 'Example Implementation:' ); ?></h4>
+							<ul class="faqinfo">
+								<li><pre style="overflow: scroll"><code><?php echo htmlspecialchars("/**
+ * Example use case of wp_faq_read_more_html
+ */
+add_filter( 'wp_faq_read_more_html', 'custom_faq_read_more', 10, 2 );
+function custom_faq_read_more( \$html, \$read_more_data ) {
+	// customize read more
+	return '<div class=\"read-more\"><a href=\"' . \$read_more_data['link'] . '\" title=\"' . \$read_more_data['title'] . '\" class=\"' . \$read_more_data['class'] . '\">' . \$read_more_data['text'] . '</a></div>';
+}"); ?></code></pre></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
+
+			<h2 class="inst-title"><?php _e( 'Available Hooks', 'wpfaq' ); ?></h2>
+			<p><?php _e( 'There are a few different hooks that you can use to add to the output from your shortcodes. Currently, they are:' ); ?></p>
+
+			<ul>
+				<li>
+					<h3>load_wp_faqs( $context )</h3>
+					<ul class="faqinfo">
+						<li>
+							<strong><?php _e( '$context', 'wpfaq' ); ?></strong>
+							<ul class="faqinfo">
+								<li>(string) Which shortcode loaded FAQs in (main || combo)</li>
+							</ul>
+						</li>
+						<li>
+							<h4><?php _e( 'Example Implementation:', 'wpfaq' ); ?></h4>
+							<ul class="faqinfo">
+								<li><pre style="overflow: scroll"><code><?php echo htmlspecialchars("/**
+ * Example use of load_wp_faqs hook
+ */
+add_action( 'load_wp_faqs', 'custom_faq_loaded', 10, 1 );
+function custom_faq_loaded( \$context ) {
+	var_dump( \$context );
+}"); ?></code></pre></li>
+							</ul>
+						</li>
+					</ul>
+				</li>
+			</ul>
 
 	<?php echo $this->settings_close(); ?>
 
@@ -629,328 +768,6 @@ class WP_FAQ_Manager
 			$counter++;
 		}
 		die(1);
-	}
-
-	/**
-	 * load primary shortcode
-	 *
-	 * @return WP_FAQ_Manager
-	 */
-
-	public function shortcode_main($atts, $content = NULL) {
-		extract(shortcode_atts(array(
-			'faq_topic'		=> '',
-			'faq_tag'		=> '',
-			'faq_id'		=> '',
-			'limit'			=> '10',
-		), $atts));
-
-		// pagination call. required regardless of whether pagination is active or not
-		if( isset( $_GET['faq_page'] ) && $faq_page = absint( $_GET['faq_page'] ) )
-			$paged = $faq_page;
-		else
-			$paged = 1;
-		$old_link = trailingslashit(get_permalink());
-		// end paginaton
-
-		// clean up text
-		$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_topic);
-		$faq_tag	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_tag);
-
-		// FAQ query
-		$args = array (
-			'p'					=> ''.$faq_id.'',
-			'faq-topic'			=> ''.$faq_topic.'',
-			'faq-tags'			=> ''.$faq_tag.'',
-			'post_type'			=>	'question',
-			'posts_per_page'	=>	''.$limit.'',
-			'orderby'			=>	'menu_order',
-			'order'				=>	'ASC',
-			'paged'				=>	$paged,
-		);
-
-		$wp_query = new WP_Query($args);
-
-		if($wp_query->have_posts()) :
-
-		// get options from settings page
-		$faqopts	= get_option('faq_options');
-		$exspeed	= (isset($faqopts['exspeed'])									? $faqopts['exspeed']	: '200'	);
-		$exlink		= (isset($faqopts['exlink'])									? true					: false	);
-		$nofilter	= (isset($faqopts['nofilter'])									? true					: false	);
-		$extext		= (isset($faqopts['extext']) && $faqopts['extext'] !== ''		? $faqopts['extext']	: 'Read More'	);
-		$expand_a	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-faq'			: ''	);
-		$expand_b	= (isset($faqopts['expand']) && $faqopts['expand'] == 'true'	? ' expand-title'		: ''	);
-		$htype		= (isset($faqopts['htype'])										? $faqopts['htype']		: 'h3'	);
-
-		$displayfaq = '<div id="faq-block" name="faq-block"><div class="faq-list" data-speed="'.$exspeed.'">';
-
-			while ($wp_query->have_posts()) : $wp_query->the_post();
-
-			global $post;
-				$content	= get_the_content();
-				$title		= get_the_title();
-				$slug		= basename(get_permalink());
-				$link		= get_permalink();
-
-				$displayfaq .= '<div class="single-faq'.$expand_a.'">';
-				$displayfaq .= '<'.$htype.' id="'.$slug.'" name="'.$slug.'" class="faq-question'.$expand_b.'">'.$title.'</'.$htype.'>';
-				$displayfaq .= '<div class="faq-answer" rel="'.$slug.'">';
-				$displayfaq .= $nofilter == true ? $content : apply_filters('the_content', $content);
-				if ($exlink == true)
-					$displayfaq .= '<p class="faq-link"><a href="'.$link.'" title="'.$title.'">'.$extext.'</a></p>';
-
-				$displayfaq .= '</div>';
-				$displayfaq .= '</div>';
-
-			endwhile;
-
-				if (isset($faqopts['paginate'])) {
-					// pagination links
-					$displayfaq .= '<p class="faq-nav">';
-					$displayfaq .= paginate_links(array(
-					  'base'	=> $old_link . '%_%',
-					  'format'	=> '?faq_page=%#%',
-					  'type'	=> 'plain',
-					  'total'	=> $wp_query->max_num_pages,
-					  'current' => $paged,
-					));
-					$displayfaq .= '</p>';
-				// end pagination links
-				}
-				wp_reset_query();
-		$displayfaq .= '</div></div>';
-		endif;
-
-		// now send it all back
-		return $displayfaq;
-	}
-
-	/**
-	 * load list version shortcode
-	 *
-	 * @return WP_FAQ_Manager
-	 */
-
-	public function shortcode_list($atts, $content = NULL) {
-		extract(shortcode_atts(array(
-			'faq_topic'		=> '',
-			'faq_tag'		=> '',
-			'faq_id'		=> '',
-			'limit'			=> '10',
-		), $atts));
-
-		// pagination call. required regardless of whether pagination is active or not
-		if( isset( $_GET['faq_page'] ) && $faq_page = absint( $_GET['faq_page'] ) )
-			$paged = $faq_page;
-		else
-			$paged = 1;
-		$old_link = trailingslashit(get_permalink());
-		// end paginaton
-
-		// clean up text
-		$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_topic);
-		$faq_tag	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_tag);
-
-		// FAQ query
-		$args = array (
-			'p'					=> ''.$faq_id.'',
-			'faq-topic'			=> ''.$faq_topic.'',
-			'faq-tags'			=> ''.$faq_tag.'',
-			'post_type'			=>	'question',
-			'posts_per_page'	=>	''.$limit.'',
-			'orderby'			=>	'menu_order',
-			'order'				=>	'ASC',
-			'paged'				=>	$paged,
-		);
-
-		$wp_query = new WP_Query($args);
-
-		if($wp_query->have_posts()) :
-
-		$displayfaq = '<div id="faq-block" name="faq-block"><div class="faq-list">';
-
-			$displayfaq .= '<ul>';
-			while ($wp_query->have_posts()) : $wp_query->the_post();
-
-			global $post;
-			$title		= get_the_title();
-			$link		= get_permalink();
-			$slug		= basename(get_permalink());
-
-			// get options from settings page
-			$faqopts	= get_option('faq_options');
-			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
-
-				$displayfaq .= '<li class="faqlist-question"><a href="'.$link.'" title="Permanent link to '.$title.'" >'.$title.'</a></li>';
-
-
-			endwhile;
-			$displayfaq .= '</ul>';
-
-				if (isset($faqopts['paginate'])) {
-					// pagination links
-					$displayfaq .= '<p class="faq-nav">';
-					$displayfaq .= paginate_links(array(
-						'base'		=> $old_link . '%_%',
-						'format'	=> '?faq_page=%#%',
-						'type'		=> 'plain',
-						'total'		=> $wp_query->max_num_pages,
-						'current'	=> $paged,
-						'prev_text'	=> __('&laquo;'),
-						'next_text'	=> __('&raquo;'),
-					));
-					$displayfaq .= '</p>';
-				// end pagination links
-				}
-				wp_reset_query();
-		$displayfaq .= '</div></div>';
-		endif;
-
-		// now send it all back
-		return $displayfaq;
-	}
-
-	/**
-	 * load combo version shortcode
-	 *
-	 * @return WP_FAQ_Manager
-	 */
-
-	public function shortcode_combo($atts, $content = NULL) {
-		extract(shortcode_atts(array(
-			'faq_topic'		=> '',
-			'faq_tag'		=> '',
-			'faq_id'		=> '',
-		), $atts));
-
-		// no pagination
-
-		// clean up text
-		$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_topic);
-		$faq_tag	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_tag);
-
-		// FAQ query
-		$args = array (
-			'p'					=> ''.$faq_id.'',
-			'faq-topic'			=> ''.$faq_topic.'',
-			'faq-tags'			=> ''.$faq_tag.'',
-			'post_type'			=>	'question',
-			'posts_per_page'	=>	-1,
-			'orderby'			=>	'menu_order',
-			'order'				=>	'ASC',
-		);
-
-		$wp_query = new WP_Query($args);
-
-		if($wp_query->have_posts()) :
-
-		$displayfaq = '<div id="faq-block" name="faq-block" rel="faq-top">';
-		$displayfaq .= '<div class="faq-list">';
-
-			$displayfaq .= '<ul>';
-			while ($wp_query->have_posts()) : $wp_query->the_post();
-
-			global $post;
-			$title		= get_the_title();
-			$slug		= basename(get_permalink());
-
-			// get options from settings page
-			$faqopts	= get_option('faq_options');
-			$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
-
-				$displayfaq .= '<li class="faqlist-question"><a href="#'.$slug.'" rel="'.$slug.'">'.$title.'</a></li>';
-
-
-			endwhile;
-		$displayfaq .= '</ul>';
-		$displayfaq .= '</div>';
-
-		$displayfaq .= '<div class="faq-content">';
-			// second part of query
-			while ($wp_query->have_posts()) : $wp_query->the_post();
-
-			global $post;
-			// get FAQ content
-			$content	= get_the_content();
-			$title		= get_the_title();
-			$slug		= basename(get_permalink());
-
-			// get options from settings page
-			$faqopts	= get_option('faq_options');
-			$htype		= (isset($faqopts['htype'])		? $faqopts['htype']  : 'h3' );
-			$nofilter	= (isset($faqopts['nofilter'])	? true : false	);
-			$backtop	= (isset($faqopts['backtop'])	? true : false	);
-
-
-				$displayfaq .= '<div class="single-faq" rel="'.$slug.'">';
-				$displayfaq .= '<'.$htype.' id="'.$slug.'" name="'.$slug.'" class="faq-question">'.$title.'</'.$htype.'>';
-				$displayfaq .= '<div class="faq-answer">';
-				$displayfaq .= $nofilter == true ? '<p>'.$content.'</p>' : apply_filters('the_content', $content);
-				$displayfaq .= '<p class="scroll-back"><a href="#faq-block">Back To Top</a></p>';
-				$displayfaq .= '</div>';
-				$displayfaq .= '</div>';
-
-			endwhile;
-
-		$displayfaq .= '</div>';
-		wp_reset_query();
-
-		$displayfaq .= '</div>';
-		endif;
-
-		// now send it all back
-		return $displayfaq;
-	}
-
-	/**
-	 * load taxonomy list shortcode
-	 *
-	 * @return WP_FAQ_Manager
-	 */
-
-	public function shortcode_taxls($atts, $content = NULL) {
-		extract(shortcode_atts(array(
-			'type'		=> 'topics',
-			'desc'		=> '',
-		), $atts));
-
-		// check for type and description variable
-		$type_check	= (isset($type) && $type == 'tags' ) ? 'faq-tags' : 'faq-topic';
-		$disp_desc	= (isset($desc) && $desc == 'true' ) ? true : false;
-
-		// get list of terms
-		$taxitems	= get_terms( $type_check );
-		$countitems	= count($taxitems);
-
- 		// only show if we have something
- 		if ( $countitems == 0 )
- 			return;
-
-		// get options from settings page
-		$faqopts	= get_option('faq_options');
-		$htype		= (isset($faqopts['htype']) ? $faqopts['htype']  : 'h3' );
-
-		// begin build
-		$displayfaq = '<div id="faq-block" name="faq-block" class="faq-taxonomy">';
-
-		// now loop through the topics
-		foreach ( $taxitems as $item ) :
-			$displayfaq .= '<div class="faq-item">';
-			$displayfaq .= '<'.$htype.'><a href="'.get_term_link($item->slug, $type_check).'">'.$item->name.'</a></'.$htype.'>';
-
-			// optional description
-			if ($disp_desc == true && !empty($item->description) )
-				$displayfaq .= '<p>'.$item->description.'</p>';
-
-			$displayfaq .= '</div>';
-		endforeach;
-
-
-		$displayfaq .= '</div>';
-
-		// now send it all back
-		return $displayfaq;
 	}
 
 	/**
