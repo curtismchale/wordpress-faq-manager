@@ -58,6 +58,7 @@ class WP_FAQ_Manager
 		add_action					( 'wp_head', 						array( $this, 'seo_head'		), 5		);
 		add_action					( 'wp_head', 						array( $this, 'print_css'		), 999		);
 		add_action					( 'admin_enqueue_scripts', 			array( $this, 'admin_scripts'	), 10		);
+		add_action					( 'widgets_init',					array( $this, 'register_widgets')			);
 		add_filter					( 'enter_title_here',				array( $this, 'title_text'		) 			);
 		add_filter					( 'pre_get_posts',					array( $this, 'rss_include'		) 			);
 		add_filter					( 'faq-caps',						array( $this, 'menu_filter'		), 10, 2	);
@@ -68,6 +69,25 @@ class WP_FAQ_Manager
 		add_shortcode				( 'faqcombo',						array( $this, 'shortcode_combo'	) 			);
 		add_shortcode				( 'faqtaxlist',						array( $this, 'shortcode_taxls'	) 			);
 
+	}
+
+	public function register_widgets() {
+		if( class_exists( 'search_FAQ_Widget' ) ) {
+			register_widget('search_FAQ_Widget');
+		}
+
+		if( class_exists( 'random_FAQ_Widget' ) ) {
+			register_widget('random_FAQ_Widget');
+		}
+		if( class_exists( 'recent_FAQ_Widget' ) ) {
+			register_widget('recent_FAQ_Widget');
+		}
+		if( class_exists( 'topics_FAQ_Widget' ) ) {
+			register_widget('topics_FAQ_Widget');
+		}
+		if( class_exists( 'cloud_FAQ_Widget' ) ) {
+			register_widget('cloud_FAQ_Widget' );
+		}
 	}
 
 	/**
@@ -364,7 +384,8 @@ class WP_FAQ_Manager
 				?>
 
 				<h2 class="inst-title"><?php _e('Display Options') ?></h2>
-				<?php if( 'h1' !== $faq_options['htype'] ) { ?>
+
+				<?php if( 'h1' !== $faq_options['htype'] && !empty( $faq_options['htype'] ) ) { ?>
 				<p>
 					<select class="faq_htype <?php echo $htype; ?>" name="faq_options[htype]" id="faq_htype">
 		            <option value="h1" <?php selected( $faq_options['htype'], 'h1' ); ?>>H1</option>
@@ -578,7 +599,6 @@ class WP_FAQ_Manager
 			<p class="indent"><code><?php _e('[faq faq_topic="topic-slug-two"]', 'wpfaq'); ?></code></p>
 			<p><?php _e('...even more content....', 'wpfaq'); ?></p>
 
-
 			<h2 class="inst-title"><?php _e('Available Filters', 'wpfaq'); ?></h2>
 			<p><?php _e( 'There are a few different filters that you can use to manipulate the output from your shortcodes. Currently, they are:' ); ?></p>
 
@@ -763,94 +783,100 @@ function custom_faq_loaded( \$context ) {
 		$single		= (isset($faqopts['single'])	? sanitize_title($faqopts['single'])	: 'question'	);
 		$arch		= (isset($faqopts['arch'])		? sanitize_title($faqopts['arch'])		: 'questions'	);
 
-		register_post_type( 'question',
-			array(
-				'labels'	=> array(
-					'name' 					=> __( 'FAQs', 'wpfaq' ),
-					'singular_name' 		=> __( 'FAQ', 'wpfaq' ),
-					'add_new'				=> __( 'Add New FAQ', 'wpfaq' ),
-					'add_new_item'			=> __( 'Add New FAQ', 'wpfaq' ),
-					'edit'					=> __( 'Edit', 'wpfaq' ),
-					'edit_item'				=> __( 'Edit FAQ', 'wpfaq' ),
-					'new_item'				=> __( 'New FAQ', 'wpfaq' ),
-					'view'					=> __( 'View FAQ', 'wpfaq' ),
-					'view_item'				=> __( 'View FAQ', 'wpfaq' ),
-					'search_items'			=> __( 'Search FAQ', 'wpfaq' ),
-					'not_found'				=> __( 'No FAQs found', 'wpfaq' ),
-					'not_found_in_trash'	=> __( 'No FAQs found in Trash', 'wpfaq' ),
-				),
-				'public'	=> true,
-					'show_in_nav_menus'		=> true,
-					'show_ui'				=> true,
-					'publicly_queryable'	=> true,
-					'exclude_from_search'	=> false,
-				'hierarchical'		=> false,
-				'menu_position'		=> 20,
-				'capability_type'	=> 'post',
-				'menu_icon'			=> plugins_url( '/inc/img/faq_menu.png', __FILE__ ),
-				'query_var'			=> true,
-				'rewrite'			=> array( 'slug' => $single, 'with_front' => false ),
-				'has_archive'		=> $arch,
-				'supports'			=> array('title', 'editor', 'author', 'thumbnail', 'comments', 'custom-fields'),
-			)
+		$args = array(
+			'labels'                  => array(
+				'name'                => __( 'FAQs', 'wpfaq' ),
+				'singular_name'       => __( 'FAQ', 'wpfaq' ),
+				'add_new'             => __( 'Add New FAQ', 'wpfaq' ),
+				'add_new_item'        => __( 'Add New FAQ', 'wpfaq' ),
+				'edit'                => __( 'Edit', 'wpfaq' ),
+				'edit_item'           => __( 'Edit FAQ', 'wpfaq' ),
+				'new_item'            => __( 'New FAQ', 'wpfaq' ),
+				'view'                => __( 'View FAQ', 'wpfaq' ),
+				'view_item'           => __( 'View FAQ', 'wpfaq' ),
+				'search_items'        => __( 'Search FAQ', 'wpfaq' ),
+				'not_found'           => __( 'No FAQs found', 'wpfaq' ),
+				'not_found_in_trash'  => __( 'No FAQs found in Trash', 'wpfaq' ),
+			),
+			'public'                  => true,
+				'show_in_nav_menus'   => true,
+				'show_ui'             => true,
+				'publicly_queryable'  => true,
+				'exclude_from_search' => false,
+			'hierarchical'            => false,
+			'menu_position'           => 20,
+			'capability_type'         => 'post',
+			'menu_icon'               => plugins_url( '/inc/img/faq_menu.png', __FILE__ ),
+			'query_var'               => true,
+			'rewrite'                 => array( 'slug' => $single, 'with_front' => false ),
+			'has_archive'             => $arch,
+			'supports'                => array('title', 'editor', 'author', 'thumbnail', 'comments', 'custom-fields'),
 		);
+
+		register_post_type( 'question', apply_filters( 'wpfaq_question_post_args', $args ) );
+
 		// register topics (categories) for FAQs
+		$args = array(
+			'public'                => true,
+			'show_in_nav_menus'     => true,
+			'show_ui'               => true,
+			'publicly_queryable'    => true,
+			'show_admin_column'     => true,
+			'exclude_from_search'   => false,
+			'rewrite'               => array( 'slug' => 'topics', 'with_front' => true ),
+			'hierarchical'          => true,
+			'query_var'             => true,
+			'labels'                => array(
+				'name'              => __( 'FAQ Topics', 'wpfaq' ),
+				'singular_name'     => __( 'FAQ Topic', 'wpfaq' ),
+				'search_items'      => __( 'Search FAQ Topics', 'wpfaq' ),
+				'popular_items'     => __( 'Popular FAQ Topics', 'wpfaq' ),
+				'all_items'         => __( 'All FAQ Topics', 'wpfaq' ),
+				'parent_item'       => __( 'Parent FAQ Topic', 'wpfaq' ),
+				'parent_item_colon' => __( 'Parent FAQ Topic:', 'wpfaq' ),
+				'edit_item'         => __( 'Edit FAQ Topics', 'wpfaq' ),
+				'update_item'       => __( 'Update FAQ Topics', 'wpfaq' ),
+				'add_new_item'      => __( 'Add New FAQ Topics', 'wpfaq' ),
+				'new_item_name'     => __( 'New FAQ Topics', 'wpfaq' ),
+			),
+		);
+
 		register_taxonomy(
 			'faq-topic',
 			array( 'question' ),
-			array(
-				'public'				=> true,
-				'show_in_nav_menus'		=> true,
-				'show_ui'				=> true,
-				'publicly_queryable'	=> true,
-				'show_admin_column'		=> true,
-				'exclude_from_search'	=> false,
-				'rewrite'				=> array( 'slug' => 'topics', 'with_front' => true ),
-				'hierarchical'			=> true,
-				'query_var'				=> true,
-				'labels'	=> array(
-					'name' 					=> __( 'FAQ Topics', 'wpfaq' ),
-					'singular_name'			=> __( 'FAQ Topic', 'wpfaq' ),
-					'search_items'			=> __( 'Search FAQ Topics', 'wpfaq' ),
-					'popular_items'			=> __( 'Popular FAQ Topics', 'wpfaq' ),
-					'all_items'				=> __( 'All FAQ Topics', 'wpfaq' ),
-					'parent_item'			=> __( 'Parent FAQ Topic', 'wpfaq' ),
-					'parent_item_colon'		=> __( 'Parent FAQ Topic:', 'wpfaq' ),
-					'edit_item'				=> __( 'Edit FAQ Topics', 'wpfaq' ),
-					'update_item'			=> __( 'Update FAQ Topics', 'wpfaq' ),
-					'add_new_item'			=> __( 'Add New FAQ Topics', 'wpfaq' ),
-					'new_item_name'			=> __( 'New FAQ Topics', 'wpfaq' ),
-				),
-			)
+			apply_filters( 'wpfaq_topic_taxonomy_args', $args )
 		);
+
 		// register tags for FAQs
+		$args = array(
+			'public'                => true,
+			'show_in_nav_menus'     => true,
+			'show_ui'               => true,
+			'publicly_queryable'    => true,
+			'show_admin_column'     => true,
+			'exclude_from_search'   => false,
+			'rewrite'               => array( 'slug' => 'faq-tags', 'with_front' => true ),
+			'hierarchical'          => false,
+			'query_var'             => true,
+			'labels'                => array(
+				'name'              => __( 'FAQ Tags', 'wpfaq' ),
+				'singular_name'     => __( 'FAQ Tag', 'wpfaq' ),
+				'search_items'      => __( 'Search FAQ Tags', 'wpfaq' ),
+				'popular_items'     => __( 'Popular FAQ Tags', 'wpfaq' ),
+				'all_items'         => __( 'All FAQ Tags', 'wpfaq' ),
+				'parent_item'       => __( 'Parent FAQ Tags', 'wpfaq' ),
+				'parent_item_colon' => __( 'Parent FAQ Tag:', 'wpfaq' ),
+				'edit_item'         => __( 'Edit FAQ Tag', 'wpfaq' ),
+				'update_item'       => __( 'Update FAQ Tag', 'wpfaq' ),
+				'add_new_item'      => __( 'Add New FAQ Tag', 'wpfaq' ),
+				'new_item_name'     => __( 'New FAQ Tag', 'wpfaq' ),
+			),
+		);
+
 		register_taxonomy(
 			'faq-tags',
 			array( 'question' ),
-			array(
-				'public'				=> true,
-				'show_in_nav_menus'		=> true,
-				'show_ui'				=> true,
-				'publicly_queryable'	=> true,
-				'show_admin_column'		=> true,
-				'exclude_from_search'	=> false,
-				'rewrite'				=> array( 'slug' => 'faq-tags', 'with_front' => true ),
-				'hierarchical'			=> false,
-				'query_var'				=> true,
-				'labels'	=> array(
-					'name'					=> __( 'FAQ Tags', 'wpfaq' ),
-					'singular_name'			=> __( 'FAQ Tag', 'wpfaq' ),
-					'search_items'			=> __( 'Search FAQ Tags', 'wpfaq' ),
-					'popular_items'			=> __( 'Popular FAQ Tags', 'wpfaq' ),
-					'all_items'				=> __( 'All FAQ Tags', 'wpfaq' ),
-					'parent_item'			=> __( 'Parent FAQ Tags', 'wpfaq' ),
-					'parent_item_colon'		=> __( 'Parent FAQ Tag:', 'wpfaq' ),
-					'edit_item'				=> __( 'Edit FAQ Tag', 'wpfaq' ),
-					'update_item'			=> __( 'Update FAQ Tag', 'wpfaq' ),
-					'add_new_item'			=> __( 'Add New FAQ Tag', 'wpfaq' ),
-					'new_item_name'			=> __( 'New FAQ Tag', 'wpfaq' ),
-				),
-			)
+			apply_filters( 'wpfaq_tags_taxonomy_args', $args )
 		);
 		register_taxonomy_for_object_type('question', 'faq-tags');
 		register_taxonomy_for_object_type('question', 'faq-topic');
