@@ -11,17 +11,30 @@ class FAQ_Shortcodes {
 	}
 
 	/**
+	 * Get the current paged
+	 */
+	public function get_paged( $wp_query = null ) {
+		if( isset( $wp_query ) && isset( $wp_query->paged ) ) {
+			$paged = $wp_query->paged;
+		} else {
+			if( isset( $_GET['faq_page'] ) && $faq_page = absint( $_GET['faq_page'] ) ) {
+				$paged = $faq_page;
+			} else {
+				$paged = 1;
+			}
+		}
+
+		return $paged;
+	}
+
+	/**
 	 * Abstraction of the query that all shortcodes run
 	 *
 	 * @return WP_Query
 	 */
 	public function shortcode_query( $shortcode_args ) {
 		// set up $paged
-		if( isset( $_GET['faq_page'] ) && $faq_page = absint( $_GET['faq_page'] ) ) {
-			$paged = $faq_page;
-		} else {
-			$paged = 1;
-		}
+		$paged = $this->get_paged();
 
 		// clean up text
 		$faq_topic = sanitize_text_field( $shortcode_args['topic'] );
@@ -170,7 +183,7 @@ class FAQ_Shortcodes {
 				  'format'	=> '?faq_page=%#%',
 				  'type'	=> 'plain',
 				  'total'	=> $wp_query->max_num_pages,
-				  'current' => $wp_query->paged,
+				  'current' => $this->get_paged( $wp_query ),
 				  'end_size' => 2
 				));
 				$displayfaq .= '</p>';
@@ -237,27 +250,27 @@ class FAQ_Shortcodes {
 					'class'   => 'faqlist-question'
 				) );
 
-
 			endwhile;
 			$displayfaq .= '</ul>';
 
-				if (isset($faqopts['paginate'])) {
-					// pagination links
-					$displayfaq .= '<p class="faq-nav">';
-					$displayfaq .= paginate_links(array(
-					  'format'	=> '?faq_page=%#%',
-					  'type'	=> 'plain',
-					  'total'	=> $wp_query->max_num_pages,
-					  'current' => $wp_query->paged,
-					  'prev_text'	=> __('&laquo;'),
-						'next_text'	=> __('&raquo;'),
-						'end_size' => 2
-					));
-					$displayfaq .= '</p>';
-				// end pagination links
-				}
-				wp_reset_query();
-		$displayfaq .= '</div></div>';
+			if ( isset( $faqopts['paginate'] ) ) {
+				// pagination links
+				$displayfaq .= '<p class="faq-nav">';
+				$displayfaq .= paginate_links(array(
+				  'format'  	=> '?faq_page=%#%',
+				  'type'	    => 'plain',
+				  'total'   	=> $wp_query->max_num_pages,
+				  'current'   => $this->get_paged( $wp_query ),
+				  'prev_text'	=> __('&laquo;'),
+					'next_text'	=> __('&raquo;'),
+					'end_size'  => 2
+				));
+				$displayfaq .= '</p>';
+			// end pagination links
+			}
+			wp_reset_query();
+
+			$displayfaq .= '</div></div>';
 		endif;
 
 		do_action( 'load_wp_faqs', $context );
