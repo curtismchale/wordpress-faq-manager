@@ -24,12 +24,12 @@ class FAQ_Shortcodes {
 		}
 
 		// clean up text
-		$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $shortcode_args['topic']);
-		$faq_tag = preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $shortcode_args['tag']);
+		$faq_topic = sanitize_text_field( $shortcode_args['topic'] );
+		$faq_tag = sanitize_text_field( $shortcode_args['tag'] );
 
 		// FAQ query
 		$args = array (
-			'p'				  => '' . $shortcode_args['id'] . '',
+			'p'				  => '' . absint( $shortcode_args['id'] ) . '',
 			'faq-topic'	=> '' . $faq_topic . '',
 			'faq-tags'	=> '' . $faq_tag . '',
 			'post_type'	=> 'question',
@@ -39,7 +39,7 @@ class FAQ_Shortcodes {
 
 		// handle optional limit
 		if( isset( $shortcode_args['limit'] ) ) {
-			$args['posts_per_page'] =	'' . $shortcode_args['limit'] . '';
+			$args['posts_per_page'] =	'' . intval( $shortcode_args['limit'] ) . '';
 		}
 
 		// handle optional pagination
