@@ -383,7 +383,7 @@ class WP_FAQ_Manager
 				$deprecated_option_message = __( "<br />- <strong>Deprecated</strong>: You only see this option because you previously changed it from it's default state. If you revert it and save, you won't see it again.", 'wp-faq-manager' );
 				?>
 
-				<h2 class="inst-title"><?php _e('Display Options') ?></h2>
+				<h2 class="inst-title"><?php _e( 'Display Options', 'wpfaq' ) ?></h2>
 
 				<?php if( 'h1' !== $faq_options['htype'] && !empty( $faq_options['htype'] ) ) { ?>
 				<p>
@@ -395,14 +395,14 @@ class WP_FAQ_Manager
 					<option value="h5" <?php selected( $faq_options['htype'], 'h5' ); ?>>H5</option>
 					<option value="h6" <?php selected( $faq_options['htype'], 'h6' ); ?>>H6</option>
 					</select>
-					<label type="select" for="faq_options[htype]"><?php _e('Choose your H type for FAQ title', 'wpfaq'); ?></label>
+					<label type="select" for="faq_options[htype]"><?php _e( 'Choose your H type for FAQ title', 'wpfaq' ); ?></label>
 					<?php echo $deprecated_option_message; ?>
 				</p>
 				<?php } ?>
 
 				<p>
 			    	<input type="checkbox" name="faq_options[paginate]" id="faq_paginate" value="true" <?php checked( $paginate, 'true' ); ?> />
-    				<label for="faq_options[paginate]" rel="checkbox"><?php _e('Paginate shortcode output', 'wpfaq'); ?></label>
+    				<label for="faq_options[paginate]" rel="checkbox"><?php _e( 'Paginate shortcode output', 'wpfaq' ); ?></label>
 				</p>
 
 				<p>
@@ -599,7 +599,7 @@ class WP_FAQ_Manager
 			<p class="indent"><code><?php _e('[faq faq_topic="topic-slug-two"]', 'wpfaq'); ?></code></p>
 			<p><?php _e('...even more content....', 'wpfaq'); ?></p>
 
-			<h2 class="inst-title"><?php _e('Available Filters', 'wpfaq'); ?></h2>
+			<h2 class="inst-title"><?php _e( 'Available Filters', 'wpfaq' ); ?></h2>
 			<p><?php _e( 'There are a few different filters that you can use to manipulate the output from your shortcodes. Currently, they are:' ); ?></p>
 
 			<ul>
@@ -607,13 +607,13 @@ class WP_FAQ_Manager
 					<h3>wp_faq_title_html( $html_title, $title_data )</h3>
 					<ul class="faqinfo">
 						<li>
-							<strong><?php _e( '$html_title' ); ?></strong>
+							<strong><?php _e( '$html_title', 'wpfaq' ); ?></strong>
 							<ul class="faqinfo">
 								<li>(string) The unaltered HTML title</li>
 							</ul>
 						</li>
 						<li>
-							<strong><?php _e( '$title_data' ); ?></strong>
+							<strong><?php _e( '$title_data', 'wpfaq' ); ?></strong>
 							<ul class="faqinfo">
 								<li>
 									(array) All of the data that is used to generate the HTML title. This provides you with everything you need to recreate it, or pieces of it.
@@ -627,7 +627,7 @@ class WP_FAQ_Manager
 							</ul>
 						</li>
 						<li>
-							<h4><?php _e( 'Example Implementation:' ); ?></h4>
+							<h4><?php _e( 'Example Implementation:', 'wpfaq' ); ?></h4>
 							<ul class="faqinfo">
 								<li><pre style="overflow: scroll"><code><?php echo htmlspecialchars("/**
  * Example use case of wp_faq_title_html
@@ -652,13 +652,13 @@ function custom_faq_title( \$html, \$title_data ) {
 					<h3>wp_faq_read_more_html( $html_read_more, $data )</h3>
 					<ul class="faqinfo">
 						<li>
-							<strong><?php _e( '$html_read_more' ); ?></strong>
+							<strong><?php _e( '$html_read_more', 'wpfaq' ); ?></strong>
 							<ul class="faqinfo">
 								<li>(string) The unaltered HTML read more link</li>
 							</ul>
 						</li>
 						<li>
-							<strong><?php _e( '$read_more_data' ); ?></strong>
+							<strong><?php _e( '$read_more_data', 'wpfaq' ); ?></strong>
 							<ul class="faqinfo">
 								<li>
 									(array) All of the data that is used to generate the HTML read more link. This provides you with everything you need to recreate it, or pieces of it.
@@ -688,7 +688,7 @@ function custom_faq_read_more( \$html, \$read_more_data ) {
 				</li>
 			</ul>
 
-			<h2 class="inst-title"><?php _e('Available Hooks', 'wpfaq'); ?></h2>
+			<h2 class="inst-title"><?php _e( 'Available Hooks', 'wpfaq' ); ?></h2>
 			<p><?php _e( 'There are a few different hooks that you can use to add to the output from your shortcodes. Currently, they are:' ); ?></p>
 
 			<ul>
@@ -696,13 +696,13 @@ function custom_faq_read_more( \$html, \$read_more_data ) {
 					<h3>load_wp_faqs( $context )</h3>
 					<ul class="faqinfo">
 						<li>
-							<strong><?php _e( '$context' ); ?></strong>
+							<strong><?php _e( '$context', 'wpfaq' ); ?></strong>
 							<ul class="faqinfo">
 								<li>(string) Which shortcode loaded FAQs in (main || combo)</li>
 							</ul>
 						</li>
 						<li>
-							<h4><?php _e( 'Example Implementation:' ); ?></h4>
+							<h4><?php _e( 'Example Implementation:', 'wpfaq' ); ?></h4>
 							<ul class="faqinfo">
 								<li><pre style="overflow: scroll"><code><?php echo htmlspecialchars("/**
  * Example use of load_wp_faqs hook
