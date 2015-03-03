@@ -164,16 +164,14 @@ class FAQ_Shortcodes {
 			endwhile;
 
 			if (isset($faqopts['paginate'])) {
-				$old_link = trailingslashit(get_permalink());
-
 				// pagination links
 				$displayfaq .= '<p class="faq-nav">';
 				$displayfaq .= paginate_links(array(
-				  'base'	=> $old_link . '%_%',
 				  'format'	=> '?faq_page=%#%',
 				  'type'	=> 'plain',
 				  'total'	=> $wp_query->max_num_pages,
-				  'current' => $paged,
+				  'current' => $wp_query->paged,
+				  'end_size' => 2
 				));
 				$displayfaq .= '</p>';
 				// end pagination links
@@ -244,18 +242,16 @@ class FAQ_Shortcodes {
 			$displayfaq .= '</ul>';
 
 				if (isset($faqopts['paginate'])) {
-					$old_link = trailingslashit(get_permalink());
-
 					// pagination links
 					$displayfaq .= '<p class="faq-nav">';
 					$displayfaq .= paginate_links(array(
-						'base'		=> $old_link . '%_%',
-						'format'	=> '?faq_page=%#%',
-						'type'		=> 'plain',
-						'total'		=> $wp_query->max_num_pages,
-						'current'	=> $paged,
-						'prev_text'	=> __('&laquo;'),
+					  'format'	=> '?faq_page=%#%',
+					  'type'	=> 'plain',
+					  'total'	=> $wp_query->max_num_pages,
+					  'current' => $wp_query->paged,
+					  'prev_text'	=> __('&laquo;'),
 						'next_text'	=> __('&raquo;'),
+						'end_size' => 2
 					));
 					$displayfaq .= '</p>';
 				// end pagination links
