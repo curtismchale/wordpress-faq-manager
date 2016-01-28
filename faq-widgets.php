@@ -1,5 +1,5 @@
 <?php
-/*  
+/*
 Keeping a separate file for the widgets for orgaization purposes
 */
 
@@ -21,29 +21,29 @@ class search_FAQ_Widget extends WP_Widget {
 		extract( $args, EXTR_SKIP );
 		echo $before_widget;
 		$title = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
-		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };		
+		if ( !empty( $title ) ) { echo $before_title . $title . $after_title; };
 
 		echo '<form class="searchform" role="search" method="get" id="faq-search" action="' . home_url( '/' ) . '" >';
 		echo '<input type="text" value="' . get_search_query() . '" name="s" id="s" class="s" />';
 		echo '<input type="submit" class="searchsubmit" value="'. esc_attr__('Search') .'" />';
 		echo '<input type="hidden" name="post_type" value="question" />';
 		echo '</form>';
-		
+
 		echo $after_widget;
 		?>
-      
+
         <?php }
 
     /** @see WP_Widget::update */
-    public function update($new_instance, $old_instance) {             
+    public function update($new_instance, $old_instance) {
     	$instance = $old_instance;
     	$instance['title']  = strip_tags($new_instance['title']);
         return $instance;
     }
 
     /** @see WP_Widget::form */
-    public function form($instance) {              
-        $instance = wp_parse_args( (array) $instance, array( 
+    public function form($instance) {
+        $instance = wp_parse_args( (array) $instance, array(
             'title' => 'Search FAQs',
             ));
         $title  = strip_tags($instance['title']);
@@ -56,7 +56,7 @@ class search_FAQ_Widget extends WP_Widget {
 	<?php }
 
 
-} // class 
+} // class
 
 	/**
 	 * Random FAQ widget
@@ -86,23 +86,23 @@ class random_FAQ_Widget extends WP_Widget {
 				'orderby'		=> 'rand',
 				);
 			$faqs = get_posts( $args );
-			
+
 			foreach( $faqs as $faq ) :
 				$text = wpautop( $faq->post_content );
- 			
+
 				echo '<h5 class="faq-widget-title">'.$faq->post_title.'</h5>';
 				echo wp_trim_words( $text, 15, null );
 				echo '<p><a href="'.get_permalink($faq->ID).'">'.$seemore.'</a></p>';
-        
+
         	endforeach;
 		wp_reset_query();
 		echo $after_widget;
 		?>
-      
+
         <?php }
 
     /** @see WP_Widget::update */
-    public function update($new_instance, $old_instance) {             
+    public function update($new_instance, $old_instance) {
     	$instance = $old_instance;
     	$instance['title']		= strip_tags($new_instance['title']);
     	$instance['seemore']	= strip_tags($new_instance['seemore']);
@@ -111,8 +111,8 @@ class random_FAQ_Widget extends WP_Widget {
     }
 
     /** @see WP_Widget::form */
-    public function form($instance) {              
-        $instance = wp_parse_args( (array) $instance, array( 
+    public function form($instance) {
+        $instance = wp_parse_args( (array) $instance, array(
             'title'		=> 'Frequently Asked Question',
             'seemore'	=> 'See the entire answer',
             'count'		=> '1',
@@ -136,17 +136,17 @@ class random_FAQ_Widget extends WP_Widget {
 	<?php }
 
 
-} // class 
+} // class
 
 	/**
-	 * Recent FAQ 
+	 * Recent FAQ
 	 *
 	 * @return WP_FAQ_Manager
 	 */
 
 
 class recent_FAQ_Widget extends WP_Widget {
-	
+
 	public function __construct() {
 		$widget_ops = array( 'classname' => 'recent-questions-widget', 'description' => 'List recent questions' );
 		parent::__construct( 'recent_questions', 'FAQ Widget - Recent', $widget_ops );
@@ -179,7 +179,7 @@ class recent_FAQ_Widget extends WP_Widget {
 
     /** @see WP_Widget::update */
 
-    public function update($new_instance, $old_instance) {				
+    public function update($new_instance, $old_instance) {
 		$instance = $old_instance;
 		$instance['title']	= strip_tags($new_instance['title']);
 		$instance['count']	= strip_tags($new_instance['count']);
@@ -189,8 +189,8 @@ class recent_FAQ_Widget extends WP_Widget {
 
 
     /** @see WP_Widget::form */
-    public function form($instance) {				
-        $instance = wp_parse_args( (array) $instance, array( 
+    public function form($instance) {
+        $instance = wp_parse_args( (array) $instance, array(
 			'title'		=> 'Recent Questions',
 			'count'		=> '5',
 		));
@@ -212,7 +212,7 @@ class recent_FAQ_Widget extends WP_Widget {
 
 
 
-} // class 
+} // class
 
 	/**
 	 * FAQ taxonomy list
@@ -243,7 +243,7 @@ class topics_FAQ_Widget extends WP_Widget {
 			$taxonomy		= $tax;
 			$title			= '';
 			$style			= 'list';
-	
+
 			$topic_args = array(
 				'orderby'		=> $orderby,
 				'show_count'	=> $show_count,
@@ -259,7 +259,7 @@ class topics_FAQ_Widget extends WP_Widget {
 		echo $after_widget;
 		?>
 
-        
+
 
         <?php }
 
@@ -304,7 +304,7 @@ class topics_FAQ_Widget extends WP_Widget {
 
 
 
-} // class 
+} // class
 
 
 
@@ -315,7 +315,7 @@ class topics_FAQ_Widget extends WP_Widget {
 	 */
 
 class cloud_FAQ_Widget extends WP_Widget {
-	
+
 	public function __construct() {
 		$widget_ops = array( 'classname' => 'faq-cloud-widget', 'description' => 'A tag cloud of FAQ topics and tags' );
 		parent::__construct( 'faq_cloud', 'FAQ Widget - Cloud', $widget_ops );
@@ -323,9 +323,9 @@ class cloud_FAQ_Widget extends WP_Widget {
 
 	public function widget( $args, $instance ) {
 		extract( $args, EXTR_SKIP );
-		
+
 		echo $before_widget;
-		
+
 		$ok_topic	= isset($instance['to_include']) ? $instance['to_include'] : false;
 		$ok_tag		= isset($instance['ta_include']) ? $instance['ta_include'] : false;
 		$title		= empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
@@ -342,8 +342,8 @@ class cloud_FAQ_Widget extends WP_Widget {
 			if($ok_topic && $ok_tag)
 				$cloud_args = array('taxonomy' => array ('faq-tags', 'faq-topic' ));
 
-        echo wp_tag_cloud( $cloud_args ); 
-		
+        echo wp_tag_cloud( $cloud_args );
+
 		echo '</div>';
 		echo $after_widget;
     }
@@ -352,29 +352,29 @@ class cloud_FAQ_Widget extends WP_Widget {
 
     /** @see WP_Widget::update */
 
-    public function update($new_instance, $old_instance) {				
+    public function update($new_instance, $old_instance) {
 		$instance = $old_instance;
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['to_include'] = !empty($new_instance['to_include']) ? 1 : 0;
 		$instance['ta_include'] = !empty($new_instance['ta_include']) ? 1 : 0;
 	        return $instance;
-    }	
+    }
 
 
     /** @see WP_Widget::form */
-    public function form($instance) {				
-        $instance = wp_parse_args( (array) $instance, array( 
+    public function form($instance) {
+        $instance = wp_parse_args( (array) $instance, array(
 			'title'			=> 'Recent Topics',
 			'to_include'	=> 0,
 			'ta_include'	=> 1,
 		));
 
 		$title = strip_tags($instance['title']);
-		
+
 		foreach ( $instance as $field => $val ) :
 			if ( isset($new_instance[$field]) )
 				$instance[$field] = 1;
-		
+
 		endforeach;
         ?>
 
@@ -397,4 +397,4 @@ class cloud_FAQ_Widget extends WP_Widget {
 
 
 
-} // class 
+} // class
