@@ -106,7 +106,7 @@ class WPFAQ_Manager_Data {
 	 *
 	 * @return array           The array of post objects or false.
 	 */
-	public static function get_main_shortcode_faqs( $id = 0, $count = 10, $topics = array(), $tag = array(), $paged = 1 ) {
+	public static function get_main_shortcode_faqs( $id = 0, $count = 10, $topics = array(), $tags = array(), $paged = 1 ) {
 
 		// If we have a single ID, do that lookup first.
 		if ( ! empty( $id ) ) {
@@ -138,14 +138,39 @@ class WPFAQ_Manager_Data {
 			'paged'           => $paged,
 		);
 
+		// Set a tax query array.
+		$tq = array();
+
 		// Check for topics passed.
 		if ( ! empty( $topics ) ) {
-			$args   = wp_parse_args( $topics, $args );
+
+			// Set the query portion.
+			$tq[]   = array(
+				'taxonomy' => 'faq-topic',
+				'field'    => 'slug',
+				'terms'    => $topics,
+			);
 		}
 
 		// Check for tags passed.
 		if ( ! empty( $tags ) ) {
-			$args   = wp_parse_args( $tags, $args );
+
+			// Set the query portion.
+			$tq[]   = array(
+				'taxonomy' => 'faq-tags',
+				'field'    => 'slug',
+				'terms'    => $tags,
+			);
+		}
+
+		// Add the args if we have them.
+		if ( ! empty( $tq ) ) {
+
+			// Set the merge relation.
+			$taxq   = array_merge( array( 'relation' => 'OR' ), $tq );
+
+			// And do the actual parsing.
+			$args   = wp_parse_args( array( 'tax_query' => array( $taxq ) ), $args );
 		}
 
 		// Fetch the items.
@@ -153,6 +178,107 @@ class WPFAQ_Manager_Data {
 
 		// Return the items if we have them, or false.
 		return ! empty( $items ) ? $items : false;
+	}
+
+	/**
+	 * Get the FAQ list for the main shortcode.
+	 *
+	 * @param  integer $id      Optional single FAQ post ID.
+	 * @param  array   $topics  The optional FAQ topic.
+	 * @param  array   $tags    The optional FAQ tag.
+	 *
+	 * @return array           The array of post objects or false.
+	 */
+	public static function get_combo_shortcode_faqs( $id = 0, $topics = array(), $tags = array() ) {
+
+		// If we have a single ID, do that lookup first.
+		if ( ! empty( $id ) ) {
+
+			// Confirm the post type and return false if it isn't an FAQ.
+			if ( 'question' !== get_post_type( $id ) ) {
+				return false;
+			}
+
+			// Get the data.
+			$item   = get_post( $id );
+
+			// Bail if the data isn't an object, or isn't published.
+			if ( ! is_object( $item ) || empty( $item->post_status ) || 'publish' !== esc_attr( $item->post_status ) ) {
+				return false;
+			}
+
+			// Return the data set as an array.
+			return array( $item );
+		}
+
+		// Set my primary args.
+		$args   = array(
+			'post_type'     => 'question',
+			'nopaging'      => true,
+			'post_status'   => 'publish',
+			'orderby'       => 'menu_order',
+			'order'         => 'ASC',
+		);
+
+		// Set a tax query array.
+		$tq = array();
+
+		// Check for topics passed.
+		if ( ! empty( $topics ) ) {
+
+			// Set the query portion.
+			$tq[]   = array(
+				'taxonomy' => 'faq-topic',
+				'field'    => 'slug',
+				'terms'    => $topics,
+			);
+		}
+
+		// Check for tags passed.
+		if ( ! empty( $tags ) ) {
+
+			// Set the query portion.
+			$tq[]   = array(
+				'taxonomy' => 'faq-tags',
+				'field'    => 'slug',
+				'terms'    => $tags,
+			);
+		}
+
+		// Add the args if we have them.
+		if ( ! empty( $tq ) ) {
+
+			// Set the merge relation.
+			$taxq   = array_merge( array( 'relation' => 'OR' ), $tq );
+
+			// And do the actual parsing.
+			$args   = wp_parse_args( array( 'tax_query' => array( $taxq ) ), $args );
+		}
+
+		// Fetch the items.
+		$items  = get_posts( $args );
+
+		// Return the items if we have them, or false.
+		return ! empty( $items ) ? $items : false;
+	}
+
+	/**
+	 * Get the FAQ list for the main shortcode.
+	 *
+	 * @param  string $term  Which term we are going to pull a list from.
+	 *
+	 * @return array           The array of term objects or false.
+	 */
+	public static function get_tax_shortcode_terms( $term = '' ) {
+
+		// Filter the available args.
+		$args    = apply_filters( 'wpfaq_taxlist_shortcode_args', array( 'hide_empty' => false ), $term );
+
+		// Fetch my terms.
+		$terms   = get_terms( array( $term ), $args );
+
+		// Return the terms if we have them, or false.
+		return empty( $terms ) || is_wp_error( $terms ) ? false : $terms;
 	}
 
 	/**

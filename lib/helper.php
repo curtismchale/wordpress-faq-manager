@@ -101,6 +101,17 @@ class WPFAQ_Manager_Helper {
 		return false;
 	}
 
+	/**
+	 * do the whole 'check current screen' progressions
+	 *
+	 * @param  string $htype  The h type tag being passed.
+	 *
+	 * @return string $htype  The h type tag being returned.
+	 */
+	public static function check_htype_tag( $htype = 'h3' ) {
+		in_array( $htype, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ) ) ? $htype : 'h3';
+	}
+
 	// End our class.
 }
 
