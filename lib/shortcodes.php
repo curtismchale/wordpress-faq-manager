@@ -54,6 +54,9 @@ class WPFAQ_Manager_Shortcodes {
 			return;
 		}
 
+		// Call our CSS file.
+		wp_enqueue_style( 'faq-front' );
+
 		// Set some variables used within.
 		$speed  = apply_filters( 'wpfaq_display_expand_speed', 200, 'main' );
 		$filter = apply_filters( 'wpfaq_display_content_filter', true, 'main' );
@@ -179,6 +182,9 @@ class WPFAQ_Manager_Shortcodes {
 			return;
 		}
 
+		// Call our CSS file.
+		wp_enqueue_style( 'faq-front' );
+
 		// Set some variables used within.
 		$pageit = apply_filters( 'wpfaq_display_shortcode_paginate', true, 'list' );
 
@@ -279,6 +285,9 @@ class WPFAQ_Manager_Shortcodes {
 			return;
 		}
 
+		// Call our CSS file.
+		wp_enqueue_style( 'faq-front' );
+
 		// Some display variables.
 		$htype  = apply_filters( 'wpfaq_display_htype', 'h3', 'taxlist' );
 
@@ -347,6 +356,9 @@ class WPFAQ_Manager_Shortcodes {
 		if ( false === $faqs = WPFAQ_Manager_Data::get_combo_shortcode_faqs( $atts['faq_id'], $topics, $tags ) ) {
 			return;
 		}
+
+		// Call our CSS file.
+		wp_enqueue_style( 'faq-front' );
 
 		// Some display variables.
 		$filter = apply_filters( 'wpfaq_display_content_filter', true, 'combo' );

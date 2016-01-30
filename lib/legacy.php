@@ -18,11 +18,34 @@ class WPFAQ_Manager_Legacy {
 	 * @return void
 	 */
 	public function init() {
+		add_action( 'admin_init',                       array( $this, 'legacy_setting'      )           );
 		add_filter( 'wpfaq_question_post_slug_single',  array( $this, 'check_single_slug'   )           );
 		add_filter( 'wpfaq_question_post_slug_archive', array( $this, 'check_archive_slug'  )           );
 		add_filter( 'wpfaq_robots_seo_tags_single',     array( $this, 'index_robot_tags'    ),  10, 2   );
 		add_filter( 'wpfaq_robots_seo_tags_archive',    array( $this, 'index_robot_tags'    ),  10, 2   );
 		add_filter( 'wpfaq_robots_seo_tags_taxonomy',   array( $this, 'index_robot_tags'    ),  10, 2   );
+	}
+
+	/**
+	 * Convert our existing setting into the legacy key.
+	 *
+	 * @return void
+	 */
+	public function legacy_setting() {
+
+		// First check for the legacy option.
+		$legacy = get_option( 'faq_legacy_options' );
+
+		// Bail if it is set.
+		if ( ! empty( $legacy ) ) {
+			return;
+		}
+
+		// Get our current options.
+		$data   = get_option( 'faq_options' );
+
+		// Save the existing data into the legacy key.
+		update_option( 'faq_legacy_options', $data );
 	}
 
 	/**

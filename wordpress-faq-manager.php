@@ -104,7 +104,6 @@ class WPFAQ_Manager_Base
 		if ( is_admin() ) {
 			require_once( WPFAQ_DIR . 'lib/admin.php' );
 		}
-
 	}
 
 	// End our class.

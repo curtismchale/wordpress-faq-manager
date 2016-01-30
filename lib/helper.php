@@ -28,7 +28,7 @@ class WPFAQ_Manager_Helper {
 		}
 
 		// Our total settings array.
-		$settings   = get_option( 'faq_options' );
+		$settings   = get_option( 'faq_legacy_options' );
 
 		// If we have no settings, return the default or nothing.
 		if ( empty( $settings ) ) {
@@ -47,31 +47,55 @@ class WPFAQ_Manager_Helper {
 	/**
 	 * do the whole 'check current screen' progressions
 	 *
-	 * @param  string $check  What we want to check against on the screen.
+	 * @param  string $action  If we want to return the value or compare it against something.
+	 * @param  string $check   What we want to check against on the screen.
 	 *
-	 * @return bool           Whether or not we are.
+	 * @return bool            Whether or not we are.
 	 */
-	public static function check_current_screen( $check = 'post_type' ) {
+	public static function check_current_screen( $action = 'compare', $check = 'post_type' ) {
 
-		// bail if not on admin or our function doesnt exist
+		// Bail if not on admin or our function doesnt exist.
 		if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
 			return false;
 		}
 
-		// get my current screen
+		// Get my current screen.
 		$screen = get_current_screen();
 
-		// bail without
+		// Bail without.
 		if ( empty( $screen ) || ! is_object( $screen ) ) {
 			return false;
 		}
 
-		// do the post type check
-		if ( $check == 'post_type' ) {
-			return ! empty( $screen->post_type ) ? $screen->post_type : false;
+		// If the check is false, return the entire screen object.
+		if ( empty( $check ) ) {
+			return $screen;
 		}
 
-		// nothing left. bail.
+		// Do the post type check.
+		if ( 'post_type' === $check ) {
+
+			// If we have no post type, it's false right off the bat.
+			if ( empty( $screen->post_type ) ) {
+				return false;
+			}
+
+			// Handle my different action types.
+			switch ( $action ) {
+
+				case 'compare' :
+
+					return 'question' === $screen->post_type ? true : false;
+					break;
+
+				case 'return' :
+
+					return $screen->post_type;
+					break;
+			}
+		}
+
+		// Nothing left. bail.
 		return false;
 	}
 
@@ -109,7 +133,7 @@ class WPFAQ_Manager_Helper {
 	 * @return string $htype  The h type tag being returned.
 	 */
 	public static function check_htype_tag( $htype = 'h3' ) {
-		in_array( $htype, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ) ) ? $htype : 'h3';
+		return in_array( $htype, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ) ) ? $htype : 'h3';
 	}
 
 	// End our class.

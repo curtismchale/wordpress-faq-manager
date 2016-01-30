@@ -336,6 +336,46 @@ class WPFAQ_Manager_Data {
 		return ceil( $calcd );
 	}
 
+	/**
+	 * Get all the FAQs for the admin page.
+	 *
+	 * @return mixed           The array of post objects or false.
+	 */
+	public static function get_admin_faqs() {
+
+		// Check for the transient first.
+		if( false === $items = get_transient( 'wpfaq_admin_fetch_faqs' )  ) {
+
+			// Set my args.
+			$args   = array(
+				'post_type'     => 'question',
+				'nopaging'      => true,
+				'post_status'   => 'publish',
+				'order'         => 'ASC',
+				'orderby'       => 'menu_order',
+			);
+
+			// Fetch the items.
+			$items  = get_posts( $args );
+
+			// Set an empty transient if we have none.
+			if ( ! $items ) {
+
+				// Set the transient time to an hour.
+				set_transient( 'wpfaq_admin_fetch_faqs', '', HOUR_IN_SECONDS );
+
+				// And return false.
+				return false;
+			}
+
+			// Set the transient time to an hour.
+			set_transient( 'wpfaq_admin_fetch_faqs', $items, WEEK_IN_SECONDS );
+		}
+
+		// Return the items.
+		return $items;
+	}
+
 	// End our class.
 }
 

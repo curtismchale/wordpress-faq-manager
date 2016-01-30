@@ -11,13 +11,13 @@ class WP_FAQ_Manager
 	public function __construct() {
 	//	add_action					( 'plugins_loaded', 				array( $this, 'textdomain'		) 			);
 	//	add_action					( 'init',							array( $this, '_register_faq'	) 			);
-		add_action					( 'admin_init', 					array( $this, 'reg_settings'	) 			);
+	//	add_action					( 'admin_init', 					array( $this, 'reg_settings'	) 			);
 		add_action					( 'admin_menu',						array( $this, 'admin_pages'		) 			);
 		add_action					( 'admin_footer',					array( $this, 'flush_rewrite'	) 			);
 		add_action					( 'the_posts', 						array( $this, 'style_loader'	) 			);
 		add_action					( 'the_posts', 						array( $this, 'script_loader'	) 			);
 		add_action					( 'the_posts',						array( $this, 'combo_wrapper'	) 			);
-		add_action					( 'wp_ajax_save_sort',				array( $this, 'save_sort'		) 			);
+	//	add_action					( 'wp_ajax_save_sort',				array( $this, 'save_sort'		) 			);
 	//	add_action					( 'template_redirect',				array( $this, 'faq_redirect'	), 1		);
 	//	add_action					( 'wp_head', 						array( $this, 'seo_head'		), 5		);
 	//	add_action					( 'wp_head', 						array( $this, 'print_css'		), 999		);
@@ -30,7 +30,7 @@ class WP_FAQ_Manager
 	//	add_filter					( 'post_class', 					array( $this, 'faq_post_class'	) 			);
 	//	add_shortcode				( 'faq',							array( $this, 'shortcode_main'	) 			);
 	//	add_shortcode				( 'faqlist',						array( $this, 'shortcode_list'	) 			);
-		add_shortcode				( 'faqcombo',						array( $this, 'shortcode_combo'	) 			);
+	//	add_shortcode				( 'faqcombo',						array( $this, 'shortcode_combo'	) 			);
 	//	add_shortcode				( 'faqtaxlist',						array( $this, 'shortcode_taxls'	) 			);
 
 	}

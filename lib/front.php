@@ -21,6 +21,8 @@ class WPFAQ_Manager_Front {
 		add_action( 'template_redirect',                array( $this, 'faq_redirect'            ),  1       );
 		add_action( 'wp_head',                          array( $this, 'seo_head'                ),  5       );
 		add_action( 'wp_head',                          array( $this, 'print_css'               ),  999     );
+		add_action( 'wp_enqueue_scripts',               array( $this, 'register_scripts'        )           );
+		add_action( 'wp_enqueue_scripts',               array( $this, 'register_styles'         )           );
 		add_action( 'pre_get_posts',                    array( $this, 'rss_include'             )           );
 		add_filter( 'post_class',                       array( $this, 'add_post_class'          )           );
 	}
@@ -128,6 +130,47 @@ class WPFAQ_Manager_Front {
 		echo 'div.faq_answer { display: block!important; }';
 		echo 'p.faq_nav { display: none; }';
 		echo '</style>';
+	}
+
+	/**
+	 * Register our scripts to be called when the shortcodes are used.
+	 *
+	 * @return void
+	 */
+	public function register_scripts() {
+
+		// Optional filter to disable this all together.
+		if ( false === apply_filters( 'wpfaq_enable_front_js', true ) ) {
+			return;
+		}
+
+		// Set a file suffix structure based on whether or not we want a minified version.
+		$jx = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.js' : '.min.js';
+
+		// Set a version for whether or not we're debugging.
+		$vr = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WPFAQ_VER;
+	}
+
+	/**
+	 * Register our CSS files to be called when the shortcodes are used.
+	 *
+	 * @return void
+	 */
+	public function register_styles() {
+
+		// Optional filter to disable this all together.
+		if ( false === apply_filters( 'wpfaq_enable_front_css', true ) ) {
+			return;
+		}
+
+		// Set a file suffix structure based on whether or not we want a minified version.
+		$cx = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.css' : '.min.css';
+
+		// Set a version for whether or not we're debugging.
+		$vr = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WPFAQ_VER;
+
+		// Register the stylesheet.
+		wp_register_style( 'faq-front', plugins_url( '/css/faq.front' . $cx, __FILE__ ), false, $vr, 'all' );
 	}
 
 	/**
