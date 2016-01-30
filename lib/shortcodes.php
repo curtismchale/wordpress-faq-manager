@@ -56,6 +56,7 @@ class WPFAQ_Manager_Shortcodes {
 
 		// Call our CSS file.
 		wp_enqueue_style( 'faq-front' );
+		wp_enqueue_script( 'faq-front' );
 
 		// Set some variables used within.
 		$speed  = apply_filters( 'wpfaq_display_expand_speed', 200, 'main' );
@@ -69,6 +70,7 @@ class WPFAQ_Manager_Shortcodes {
 		$htype  = WPFAQ_Manager_Helper::check_htype_tag( $htype );
 
 		// Set some classes for markup.
+		$dclass = ! empty( $expand ) ? 'faq-list expand-faq-list' : 'faq-list';
 		$bclass = ! empty( $expand ) ? 'single-faq expand-faq' : 'single-faq';
 		$tclass = ! empty( $expand ) ? 'faq-question expand-title' : 'faq-question';
 
@@ -76,8 +78,8 @@ class WPFAQ_Manager_Shortcodes {
 		$build  = '';
 
 		// The wrapper around.
-		$build .= '<div id="faq-block" name="faq-block">';
-			$build .= '<div class="faq-list" data-speed="' . absint( $speed ) . '">';
+		$build .= '<div id="faq-block" class="faq-block-wrap" name="faq-block">';
+			$build .= '<div class="' . esc_attr( $dclass ) . '" data-speed="' . absint( $speed ) . '">';
 
 			// Loop my individual FAQs
 			foreach ( $faqs as $faq ) {
@@ -184,6 +186,7 @@ class WPFAQ_Manager_Shortcodes {
 
 		// Call our CSS file.
 		wp_enqueue_style( 'faq-front' );
+		wp_enqueue_script( 'faq-front' );
 
 		// Set some variables used within.
 		$pageit = apply_filters( 'wpfaq_display_shortcode_paginate', true, 'list' );
@@ -192,7 +195,7 @@ class WPFAQ_Manager_Shortcodes {
 		$build  = '';
 
 		// The wrapper around.
-		$build .= '<div id="faq-block" name="faq-block">';
+		$build .= '<div id="faq-block" class="faq-block-wrap" name="faq-block">';
 			$build .= '<div class="faq-list">';
 
 			// Set up a list wrapper.
@@ -287,6 +290,7 @@ class WPFAQ_Manager_Shortcodes {
 
 		// Call our CSS file.
 		wp_enqueue_style( 'faq-front' );
+		wp_enqueue_script( 'faq-front' );
 
 		// Some display variables.
 		$htype  = apply_filters( 'wpfaq_display_htype', 'h3', 'taxlist' );
@@ -298,7 +302,7 @@ class WPFAQ_Manager_Shortcodes {
 		$build  = '';
 
 		// The wrapper around.
-		$build .= '<div id="faq-block" name="faq-block" class="faq-taxonomy faq-taxonomy-' . sanitize_html_class( $type ) . '">';
+		$build .= '<div id="faq-block" name="faq-block" class="faq-block-wrap faq-taxonomy faq-taxonomy-' . sanitize_html_class( $type ) . '">';
 
 		// Loop my individual terms
 		foreach ( $terms as $term ) {
@@ -359,6 +363,7 @@ class WPFAQ_Manager_Shortcodes {
 
 		// Call our CSS file.
 		wp_enqueue_style( 'faq-front' );
+		wp_enqueue_script( 'faq-front' );
 
 		// Some display variables.
 		$filter = apply_filters( 'wpfaq_display_content_filter', true, 'combo' );
@@ -371,7 +376,7 @@ class WPFAQ_Manager_Shortcodes {
 		$build  = '';
 
 		// The wrapper around the entire thing.
-		$build .= '<div id="faq-block" name="faq-block" rel="faq-top">';
+		$build .= '<div id="faq-block" class="faq-block-wrap faq-block-combo-wrap" name="faq-block" rel="faq-top">';
 
 			// Wrap the list portion of the combo.
 			$build .= '<div class="faq-list">';

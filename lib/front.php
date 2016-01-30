@@ -145,10 +145,13 @@ class WPFAQ_Manager_Front {
 		}
 
 		// Set a file suffix structure based on whether or not we want a minified version.
-		$jx = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.js' : '.min.js';
+		$sx = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.js' : '.min.js';
 
 		// Set a version for whether or not we're debugging.
 		$vr = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WPFAQ_VER;
+
+		// Register my script to call later.
+		wp_register_script( 'faq-front', plugins_url( '/js/faq.front' . $sx, __FILE__ ), array( 'jquery' ), $vr, true );
 	}
 
 	/**
@@ -164,13 +167,13 @@ class WPFAQ_Manager_Front {
 		}
 
 		// Set a file suffix structure based on whether or not we want a minified version.
-		$cx = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.css' : '.min.css';
+		$sx = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.css' : '.min.css';
 
 		// Set a version for whether or not we're debugging.
 		$vr = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WPFAQ_VER;
 
 		// Register the stylesheet.
-		wp_register_style( 'faq-front', plugins_url( '/css/faq.front' . $cx, __FILE__ ), false, $vr, 'all' );
+		wp_register_style( 'faq-front', plugins_url( '/css/faq.front' . $sx, __FILE__ ), false, $vr, 'all' );
 	}
 
 	/**
