@@ -34,8 +34,11 @@ class WPFAQ_Manager_Front {
 	 */
 	public function faq_redirect() {
 
-		// Optional filter to disable this all together.
-		if ( false !== $redirect_id = apply_filters( 'wpfaq_enable_redirects', false ) ) {
+		// Fetch the redirect ID stored or a boolean value.
+		$redirect_id    = $redirect_id = apply_filters( 'wpfaq_enable_redirects', false );
+
+		// Make sure our old "none" value isn't returned.
+		if ( empty( $redirect_id ) || 'none' === $redirect_id ) {
 			return;
 		}
 

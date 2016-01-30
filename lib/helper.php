@@ -28,7 +28,7 @@ class WPFAQ_Manager_Helper {
 		}
 
 		// Our total settings array.
-		$settings   = get_option( 'faq_legacy_options' );
+		$settings   = get_option( 'faq_options' );
 
 		// If we have no settings, return the default or nothing.
 		if ( empty( $settings ) ) {

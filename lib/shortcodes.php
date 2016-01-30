@@ -54,16 +54,12 @@ class WPFAQ_Manager_Shortcodes {
 			return;
 		}
 
-		// Call our CSS file.
-		wp_enqueue_style( 'faq-front' );
-		wp_enqueue_script( 'faq-front' );
-
 		// Set some variables used within.
 		$speed  = apply_filters( 'wpfaq_display_expand_speed', 200, 'main' );
-		$filter = apply_filters( 'wpfaq_display_content_filter', true, 'main' );
 		$expand = apply_filters( 'wpfaq_display_content_expand', true, 'main' );
 		$htype  = apply_filters( 'wpfaq_display_htype', 'h3', 'main' );
-		$exlink = apply_filters( 'wpfaq_display_content_more_link', array( 'show' => 1, 'text' => 'Read More' ), 'main' );
+		$filter = apply_filters( 'wpfaq_display_content_filter', true, 'main' );
+		$exlink = apply_filters( 'wpfaq_display_content_more_link', array( 'show' => 1, 'text' => __( 'Read More', 'wordpress-faq-manager' ) ), 'main' );
 		$pageit = apply_filters( 'wpfaq_display_shortcode_paginate', true, 'main' );
 
 		// Make sure we have a valid H type to use.
@@ -73,6 +69,10 @@ class WPFAQ_Manager_Shortcodes {
 		$dclass = ! empty( $expand ) ? 'faq-list expand-faq-list' : 'faq-list';
 		$bclass = ! empty( $expand ) ? 'single-faq expand-faq' : 'single-faq';
 		$tclass = ! empty( $expand ) ? 'faq-question expand-title' : 'faq-question';
+
+		// Call our CSS and JS files.
+		wp_enqueue_style( 'faq-front' );
+		wp_enqueue_script( 'faq-front' );
 
 		// Start my markup.
 		$build  = '';
@@ -94,14 +94,14 @@ class WPFAQ_Manager_Shortcodes {
 					$build .= '<div class="faq-answer" rel="' . esc_attr( $faq->post_name ) . '">';
 
 					// Show the content, with the optional filter.
-					$build .= false !== $filter ? apply_filters( 'the_content', $faq->post_content ) : $faq->post_content;
+					$build .= false !== $filter ? apply_filters( 'the_content', $faq->post_content ) : wpautop( $faq->post_content );
 
 					// Show the "read more" link.
 					if ( ! empty( $exlink ) ) {
 
 						// Fetch the link and text to display.
 						$link   = get_permalink( absint( $faq->ID ) );
-						$more   = ! empty( $exlink['text'] ) ? $exlink['text'] : 'Read More';
+						$more   = ! empty( $exlink['text'] ) ? $exlink['text'] : __( 'Read More', 'wordpress-faq-manager' );
 
 						// The display portion itself.
 						$build .= '<p class="faq-link">';
@@ -366,17 +366,21 @@ class WPFAQ_Manager_Shortcodes {
 		wp_enqueue_script( 'faq-front' );
 
 		// Some display variables.
+		$scroll = apply_filters( 'wpfaq_scroll_combo_list', true, 'combo' );
 		$filter = apply_filters( 'wpfaq_display_content_filter', true, 'combo' );
 		$htype  = apply_filters( 'wpfaq_display_htype', 'h3', 'combo' );
 
 		// Make sure we have a valid H type to use.
 		$htype  = in_array( $htype, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ) ) ? $htype : 'h3';
 
+		// Set a class based on the scrolling.
+		$sclass = ! empty( $scroll ) ? 'faq-block-combo-wrap faq-block-combo-wrap-scroll' : 'faq-block-combo-wrap';
+
 		// Start my markup.
 		$build  = '';
 
 		// The wrapper around the entire thing.
-		$build .= '<div id="faq-block" class="faq-block-wrap faq-block-combo-wrap" name="faq-block" rel="faq-top">';
+		$build .= '<div id="faq-block" class="faq-block-wrap ' . esc_attr( $sclass ) . '" name="faq-block" rel="faq-top">';
 
 			// Wrap the list portion of the combo.
 			$build .= '<div class="faq-list">';
@@ -415,7 +419,7 @@ class WPFAQ_Manager_Shortcodes {
 						$build .= '<div class="faq-answer">';
 
 							// Show the content, with the optional filter.
-							$build .= false !== $filter ? apply_filters( 'the_content', $faq->post_content ) : $faq->post_content;
+							$build .= false !== $filter ? apply_filters( 'the_content', $faq->post_content ) : wpautop( $faq->post_content );
 
 							// Show the "back to top" if requested.
 							if ( false !== apply_filters( 'wpfaq_display_content_backtotop', true, 'combo' ) ) {
