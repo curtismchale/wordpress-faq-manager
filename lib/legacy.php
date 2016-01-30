@@ -33,7 +33,7 @@ class WPFAQ_Manager_Legacy {
 		add_filter( 'wpfaq_display_content_backtotop',  array( $this, 'combo_backtotop'     ),  5,  2   );
 		add_filter( 'wpfaq_enable_redirects',           array( $this, 'set_faq_redirects'   ),  5       );
 		add_filter( 'wpfaq_enable_front_css',           array( $this, 'load_frontend_css'   ),  5       );
-
+		add_filter( 'wpfaq_disable_faq_rss',            array( $this, 'check_frontend_rss'  ),  5       );
 
 	}
 
@@ -270,7 +270,23 @@ class WPFAQ_Manager_Legacy {
 		$stored = WPFAQ_Manager_Helper::get_legacy_option( 'css' );
 
 		// Return the stored value, or the original.
-		return ! empty( $stored ) ? true : false;
+		return ! empty( $stored ) ? true : $loadcss;
+	}
+
+	/**
+	 * Check for the flag for not loading into RSS values.
+	 *
+	 * @param bool   $loadcss  The current flag being passed.
+	 *
+	 * @return bool  $loadcss  The stored value from the old settings, or the original passed.
+	 */
+	public function check_frontend_rss( $loadrss ) {
+
+		// Check for a stored value.
+		$stored = WPFAQ_Manager_Helper::get_legacy_option( 'rss' );
+
+		// Return the stored value, or the original.
+		return ! empty( $stored ) ? false : $loadrss;
 	}
 
 	// End our class.
