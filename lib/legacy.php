@@ -270,7 +270,7 @@ class WPFAQ_Manager_Legacy {
 		$stored = WPFAQ_Manager_Helper::get_legacy_option( 'css' );
 
 		// Return the stored value, or the original.
-		return ! empty( $stored ) ? true : $loadcss;
+		return ! empty( $stored ) ? false : $loadcss;
 	}
 
 	/**
