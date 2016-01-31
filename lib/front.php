@@ -165,18 +165,17 @@ class WPFAQ_Manager_Front {
 	public function register_styles() {
 
 		// Optional filter to disable this all together.
-		if ( false === apply_filters( 'wpfaq_enable_front_css', true ) ) {
-			return;
+		if ( false !== apply_filters( 'wpfaq_enable_front_css', false ) ) {
+
+			// Set a file suffix structure based on whether or not we want a minified version.
+			$sx = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.css' : '.min.css';
+
+			// Set a version for whether or not we're debugging.
+			$vr = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WPFAQ_VER;
+
+			// Register the stylesheet.
+			wp_register_style( 'faq-front', plugins_url( '/css/faq.front' . $sx, __FILE__ ), false, $vr, 'all' );
 		}
-
-		// Set a file suffix structure based on whether or not we want a minified version.
-		$sx = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.css' : '.min.css';
-
-		// Set a version for whether or not we're debugging.
-		$vr = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WPFAQ_VER;
-
-		// Register the stylesheet.
-		wp_register_style( 'faq-front', plugins_url( '/css/faq.front' . $sx, __FILE__ ), false, $vr, 'all' );
 	}
 
 	/**
