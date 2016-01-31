@@ -389,7 +389,7 @@ class WPFAQ_Manager_Admin {
 
 				<p><?php _e( 'The plugin will automatically create single posts using your existing permalink structure, and the FAQ topics and tags can be added to your menu using the WP Menu Manager.', 'wordpress-faq-manager' ); ?></p>
 
-				<h4 class="faqinfo-callout"><span class="dashicons dashicons-megaphone faqinfo-dashicon"></span><?php _e( 'Questions? Issues? Bugs?', 'wordpress-faq-manager' ); ?> <a href="https://github.com/norcross/wordpress-faq-manager/issues" target="_blank"><?php _e( 'Please report them on GitHub', 'wordpress-faq-manager' ); ?></a>.</h4>
+				<h4 class="faqinfo-callout"><span class="dashicons dashicons-megaphone faqinfo-dashicon"></span><?php _e( 'Questions? Issues? Bugs?', 'wordpress-faq-manager' ); ?> <a href="https://github.com/norcross/wordpress-faq-manager/issues" target="_blank" title="<?php _e( 'WordPress FAQ Manager on GitHub', 'wordpress-faq-manager' ); ?>"><?php _e( 'Please report them on GitHub', 'wordpress-faq-manager' ); ?></a>.</h4>
 			</div>
 
 			<h2><?php _e( 'Shortcodes', 'wordpress-faq-manager' ); ?></h2>
