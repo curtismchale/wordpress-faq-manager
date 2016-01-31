@@ -29,6 +29,32 @@
 }
 
 /* FAQ instruction page styles */
+
+.faq-admin-instructions-wrap .faqinfo-intro-content {
+	max-width: 800px;
+	margin-bottom: 20px;
+	padding-bottom: 20px;
+	border-bottom: 1px solid #ccc;
+}
+
+.faq-admin-instructions-wrap .faqinfo-intro-content p {
+	margin-bottom: 1.2em;
+}
+
+.faq-admin-instructions-wrap .faqinfo-callout {
+	font-weight: 700;
+	font-size: 1.2em;
+	margin: 0;
+	line-height: 32px;
+}
+
+.faq-admin-instructions-wrap .faqinfo-callout .faqinfo-dashicon {
+	padding-right: 8px;
+	font-size: 32px;
+	height: 32px;
+	width: 32px;
+}
+
 .faq-admin-instructions-wrap ul.faqinfo-list {
 	margin: 0 0 1.8em 1em;
 }
