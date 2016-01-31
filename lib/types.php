@@ -68,7 +68,7 @@ class WPFAQ_Manager_Types {
 			'hierarchical'          => false,
 			'menu_position'         => null,
 			'capability_type'       => $cap,
-			'menu_icon'             => 'dashicons-lightbulb',
+			'menu_icon'             => 'dashicons-editor-help',
 			'query_var'             => true,
 			'rewrite'               => array( 'slug' => $single, 'with_front' => false ),
 			'has_archive'           => $arch,
