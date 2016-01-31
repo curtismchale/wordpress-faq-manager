@@ -22,6 +22,7 @@ class WPFAQ_Manager_Admin {
 		add_action( 'wp_ajax_save_faq_sort',            array( $this, 'save_faq_sort'           )           );
 		add_action( 'admin_enqueue_scripts',            array( $this, 'admin_scripts'           ),  10      );
 		add_action( 'parse_query',                      array( $this, 'default_admin_sort'      )           );
+		add_action( 'save_post',                        array( $this, 'clear_transients'        )           );
 		add_filter( 'plugin_action_links',              array( $this, 'quick_link'              ),  10, 2   );
 		add_filter( 'faq-caps',                         array( $this, 'menu_cap_filter'         ),  10, 2   );
 		add_filter( 'enter_title_here',                 array( $this, 'title_text'              )           );
@@ -272,6 +273,42 @@ class WPFAQ_Manager_Admin {
 
 		// send back the query
 		return $query;
+	}
+
+	/**
+	 * Clear any transients related to the FAQs when saving one.
+	 *
+	 * @param  integer $post_id  The post ID of the item being saved.
+	 *
+	 * @return void
+	 */
+	public function clear_transients( $post_id ) {
+
+		// Bail out if running an autosave
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return;
+		}
+
+		// Bail out if running an ajax.
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			return;
+		}
+
+		// Bail out if running a cron job.
+		if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+			return;
+		}
+
+		// Now check the post type.
+		if ( 'question' !== get_post_type( $post_id ) ) {
+			return;
+		}
+
+		// Delete our transients.
+		delete_transient( 'wpfaq_widget_fetch_random' );
+		delete_transient( 'wpfaq_widget_fetch_recent' );
+		delete_transient( 'wpfaq_total_faq_count' );
+		delete_transient( 'wpfaq_admin_fetch_faqs' );
 	}
 
 	/**
