@@ -46,6 +46,8 @@ class WPFAQ_Manager_Base
 	private function __construct() {
 		add_action( 'plugins_loaded',               array( $this, 'textdomain'          )           );
 		add_action( 'plugins_loaded',               array( $this, 'load_files'          )           );
+		register_activation_hook    ( __FILE__,     array( $this, 'flush_rewrite_rules' )           );
+		register_deactivation_hook  ( __FILE__,     array( $this, 'flush_rewrite_rules' )           );
 	}
 
 	/**
@@ -104,6 +106,15 @@ class WPFAQ_Manager_Base
 		if ( is_admin() ) {
 			require_once( WPFAQ_DIR . 'lib/admin.php' );
 		}
+	}
+
+	/**
+	 * Flush the rewrite rules on activation / deactivation.
+	 *
+	 * @return void
+	 */
+	public function flush_rewrite_rules() {
+		flush_rewrite_rules();
 	}
 
 	// End our class.
