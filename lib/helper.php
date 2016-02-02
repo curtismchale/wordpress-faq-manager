@@ -126,13 +126,24 @@ class WPFAQ_Manager_Helper {
 	}
 
 	/**
-	 * do the whole 'check current screen' progressions
+	 * Get and filter our htype tag for shortcode displays.
 	 *
-	 * @param  string $htype  The h type tag being passed.
+	 * @param  string $htype      The H type tag being passed.
+	 * @param  string $shortcode  The shortcode it is being used on.
 	 *
-	 * @return string $htype  The h type tag being returned.
+	 * @return string $htype      The h type tag being returned.
 	 */
-	public static function check_htype_tag( $htype = 'h3' ) {
+	public static function check_htype_tag( $htype = 'h3', $shortcode = 'main' ) {
+
+		// Run the filter first.
+		$htype  = apply_filters( 'wpfaq_display_htype', $htype, $shortcode );
+
+		// If it was set to empty, just return the default tag.
+		if ( empty( $htype ) ) {
+			return 'h3';
+		}
+
+		// And then return it making sure it is a valid type.
 		return in_array( $htype, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ) ) ? $htype : 'h3';
 	}
 

@@ -57,13 +57,12 @@ class WPFAQ_Manager_Shortcodes {
 		// Set some variables used within.
 		$speed  = apply_filters( 'wpfaq_display_expand_speed', 200, 'main' );
 		$expand = apply_filters( 'wpfaq_display_content_expand', true, 'main' );
-		$htype  = apply_filters( 'wpfaq_display_htype', 'h3', 'main' );
 		$filter = apply_filters( 'wpfaq_display_content_filter', true, 'main' );
 		$exlink = apply_filters( 'wpfaq_display_content_more_link', array( 'show' => 1, 'text' => __( 'Read More', 'wordpress-faq-manager' ) ), 'main' );
 		$pageit = apply_filters( 'wpfaq_display_shortcode_paginate', true, 'main' );
 
 		// Make sure we have a valid H type to use.
-		$htype  = WPFAQ_Manager_Helper::check_htype_tag( $htype );
+		$htype  = WPFAQ_Manager_Helper::check_htype_tag( 'h3', 'main' );
 
 		// Set some classes for markup.
 		$dclass = ! empty( $expand ) ? 'faq-list expand-faq-list' : 'faq-list';
@@ -292,11 +291,8 @@ class WPFAQ_Manager_Shortcodes {
 		wp_enqueue_style( 'faq-front' );
 		wp_enqueue_script( 'faq-front' );
 
-		// Some display variables.
-		$htype  = apply_filters( 'wpfaq_display_htype', 'h3', 'taxlist' );
-
 		// Make sure we have a valid H type to use.
-		$htype  = WPFAQ_Manager_Helper::check_htype_tag( $htype );
+		$htype  = WPFAQ_Manager_Helper::check_htype_tag( 'h3', 'taxlist' );
 
 		// Start my markup.
 		$build  = '';
@@ -368,11 +364,10 @@ class WPFAQ_Manager_Shortcodes {
 		// Some display variables.
 		$scroll = apply_filters( 'wpfaq_scroll_combo_list', true, 'combo' );
 		$filter = apply_filters( 'wpfaq_display_content_filter', true, 'combo' );
-		$htype  = apply_filters( 'wpfaq_display_htype', 'h3', 'combo' );
 		$bktop  = apply_filters( 'wpfaq_display_content_backtotop', true, 'combo' );
 
 		// Make sure we have a valid H type to use.
-		$htype  = in_array( $htype, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ) ) ? $htype : 'h3';
+		$htype  = WPFAQ_Manager_Helper::check_htype_tag( 'h3', 'combo' );
 
 		// Set a class based on the scrolling.
 		$sclass = ! empty( $scroll ) ? 'faq-block-combo-wrap faq-block-combo-wrap-scroll' : 'faq-block-combo-wrap';
