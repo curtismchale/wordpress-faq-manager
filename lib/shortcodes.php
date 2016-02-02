@@ -369,6 +369,7 @@ class WPFAQ_Manager_Shortcodes {
 		$scroll = apply_filters( 'wpfaq_scroll_combo_list', true, 'combo' );
 		$filter = apply_filters( 'wpfaq_display_content_filter', true, 'combo' );
 		$htype  = apply_filters( 'wpfaq_display_htype', 'h3', 'combo' );
+		$bktop  = apply_filters( 'wpfaq_display_content_backtotop', true, 'combo' );
 
 		// Make sure we have a valid H type to use.
 		$htype  = in_array( $htype, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ) ) ? $htype : 'h3';
@@ -422,7 +423,7 @@ class WPFAQ_Manager_Shortcodes {
 							$build .= false !== $filter ? apply_filters( 'the_content', $faq->post_content ) : wpautop( $faq->post_content );
 
 							// Show the "back to top" if requested.
-							if ( false !== apply_filters( 'wpfaq_display_content_backtotop', true, 'combo' ) ) {
+							if ( ! empty( $bktop ) ) {
 								$build .= '<p class="scroll-back"><a href="#faq-block">' . __( 'Back To Top', 'wordpress-faq-manager' ) . '</a></p>';
 							}
 
