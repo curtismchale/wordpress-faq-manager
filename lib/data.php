@@ -128,15 +128,21 @@ class WPFAQ_Manager_Data {
 			return array( $item );
 		}
 
-		// Set my primary args.
-		$args   = array(
+		// Set my base primary args.
+		$base   = array(
 			'post_type'       => 'question',
-			'posts_per_page'  => absint( $count ),
 			'post_status'     => 'publish',
 			'orderby'         => 'menu_order',
 			'order'           => 'ASC',
-			'paged'           => $paged,
 		);
+
+		// If we are using the "all" feature, set the args with that.
+		// Otherwise, use the paged and posts_per_page setup.
+		if ( $count === 'all' || $count == -1 ) {
+			$args   = wp_parse_args( array( 'nopaging' => true, 'paged' => $paged ), $base );
+		} else {
+			$args   = wp_parse_args( array( 'posts_per_page' => absint( $count ), 'paged' => $paged ), $base );
+		}
 
 		// Set a tax query array.
 		$tq = array();
