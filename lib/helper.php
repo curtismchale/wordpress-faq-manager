@@ -147,6 +147,56 @@ class WPFAQ_Manager_Helper {
 		return in_array( $htype, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ) ) ? $htype : 'h3';
 	}
 
+	/**
+	 * Build out the pagination links for the various shortcodes
+	 *
+	 * @param  array   $atts   The attributes set in the shortcode.
+	 * @param  string  $link   The permalink in the page the shortcode is displayed on.
+	 * @param  integer $paged  Pagination location of current query.
+	 * @param  string  $type   Which type of shortcode we are using.
+	 *
+	 * @return mixed HTML      The pagination links, or nothing if none can be generated.
+	 */
+	public static function build_pagination( $atts = array(), $link = '', $paged = 1, $type = 'main' ) {
+
+		// If we have our "all" or -1 set as a limit, bail.
+		if ( $atts['limit'] === 'all' || $atts['limit'] == -1 ) {
+			return;
+		}
+
+		// Get the base link setup for pagination.
+		$base   = trailingslashit( $link );
+
+		// Figure out our total.
+		$total  = WPFAQ_Manager_Data::get_total_faq_count( $atts['limit'] );
+
+		// The actual pagination args.
+		$args   = array(
+			'base'      => $base . '%_%',
+			'format'    => '?faq_page=%#%',
+			'type'      => 'plain',
+			'current'   => $paged,
+			'total'     => $total,
+			'prev_text' => __( '&laquo;' ),
+			'next_text' => __( '&raquo;' ),
+		);
+
+		// The empty markup.
+		$build  = '';
+
+		// The wrapper for pagination.
+		$build .= '<p class="faq-nav">';
+
+		// The actual pagination call with our filtered args.
+		$build .= paginate_links( apply_filters( 'wpfaq_shortcode_paginate_args', $args, $type ) );
+
+		// The closing markup for pagination.
+		$build .= '</p>';
+
+		// Return our markup.
+		return $build;
+	}
+
 	// End our class.
 }
 

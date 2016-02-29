@@ -117,32 +117,7 @@ class WPFAQ_Manager_Shortcodes {
 
 			// Handle our optional pagination.
 			if ( ! empty( $pageit ) && empty( $atts['faq_id'] ) ) {
-
-				// Get the base link setup for pagination.
-				$base   = trailingslashit( get_permalink() );
-
-				// Figure out our total.
-				$total  = WPFAQ_Manager_Data::get_total_faq_count( $atts['limit'] );
-
-				// The actual pagination args.
-				$pargs  = array(
-					'base'      => $base . '%_%',
-					'format'    => '?faq_page=%#%',
-					'type'      => 'plain',
-					'current'   => $paged,
-					'total'     => $total,
-					'prev_text' => __( '&laquo;' ),
-					'next_text' => __( '&raquo;' ),
-				);
-
-				// The wrapper for pagination.
-				$build .= '<p class="faq-nav">';
-
-				// The actual pagination call with our filtered args.
-				$build .= paginate_links( apply_filters( 'wpfaq_shortcode_paginate_args', $pargs, 'main' ) );
-
-				// The closing markup for pagination.
-				$build .= '</p>';
+				$build .= WPFAQ_Manager_Helper::build_pagination( $atts, get_permalink(), $paged, 'main' );
 			}
 
 			// Close the markup wrappers.
@@ -221,32 +196,7 @@ class WPFAQ_Manager_Shortcodes {
 
 			// Handle our optional pagination.
 			if ( ! empty( $pageit ) && empty( $atts['faq_id'] ) ) {
-
-				// Get the base link setup for pagination.
-				$base   = trailingslashit( get_permalink() );
-
-				// Figure out our total.
-				$total  = WPFAQ_Manager_Data::get_total_faq_count( $atts['limit'] );
-
-				// The actual pagination args.
-				$pargs  = array(
-					'base'      => $base . '%_%',
-					'format'    => '?faq_page=%#%',
-					'type'      => 'plain',
-					'current'   => $paged,
-					'total'     => $total,
-					'prev_text' => __( '&laquo;' ),
-					'next_text' => __( '&raquo;' ),
-				);
-
-				// The wrapper for pagination.
-				$build .= '<p class="faq-nav">';
-
-				// The actual pagination call with our filtered args.
-				$build .= paginate_links( apply_filters( 'wpfaq_shortcode_paginate_args', $pargs, 'list' ) );
-
-				// The closing markup for pagination.
-				$build .= '</p>';
+				$build .= WPFAQ_Manager_Helper::build_pagination( $atts, get_permalink(), $paged, 'list' );
 			}
 
 			// Close the markup wrappers.
