@@ -669,6 +669,16 @@ class WP_FAQ_Manager
 			'paged'				=>	$paged,
 		);
 
+		/**
+		 * Filter the query arguments
+		 *
+		 * @param array $args, current query arguments
+		 * @param array $atts, shortcode attributes
+		 * @param string $shortcode, name of shortcode
+		 * @return array $args, modified query arguments
+		 */
+		$args = apply_filters( 'wordpress_faq_manager_query_args', $args, $atts, 'faq' );
+		 
 		$wp_query = new WP_Query($args);
 
 		if($wp_query->have_posts()) :
@@ -764,6 +774,16 @@ class WP_FAQ_Manager
 			'paged'				=>	$paged,
 		);
 
+		/**
+		 * Filter the query arguments
+		 *
+		 * @param array $args, current query arguments
+		 * @param array $atts, shortcode attributes
+		 * @param string $shortcode, name of shortcode
+		 * @return array $args, modified query arguments
+		 */
+		$args = apply_filters( 'wordpress_faq_manager_query_args', $args, $atts, 'faqlist' );
+		 
 		$wp_query = new WP_Query($args);
 
 		if($wp_query->have_posts()) :
@@ -841,6 +861,16 @@ class WP_FAQ_Manager
 			'order'				=>	'ASC',
 		);
 
+		/**
+		 * Filter the query arguments
+		 *
+		 * @param array $args, current query arguments
+		 * @param array $atts, shortcode attributes
+		 * @param string $shortcode, name of shortcode
+		 * @return array $args, modified query arguments
+		 */
+		$args = apply_filters( 'wordpress_faq_manager_query_args', $args, $atts, 'faqcombo' );
+		 
 		$wp_query = new WP_Query($args);
 
 		if($wp_query->have_posts()) :
