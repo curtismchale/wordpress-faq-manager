@@ -643,7 +643,7 @@ class WP_FAQ_Manager
 			'faq_tag'		=> '',
 			'faq_id'		=> '',
 			'limit'			=> '10',
-		), $atts));
+		), $atts, 'faq' ));
 
 		// pagination call. required regardless of whether pagination is active or not
 		if( isset( $_GET['faq_page'] ) && $faq_page = absint( $_GET['faq_page'] ) )
@@ -669,6 +669,16 @@ class WP_FAQ_Manager
 			'paged'				=>	$paged,
 		);
 
+		/**
+		 * Filter the query arguments
+		 *
+		 * @param array $args, current query arguments
+		 * @param array $atts, shortcode attributes
+		 * @param string $shortcode, name of shortcode
+		 * @return array $args, modified query arguments
+		 */
+		$args = apply_filters( 'wordpress_faq_manager_query_args', $args, $atts, 'faq' );
+		 
 		$wp_query = new WP_Query($args);
 
 		if($wp_query->have_posts()) :
@@ -738,7 +748,7 @@ class WP_FAQ_Manager
 			'faq_tag'		=> '',
 			'faq_id'		=> '',
 			'limit'			=> '10',
-		), $atts));
+		), $atts, 'faqlist' ));
 
 		// pagination call. required regardless of whether pagination is active or not
 		if( isset( $_GET['faq_page'] ) && $faq_page = absint( $_GET['faq_page'] ) )
@@ -764,6 +774,16 @@ class WP_FAQ_Manager
 			'paged'				=>	$paged,
 		);
 
+		/**
+		 * Filter the query arguments
+		 *
+		 * @param array $args, current query arguments
+		 * @param array $atts, shortcode attributes
+		 * @param string $shortcode, name of shortcode
+		 * @return array $args, modified query arguments
+		 */
+		$args = apply_filters( 'wordpress_faq_manager_query_args', $args, $atts, 'faqlist' );
+		 
 		$wp_query = new WP_Query($args);
 
 		if($wp_query->have_posts()) :
@@ -822,7 +842,7 @@ class WP_FAQ_Manager
 			'faq_topic'		=> '',
 			'faq_tag'		=> '',
 			'faq_id'		=> '',
-		), $atts));
+		), $atts, 'faqcombo' ));
 
 		// no pagination
 
@@ -841,6 +861,16 @@ class WP_FAQ_Manager
 			'order'				=>	'ASC',
 		);
 
+		/**
+		 * Filter the query arguments
+		 *
+		 * @param array $args, current query arguments
+		 * @param array $atts, shortcode attributes
+		 * @param string $shortcode, name of shortcode
+		 * @return array $args, modified query arguments
+		 */
+		$args = apply_filters( 'wordpress_faq_manager_query_args', $args, $atts, 'faqcombo' );
+		 
 		$wp_query = new WP_Query($args);
 
 		if($wp_query->have_posts()) :
@@ -913,7 +943,7 @@ class WP_FAQ_Manager
 		extract(shortcode_atts(array(
 			'type'		=> 'topics',
 			'desc'		=> '',
-		), $atts));
+		), $atts, 'faqtaxlist' ));
 
 		// check for type and description variable
 		$type_check	= (isset($type) && $type == 'tags' ) ? 'faq-tags' : 'faq-topic';
