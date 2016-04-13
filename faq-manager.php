@@ -643,7 +643,7 @@ class WP_FAQ_Manager
 			'faq_tag'		=> '',
 			'faq_id'		=> '',
 			'limit'			=> '10',
-		), $atts));
+		), $atts, 'faq' ));
 
 		// pagination call. required regardless of whether pagination is active or not
 		if( isset( $_GET['faq_page'] ) && $faq_page = absint( $_GET['faq_page'] ) )
@@ -738,7 +738,7 @@ class WP_FAQ_Manager
 			'faq_tag'		=> '',
 			'faq_id'		=> '',
 			'limit'			=> '10',
-		), $atts));
+		), $atts, 'faqlist' ));
 
 		// pagination call. required regardless of whether pagination is active or not
 		if( isset( $_GET['faq_page'] ) && $faq_page = absint( $_GET['faq_page'] ) )
@@ -822,7 +822,7 @@ class WP_FAQ_Manager
 			'faq_topic'		=> '',
 			'faq_tag'		=> '',
 			'faq_id'		=> '',
-		), $atts));
+		), $atts, 'faqcombo' ));
 
 		// no pagination
 
@@ -913,7 +913,7 @@ class WP_FAQ_Manager
 		extract(shortcode_atts(array(
 			'type'		=> 'topics',
 			'desc'		=> '',
-		), $atts));
+		), $atts, 'faqtaxlist' ));
 
 		// check for type and description variable
 		$type_check	= (isset($type) && $type == 'tags' ) ? 'faq-tags' : 'faq-topic';
