@@ -138,7 +138,7 @@ class WPFAQ_Manager_Data {
 
 		// If we are using the "all" feature, set the args with that.
 		// Otherwise, use the paged and posts_per_page setup.
-		if ( $count === 'all' || $count == -1 ) {
+		if ( 'all' === $count || $count < 0 ) {
 			$args   = wp_parse_args( array( 'nopaging' => true, 'paged' => $paged ), $base );
 		} else {
 			$args   = wp_parse_args( array( 'posts_per_page' => absint( $count ), 'paged' => $paged ), $base );

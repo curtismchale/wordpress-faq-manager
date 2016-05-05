@@ -80,21 +80,25 @@ class WPFAQ_Manager_Admin {
 		// Set the message about where this works.
 		$build .= '<p>' . __( '<strong>Note:</strong> this only affects the FAQs listed using the shortcode functions', 'wordpress-faq-manager' ) . '</p>';
 
-		// Now wrap the list.
+		// Now open this with a div.
 		$build .= '<div class="faq-sort-list">';
-		$build .= '<ul id="faq-sort-type-list">';
 
-		// Loop the FAQs.
-		foreach ( $faqs as $faq ) {
-			$build .= '<li id="' . absint( $faq->ID ) . '">' . esc_html( $faq->post_title ) . '</li>';
-		}
+			// Now wrap the list.
+			$build .= '<ul id="faq-sort-type-list">';
 
-		// Close the list wrap.
-		$build .= '</ul>';
+			// Loop the FAQs.
+			foreach ( $faqs as $faq ) {
+				$build .= '<li id="' . absint( $faq->ID ) . '">' . esc_html( $faq->post_title ) . '</li>';
+			}
+
+			// Close the list wrap.
+			$build .= '</ul>';
+
+			// Include our nonce.
+			$build .= wp_nonce_field( 'wpfaq_sort_nonce', 'wpfaq_sort_nonce', false, false );
+
+		// Close the div.
 		$build .= '</div>';
-
-		// Include our nonce.
-		$build .= wp_nonce_field( 'wpfaq_sort_nonce', 'wpfaq_sort_nonce', false, false );
 
 		// Return the build.
 		return $build;
