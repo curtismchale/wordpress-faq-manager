@@ -654,8 +654,8 @@ class WP_FAQ_Manager
 		// end paginaton
 
 		// clean up text
-		$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_topic);
-		$faq_tag	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_tag);
+		$faq_topic	= preg_replace_callback('~&#x0*([0-9a-f]+);~i', function($m) { return chr(hexdec($m[1])); }, $faq_topic);
+		$faq_tag	= preg_replace_callback('~&#x0*([0-9a-f]+);~i', function($m) { return chr(hexdec($m[1])); }, $faq_tag);
 
 		// FAQ query
 		$args = array (
@@ -749,8 +749,8 @@ class WP_FAQ_Manager
 		// end paginaton
 
 		// clean up text
-		$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_topic);
-		$faq_tag	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_tag);
+		$faq_topic	= preg_replace_callback('~&#x0*([0-9a-f]+);~i', function($m) { return chr(hexdec($m[1])); }, $faq_topic);
+		$faq_tag	= preg_replace_callback('~&#x0*([0-9a-f]+);~i', function($m) { return chr(hexdec($m[1])); }, $faq_tag);
 
 		// FAQ query
 		$args = array (
@@ -827,8 +827,8 @@ class WP_FAQ_Manager
 		// no pagination
 
 		// clean up text
-		$faq_topic	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_topic);
-		$faq_tag	= preg_replace('~&#x0*([0-9a-f]+);~ei', 'chr(hexdec("\\1"))', $faq_tag);
+		$faq_topic	= preg_replace_callback('~&#x0*([0-9a-f]+);~i', function($m) { return chr(hexdec($m[1])); }, $faq_topic);
+		$faq_tag	= preg_replace_callback('~&#x0*([0-9a-f]+);~i', function($m) { return chr(hexdec($m[1])); }, $faq_tag);
 
 		// FAQ query
 		$args = array (
@@ -1375,5 +1375,3 @@ class WP_FAQ_Manager
 
 // Instantiate our class
 $WP_FAQ_Manager = new WP_FAQ_Manager();
-
-
