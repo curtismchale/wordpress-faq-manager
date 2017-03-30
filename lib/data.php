@@ -22,7 +22,7 @@ class WPFAQ_Manager_Data {
 	public static function get_random_widget_faqs( $count = 1 ) {
 
 		// Check for the transient first.
-		if( false === $items = get_transient( 'wpfaq_widget_fetch_random' )  ) {
+		if ( false === $items = get_transient( 'wpfaq_widget_fetch_random' )  ) {
 
 			// Set my args.
 			$args   = array(
@@ -65,7 +65,7 @@ class WPFAQ_Manager_Data {
 	public static function get_recent_widget_faqs( $count = 5 ) {
 
 		// Check for the transient first.
-		if( false === $items = get_transient( 'wpfaq_widget_fetch_recent' )  ) {
+		if ( false === $items = get_transient( 'wpfaq_widget_fetch_recent' )  ) {
 
 			// Set my args.
 			$args   = array(
@@ -297,7 +297,7 @@ class WPFAQ_Manager_Data {
 	public static function get_total_faq_count( $divide = 0 ) {
 
 		// Check for the transient first.
-		if( false === $count = get_transient( 'wpfaq_total_faq_count' )  ) {
+		if ( false === $count = get_transient( 'wpfaq_total_faq_count' )  ) {
 
 			// Call the global database.
 			global $wpdb;
@@ -350,7 +350,7 @@ class WPFAQ_Manager_Data {
 	public static function get_admin_faqs() {
 
 		// Check for the transient first.
-		if( false === $items = get_transient( 'wpfaq_admin_fetch_faqs' )  ) {
+		if ( false === $items = get_transient( 'wpfaq_admin_fetch_faqs' )  ) {
 
 			// Set my args.
 			$args   = array(

@@ -3,7 +3,7 @@ Contributors: norcross
 Donate link: http://andrewnorcross.com/donate
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 4.0
-Tested up to: 4.2
+Tested up to: 4.7
 Stable tag: 2.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html

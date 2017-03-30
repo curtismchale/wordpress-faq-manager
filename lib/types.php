@@ -67,11 +67,11 @@ class WPFAQ_Manager_Types {
 			'exclude_from_search'   => false,
 			'hierarchical'          => false,
 			'menu_position'         => null,
-			'capability_type'       => $cap,
+			'capability_type'       => esc_attr( $cap ),
 			'menu_icon'             => 'dashicons-editor-help',
 			'query_var'             => true,
-			'rewrite'               => array( 'slug' => $single, 'with_front' => false ),
-			'has_archive'           => $arch,
+			'rewrite'               => array( 'slug' => esc_attr( $single ), 'with_front' => false ),
+			'has_archive'           => esc_attr( $arch ),
 			'supports'              => $sppts,
 		);
 
@@ -124,7 +124,7 @@ class WPFAQ_Manager_Types {
 			'publicly_queryable'    => true,
 			'show_admin_column'     => true,
 			'exclude_from_search'   => false,
-			'rewrite'               => array( 'slug' => $slug, 'with_front' => true ),
+			'rewrite'               => array( 'slug' => esc_attr( $slug ), 'with_front' => true ),
 			'hierarchical'          => true,
 			'query_var'             => true,
 		);
@@ -186,7 +186,7 @@ class WPFAQ_Manager_Types {
 			'publicly_queryable'    => true,
 			'show_admin_column'     => true,
 			'exclude_from_search'   => false,
-			'rewrite'               => array( 'slug' => $slug, 'with_front' => true ),
+			'rewrite'               => array( 'slug' => esc_attr( $slug ), 'with_front' => true ),
 			'hierarchical'          => false,
 			'query_var'             => true,
 		);

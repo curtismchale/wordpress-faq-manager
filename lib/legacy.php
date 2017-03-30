@@ -34,7 +34,6 @@ class WPFAQ_Manager_Legacy {
 		add_filter( 'wpfaq_enable_redirects',           array( $this, 'set_faq_redirects'   ),  5       );
 		add_filter( 'wpfaq_enable_front_css',           array( $this, 'load_frontend_css'   ),  5       );
 		add_filter( 'wpfaq_disable_faq_rss',            array( $this, 'check_frontend_rss'  ),  5       );
-
 	}
 
 	/**
@@ -270,7 +269,7 @@ class WPFAQ_Manager_Legacy {
 		$stored = WPFAQ_Manager_Helper::get_legacy_option( 'css' );
 
 		// Return the stored value, or the original.
-		return ! empty( $stored ) ? false : $loadcss;
+		return ! empty( $stored ) ? $stored : $loadcss;
 	}
 
 	/**
@@ -295,4 +294,3 @@ class WPFAQ_Manager_Legacy {
 // Call our class.
 $WPFAQ_Manager_Legacy = new WPFAQ_Manager_Legacy();
 $WPFAQ_Manager_Legacy->init();
-

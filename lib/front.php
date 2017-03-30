@@ -35,7 +35,7 @@ class WPFAQ_Manager_Front {
 	public function faq_redirect() {
 
 		// Fetch the redirect ID stored or a boolean value.
-		$redirect_id    = $redirect_id = apply_filters( 'wpfaq_enable_redirects', false );
+		$redirect_id    = apply_filters( 'wpfaq_enable_redirects', false );
 
 		// Make sure our old "none" value isn't returned.
 		if ( empty( $redirect_id ) || 'none' === $redirect_id ) {
@@ -143,18 +143,18 @@ class WPFAQ_Manager_Front {
 	public function register_scripts() {
 
 		// Optional filter to disable this all together.
-		if ( false === apply_filters( 'wpfaq_enable_front_js', true ) ) {
+		if ( false === $check = apply_filters( 'wpfaq_enable_front_js', true ) ) {
 			return;
 		}
 
 		// Set a file suffix structure based on whether or not we want a minified version.
-		$sx = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.js' : '.min.js';
+		$file   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? 'faq.front.js' : 'faq.front.min.js';
 
 		// Set a version for whether or not we're debugging.
-		$vr = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WPFAQ_VER;
+		$vers   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WPFAQ_VER;
 
 		// Register my script to call later.
-		wp_register_script( 'faq-front', plugins_url( '/js/faq.front' . $sx, __FILE__ ), array( 'jquery' ), $vr, true );
+		wp_register_script( 'faq-front', plugins_url( '/js/' . $file, __FILE__ ), array( 'jquery' ), $vers, true );
 	}
 
 	/**
@@ -165,17 +165,18 @@ class WPFAQ_Manager_Front {
 	public function register_styles() {
 
 		// Optional filter to disable this all together.
-		if ( false !== apply_filters( 'wpfaq_enable_front_css', false ) ) {
-
-			// Set a file suffix structure based on whether or not we want a minified version.
-			$sx = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.css' : '.min.css';
-
-			// Set a version for whether or not we're debugging.
-			$vr = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WPFAQ_VER;
-
-			// Register the stylesheet.
-			wp_register_style( 'faq-front', plugins_url( '/css/faq.front' . $sx, __FILE__ ), false, $vr, 'all' );
+		if ( false === $check = apply_filters( 'wpfaq_enable_front_css', true ) ) {
+			return;
 		}
+
+		// Set a file suffix structure based on whether or not we want a minified version.
+		$file   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? 'faq.front.css' : 'faq.front.min.css';
+
+		// Set a version for whether or not we're debugging.
+		$vers   = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WPFAQ_VER;
+
+		// Register the stylesheet.
+		wp_register_style( 'faq-front', plugins_url( '/css/' . $file, __FILE__ ), false, $vers, 'all' );
 	}
 
 	/**
@@ -188,7 +189,7 @@ class WPFAQ_Manager_Front {
 	public function rss_include( $query ) {
 
 		// Optional filter to disable this all together.
-		if ( false === apply_filters( 'wpfaq_disable_faq_rss', true ) ) {
+		if ( false === $check = apply_filters( 'wpfaq_disable_faq_rss', true ) ) {
 			return $query;
 		}
 

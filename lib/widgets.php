@@ -21,10 +21,7 @@ class WPFAQ_Manager_Widgets {
 	public function init() {
 
 		// Optional filter to disable all the widgets.
-		$enable = apply_filters( 'wpfaq_enable_widgets', true );
-
-		// Compare the filter return.
-		if ( empty( $enable ) ) {
+		if ( false === $enable = apply_filters( 'wpfaq_enable_widgets', true ) ) {
 			return;
 		}
 
@@ -39,35 +36,28 @@ class WPFAQ_Manager_Widgets {
 	 */
 	public function register_widgets() {
 
-		// Call each of our filter checks.
-		$search = apply_filters( 'wpfaq_disable_search_widget', false );
-		$random = apply_filters( 'wpfaq_disable_random_widget', false );
-		$recent = apply_filters( 'wpfaq_disable_recent_widget', false );
-		$taxlst = apply_filters( 'wpfaq_disable_taxlist_widget', false );
-		$cloud  = apply_filters( 'wpfaq_disable_cloud_widget', false );
-
 		// Register the search widget (with optional filter to disable).
-		if ( false === $search ) {
+		if ( false === $search = apply_filters( 'wpfaq_disable_search_widget', false ) ) {
 			register_widget( 'Search_FAQ_Widget' );
 		}
 
 		// Register the random FAQ widget (with optional filter to disable).
-		if ( false === $random ) {
+		if ( false === $random = apply_filters( 'wpfaq_disable_random_widget', false ) ) {
 			register_widget( 'Random_FAQ_Widget' );
 		}
 
 		// Register the recent FAQ widget (with optional filter to disable).
-		if ( false === $recent ) {
+		if ( false === $recent = apply_filters( 'wpfaq_disable_recent_widget', false ) ) {
 			register_widget( 'Recent_FAQ_Widget' );
 		}
 
 		// Register the FAQ taxonomy list (with optional filter to disable).
-		if ( false === $taxlst ) {
+		if ( false === $taxlst = apply_filters( 'wpfaq_disable_taxlist_widget', false ) ) {
 			register_widget( 'Topics_FAQ_Widget' );
 		}
 
 		// Register the FAQ cloud (with optional filter to disable).
-		if ( false === $cloud ) {
+		if ( false === $cloud = apply_filters( 'wpfaq_disable_cloud_widget', false ) ) {
 			register_widget( 'Cloud_FAQ_Widget' );
 		}
 	}
@@ -128,7 +118,7 @@ class Search_FAQ_Widget extends WP_Widget {
 				echo '<span class="screen-reader-text">' . __( 'Search FAQs for:', 'wordpress-faq-manager' ) . '</span>';
 				echo '<input type="search" class="search-field" placeholder="' . __( 'Search FAQs &hellip;', 'wordpress-faq-manager' ) . '" value="' . get_search_query() . '" name="s" />';
 			echo '</label>';
-			echo '<input type="submit" class="search-submit" value="'. esc_attr_x( 'Search', 'submit button' ) .'" />';
+			echo '<input type="submit" class="search-submit" value="' . esc_attr_x( 'Search', 'submit button' ) . '" />';
 			echo '<input type="hidden" name="post_type" value="question" />';
 
 		echo '</form>';
