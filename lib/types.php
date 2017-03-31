@@ -67,7 +67,7 @@ class WPFAQ_Manager_Types {
 			'exclude_from_search'   => false,
 			'hierarchical'          => false,
 			'menu_position'         => null,
-			'capability_type'       => sanitize_title_with_dashes(( $cap ),
+			'capability_type'       => sanitize_title_with_dashes( $cap ),
 			'menu_icon'             => 'dashicons-editor-help',
 			'query_var'             => true,
 			'rewrite'               => array( 'slug' => sanitize_title_with_dashes( $single ), 'with_front' => false ),
