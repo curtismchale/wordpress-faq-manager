@@ -243,4 +243,3 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 == Potential Enhancements ==
 * Got a bug? Something look off? Hit me up.
 
-
