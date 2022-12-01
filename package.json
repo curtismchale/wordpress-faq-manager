@@ -1,0 +1,26 @@
+{
+  "name": "wordpress-faq-manager",
+  "version": "1.0.0",
+  "description": "**Contributors:** curtismchale, norcross",
+  "main": "index.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/curtismchale/wordpress-faq-manager.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/curtismchale/wordpress-faq-manager/issues"
+  },
+  "homepage": "https://github.com/curtismchale/wordpress-faq-manager#readme",
+  "devDependencies": {
+    "laravel-mix": "^6.0.49"
+  }
+}
