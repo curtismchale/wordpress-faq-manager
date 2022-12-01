@@ -1,3 +1,6 @@
 {
-    "/lib/js/faq.admin.js": "/lib/js/faq.admin.js"
+    "/lib/js/faq.admin.min.js": "/lib/js/faq.admin.min.js",
+    "/lib/js/faq.front.min.js": "/lib/js/faq.front.min.js",
+    "/lib/css/faq.admin.min.css": "/lib/css/faq.admin.min.css",
+    "/lib/css/faq.front.min.css": "/lib/css/faq.front.min.css"
 }
