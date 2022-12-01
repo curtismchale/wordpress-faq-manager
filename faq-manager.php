@@ -1,13 +1,14 @@
 <?php
 /**
  * Plugin Name: WordPress FAQ Manager
- * Plugin URI: http://andrewnorcross.com/plugins/faq-manager/
+ * Plugin URI: https://sfndesign.ca/wordpress-faq-manager/
  * Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
  * Author: Curtis McHale, Andrew Norcross
  * Author URI: https://sfndesign.ca/
  * Version: 2.0.0
  * Text Domain: wordpress-faq-manager
  * Requires WP: 4.0
+ * Requires PHP: 7.0
  * Domain Path: languages
  * License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * GitHub Plugin URI: https://github.com/norcross/wordpress-faq-manager

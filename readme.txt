@@ -2,6 +2,7 @@
 Contributors: curtismchale, norcross
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 4.0
+Requires PHP: 7.4
 Tested up to: 6.1
 Stable tag: 2.0.0
 License: GPLv2 or later
