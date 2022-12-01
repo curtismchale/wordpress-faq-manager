@@ -171,14 +171,14 @@ class WPFAQ_Manager_Admin {
 		if ( ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) || in_array( wp_get_environment_type(), array( 'local', 'development' ) ) ){
 			$cx = '.css';
 			$jx = '.js';
+			$vr = time();
 		} else {
 			$cx = '.min.css';
 			$jx = '.min.js';
+			$vr =  WPFAQ_VER;
 		}
 
-
 		// Set a version for whether or not we're debugging.
-		$vr = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WPFAQ_VER;
 
 		// Run our quick check on the post type screen and load our CSS on the post editor.
 		if ( false !== $check = WPFAQ_Manager_Helper::check_current_screen() ) {
