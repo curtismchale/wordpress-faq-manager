@@ -168,8 +168,14 @@ class WPFAQ_Manager_Admin {
 	public function admin_scripts( $hook ) {
 
 		// Set a file suffix structure based on whether or not we want a minified version.
-		$cx = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.css' : '.min.css';
-		$jx = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.js' : '.min.js';
+		if ( ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) || in_array( wp_get_environment_type(), array( 'local', 'development' ) ) ){
+			$cx = '.css';
+			$jx = '.js';
+		} else {
+			$cx = '.min.css';
+			$jx = '.min.js';
+		}
+
 
 		// Set a version for whether or not we're debugging.
 		$vr = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WPFAQ_VER;
