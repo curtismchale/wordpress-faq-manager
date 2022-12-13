@@ -1,3 +1,4 @@
 node_modules/
 __old/
 example-data.txt
+.DS_Store
