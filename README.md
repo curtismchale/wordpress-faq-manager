@@ -9,7 +9,7 @@
 
 **Tested up to:** 6.1
 
-**Stable tag:** 2.0.1
+**Stable tag:** 2.0.2
 
 **License:** GPLv2 or later
 
@@ -90,6 +90,11 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 
 
 ## Changelog ##
+
+### 2.0.2 ###
+
+* fixed a bug where the rest route location changed so we defined the old way
+  and it works again
 
 ### 2.0.1 ###
 * adding rest support back for custom post types and taxonomies

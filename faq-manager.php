@@ -5,7 +5,7 @@
  * Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
  * Author: Curtis McHale
  * Author URI: https://sfndesign.ca/
- * Version: 2.0.1
+ * Version: 2.0.2
  * Text Domain: wordpress-faq-manager
  * Requires WP: 4.0
  * Requires PHP: 7.0
