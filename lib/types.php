@@ -66,6 +66,7 @@ class WPFAQ_Manager_Types {
 			'publicly_queryable'    => true,
 			'exclude_from_search'   => false,
 			'show_in_rest'          => true,
+			'rest_base'             => 'questions',
 			'hierarchical'          => false,
 			'menu_position'         => null,
 			'capability_type'       => sanitize_title_with_dashes( $cap ),
