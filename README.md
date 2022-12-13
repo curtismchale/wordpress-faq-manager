@@ -9,7 +9,7 @@
 
 **Tested up to:** 6.1
 
-**Stable tag:** 2.0.0
+**Stable tag:** 2.0.1
 
 **License:** GPLv2 or later
 
@@ -90,6 +90,9 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 
 
 ## Changelog ##
+
+### 2.0.1 ###
+* adding rest support back for custom post types and taxonomies
 
 ### 2.0.0 ###
 * total refactoring. I mean, totally.
@@ -257,5 +260,3 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 
 ## Potential Enhancements ##
 * Got a bug? Something look off? Hit me up.
-
-

@@ -4,7 +4,7 @@ Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 4.0
 Requires PHP: 7.4
 Tested up to: 6.1
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,9 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 3. Example of expanded FAQs
 
 == Changelog ==
+
+= 2.0.1 =
+* adding rest support back for custom post types and taxonomies
 
 = 2.0.0 =
 * total refactoring. I mean, totally.
@@ -242,4 +245,3 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 
 == Potential Enhancements ==
 * Got a bug? Something look off? Hit me up.
-
