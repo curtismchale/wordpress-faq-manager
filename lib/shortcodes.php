@@ -4,7 +4,7 @@
  *
  * Contains our shortcodes and related functionality.
  *
- * @package WordPress FAQ Manager
+ * @package WP FAQ Manager
  */
 
 /**

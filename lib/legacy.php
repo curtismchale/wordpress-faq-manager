@@ -4,7 +4,7 @@
  *
  * Backwards compatibility stuff to handle old settings, etc.
  *
- * @package WordPress FAQ Manager
+ * @package WP FAQ Manager
  */
 
 /**

@@ -1,17 +1,17 @@
 <?php
 /**
- * Plugin Name: WordPress FAQ Manager
+ * Plugin Name: WP FAQ Manager
  * Plugin URI: https://sfndesign.ca/wordpress-faq-manager/
  * Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
  * Author: Curtis McHale
  * Author URI: https://sfndesign.ca/
  * Version: 2.0.2
- * Text Domain: wordpress-faq-manager
+ * Text Domain: wp-faq-manager
  * Requires WP: 4.0
  * Requires PHP: 7.0
  * Domain Path: languages
  * License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
- * GitHub Plugin URI: https://github.com/norcross/wordpress-faq-manager
+ * GitHub Plugin URI: https://github.com/curtismchale/wordpress-faq-manager
  */
 
 // Define our base file.
@@ -72,7 +72,7 @@ class WPFAQ_Manager_Base
 	 * @return void
 	 */
 	public function textdomain() {
-		load_plugin_textdomain( 'wordpress-faq-manager', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+		load_plugin_textdomain( 'wp-faq-manager', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
 	}
 
 	/**

@@ -36,10 +36,10 @@ class WPFAQ_Manager_Admin {
 	public function admin_pages() {
 
 		// Load the sorting page.
-		add_submenu_page( 'edit.php?post_type=question', __( 'Sort FAQs', 'wordpress-faq-manager' ), __( 'Sort FAQs', 'wordpress-faq-manager' ), apply_filters( 'faq-caps', 'manage_options', 'sort' ), 'sort-page', array( $this, 'sort_page' ) );
+		add_submenu_page( 'edit.php?post_type=question', __( 'Sort FAQs', 'wp-faq-manager' ), __( 'Sort FAQs', 'wp-faq-manager' ), apply_filters( 'faq-caps', 'manage_options', 'sort' ), 'sort-page', array( $this, 'sort_page' ) );
 
 		// Load the instructions page.
-		add_submenu_page('edit.php?post_type=question', __( 'FAQ Manager Instructions', 'wordpress-faq-manager' ), __( 'Instructions', 'wordpress-faq-manager' ), apply_filters( 'faq-caps', 'manage_options', 'instructions' ), 'instructions', array( $this, 'instructions_page' ) );
+		add_submenu_page('edit.php?post_type=question', __( 'FAQ Manager Instructions', 'wp-faq-manager' ), __( 'Instructions', 'wp-faq-manager' ), apply_filters( 'faq-caps', 'manage_options', 'instructions' ), 'instructions', array( $this, 'instructions_page' ) );
 	}
 
 	/**
@@ -53,7 +53,7 @@ class WPFAQ_Manager_Admin {
 		echo '<div id="faq-admin-sort" class="wrap faq-admin-page-wrap faq-admin-sort-wrap">';
 
 			// Title it.
-			echo '<h1>' . __( 'Sort FAQs', 'wordpress-faq-manager' ) . '<span class="spinner faq-sort-spinner"></span></h1>';
+			echo '<h1>' . __( 'Sort FAQs', 'wp-faq-manager' ) . '<span class="spinner faq-sort-spinner"></span></h1>';
 
 			// SHow the message or the items.
 			echo self::sort_display();
@@ -71,14 +71,14 @@ class WPFAQ_Manager_Admin {
 
 		// Fetch my FAQs to sort and return a message if we have none.
 		if ( false === $faqs = WPFAQ_Manager_Data::get_admin_faqs() ) {
-			return '<p>' . __( 'You have no FAQs to sort.', 'wordpress-faq-manager' ) . '</p>';
+			return '<p>' . __( 'You have no FAQs to sort.', 'wp-faq-manager' ) . '</p>';
 		}
 
 		// Set an empty.
 		$build  = '';
 
 		// Set the message about where this works.
-		$build .= '<p>' . __( '<strong>Note:</strong> this only affects the FAQs listed using the shortcode functions', 'wordpress-faq-manager' ) . '</p>';
+		$build .= '<p>' . __( '<strong>Note:</strong> this only affects the FAQs listed using the shortcode functions', 'wp-faq-manager' ) . '</p>';
 
 		// Now open this with a div.
 		$build .= '<div class="faq-sort-list">';
@@ -218,12 +218,12 @@ class WPFAQ_Manager_Admin {
 
 			case 'update-sort' :
 
-				$text   = __( 'FAQ sort order has been saved.', 'wordpress-faq-manager' );
+				$text   = __( 'FAQ sort order has been saved.', 'wp-faq-manager' );
 				break;
 
 			case 'error-sort' :
 
-				$text   = __( 'There was an error saving the sort order. Please try again later.', 'wordpress-faq-manager' );
+				$text   = __( 'There was an error saving the sort order. Please try again later.', 'wp-faq-manager' );
 				break;
 		}
 
@@ -335,7 +335,7 @@ class WPFAQ_Manager_Admin {
 		if ( $file === WPFAQ_BASE ) {
 
 			// Our instruction links.
-			$instruct   = '<a href="' . admin_url( 'edit.php?post_type=question&page=instructions' ) . '">' . __( 'How-To', 'wordpress-faq-manager' ) . '</a>';
+			$instruct   = '<a href="' . admin_url( 'edit.php?post_type=question&page=instructions' ) . '">' . __( 'How-To', 'wp-faq-manager' ) . '</a>';
 
 			// Add them all into the array.
 			array_push( $links, $instruct );
@@ -378,7 +378,7 @@ class WPFAQ_Manager_Admin {
 	 * @return string $title  The updated title.
 	 */
 	public function title_text( $title ){
-		return false !== WPFAQ_Manager_Helper::check_current_screen() ? __( 'Enter question title here', 'wordpress-faq-manager' ) : $title;
+		return false !== WPFAQ_Manager_Helper::check_current_screen() ? __( 'Enter question title here', 'wp-faq-manager' ) : $title;
 	}
 
 	/**
@@ -391,44 +391,44 @@ class WPFAQ_Manager_Admin {
 
         <div id="faq-admin-instructions" class="wrap faq-admin-page-wrap faq-admin-instructions-wrap">
 
-        	<h1><?php _e( 'FAQ Manager Instructions', 'wordpress-faq-manager' ); ?></h1>
+        	<h1><?php _e( 'FAQ Manager Instructions', 'wp-faq-manager' ); ?></h1>
 
 			<div class="faqinfo-intro-content">
 
-				<p><?php _e( 'The FAQ Manager plugin uses a combination of a custom post type and custom taxonomies.', 'wordpress-faq-manager' ); ?></p>
+				<p><?php _e( 'The FAQ Manager plugin uses a combination of a custom post type and custom taxonomies.', 'wp-faq-manager' ); ?></p>
 
-				<p><?php _e( 'The plugin will automatically create single posts using your existing permalink structure, and the FAQ topics and tags can be added to your menu using the WP Menu Manager.', 'wordpress-faq-manager' ); ?></p>
+				<p><?php _e( 'The plugin will automatically create single posts using your existing permalink structure, and the FAQ topics and tags can be added to your menu using the WP Menu Manager.', 'wp-faq-manager' ); ?></p>
 
-				<h4 class="faqinfo-callout"><span class="dashicons dashicons-megaphone faqinfo-dashicon"></span><?php _e( 'Questions? Issues? Bugs?', 'wordpress-faq-manager' ); ?> <a href="https://github.com/norcross/wordpress-faq-manager/issues" target="_blank" title="<?php _e( 'WordPress FAQ Manager on GitHub', 'wordpress-faq-manager' ); ?>"><?php _e( 'Please report them on GitHub', 'wordpress-faq-manager' ); ?></a>.</h4>
+				<h4 class="faqinfo-callout"><span class="dashicons dashicons-megaphone faqinfo-dashicon"></span><?php _e( 'Questions? Issues? Bugs?', 'wp-faq-manager' ); ?> <a href="https://github.com/curtismchale/wp-faq-manager/issues" target="_blank" title="<?php _e( 'WordPress FAQ Manager on GitHub', 'wp-faq-manager' ); ?>"><?php _e( 'Please report them on GitHub', 'wp-faq-manager' ); ?></a>.</h4>
 			</div>
 
 			<div class="faqinfo-instruction-content">
 
-				<h2 class="title"><?php _e( 'Shortcodes', 'wordpress-faq-manager' ); ?></h2>
+				<h2 class="title"><?php _e( 'Shortcodes', 'wp-faq-manager' ); ?></h2>
 
-				<p><?php _e( 'The plugin also has the option of using shortcodes. To use them, follow the syntax accordingly in the HTML tab:', 'wordpress-faq-manager' ); ?></p>
+				<p><?php _e( 'The plugin also has the option of using shortcodes. To use them, follow the syntax accordingly in the HTML tab:', 'wp-faq-manager' ); ?></p>
 
 				<ul class="faqinfo-list">
 
-					<li class="faqinfo-strong"><?php _e( 'For the complete list (including title and content):', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-strong"><?php _e( 'For the complete list (including title and content):', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-code"><?php _e( 'place <code>[faq]</code> on a post / page', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-code"><?php _e( 'place <code>[faq]</code> on a post / page', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-strong"><?php _e( 'For the question title, and a link to the FAQ on a separate page:', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-strong"><?php _e( 'For the question title, and a link to the FAQ on a separate page:', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-code"><?php _e( 'place <code>[faqlist]</code> on a post / page', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-code"><?php _e( 'place <code>[faqlist]</code> on a post / page', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-strong"><?php _e( 'For a list with a group of titles that link to complete content later in page:', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-strong"><?php _e( 'For a list with a group of titles that link to complete content later in page:', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-code"><?php _e( 'place <code>[faqcombo]</code> on a post / page', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-code"><?php _e( 'place <code>[faqcombo]</code> on a post / page', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-strong"><?php _e( 'For a list of taxonomy titles that link to the related archive page:', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-strong"><?php _e( 'For a list of taxonomy titles that link to the related archive page:', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-code"><?php _e( 'place <code>[faqtaxlist type="topics"]</code> or <code>[faqtaxlist type="tags"]</code> on a post / page', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-code"><?php _e( 'place <code>[faqtaxlist type="topics"]</code> or <code>[faqtaxlist type="tags"]</code> on a post / page', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-code"><?php _e( 'Show optional description: <code>[faqtaxlist type="topics" desc="true"]</code>', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-code"><?php _e( 'Show optional description: <code>[faqtaxlist type="topics" desc="true"]</code>', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-details"><?php _e( '<strong>Please note:</strong> the combo and taxonomy list shortcodes will not recognize the pagination and expand / collapse', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-details"><?php _e( '<strong>Please note:</strong> the combo and taxonomy list shortcodes will not recognize the pagination and expand / collapse', 'wp-faq-manager' ); ?></li>
 
 				</ul>
 
@@ -436,47 +436,47 @@ class WPFAQ_Manager_Admin {
 
 			<div class="faqinfo-instruction-content">
 
-				<h2 class="title"><?php _e( 'The following options apply to all the <code>shortcode</code> types', 'wordpress-faq-manager' ); ?></h2>
+				<h2 class="title"><?php _e( 'The following options apply to all the <code>shortcode</code> types', 'wp-faq-manager' ); ?></h2>
 
-				<p><?php _e( 'The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).', 'wordpress-faq-manager' ); ?></p>
+				<p><?php _e( 'The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).', 'wp-faq-manager' ); ?></p>
 
 				<ul class="faqinfo-list">
 
-					<li class="faqinfo-strong"><?php _e( 'To display only 5:', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-strong"><?php _e( 'To display only 5:', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-code"><?php _e( 'place <code>[faq limit="5"]</code> on a post / page', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-code"><?php _e( 'place <code>[faq limit="5"]</code> on a post / page', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-strong"><?php _e( 'To display ALL:', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-strong"><?php _e( 'To display ALL:', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-code"><?php _e( 'place <code>[faq limit="-1"]</code> on a post / page', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-code"><?php _e( 'place <code>[faq limit="-1"]</code> on a post / page', 'wp-faq-manager' ); ?></li>
 
 				</ul>
 
 				<ul class="faqinfo-list">
 
-					<li class="faqinfo-strong"><?php _e( 'For a single FAQ:', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-strong"><?php _e( 'For a single FAQ:', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-code"><?php _e( 'place <code>[faq faq_id="ID"]</code> on a post / page', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-code"><?php _e( 'place <code>[faq faq_id="ID"]</code> on a post / page', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-strong"><?php _e( 'List all from a single FAQ topic category:', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-strong"><?php _e( 'List all from a single FAQ topic category:', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-code"><?php _e( 'place <code>[faq faq_topic="topic-slug"]</code> on a post / page', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-code"><?php _e( 'place <code>[faq faq_topic="topic-slug"]</code> on a post / page', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-strong"><?php _e( 'List all from multiple FAQ topic categories:', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-strong"><?php _e( 'List all from multiple FAQ topic categories:', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-code"><?php _e( 'place <code>[faq faq_topic="topic-slug-1, topic-slug-2"]</code> on a post / page', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-code"><?php _e( 'place <code>[faq faq_topic="topic-slug-1, topic-slug-2"]</code> on a post / page', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-strong"><?php _e( 'List all from a single FAQ tag:', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-strong"><?php _e( 'List all from a single FAQ tag:', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-code"><?php _e( 'place <code>[faq faq_tag="tag-slug"]</code> on a post / page', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-code"><?php _e( 'place <code>[faq faq_tag="tag-slug"]</code> on a post / page', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-strong"><?php _e( 'List all from multiple FAQ tags:', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-strong"><?php _e( 'List all from multiple FAQ tags:', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-code"><?php _e( 'place <code>[faq faq_tag="tag-slug-1, tag-slug-2"]</code> on a post / page', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-code"><?php _e( 'place <code>[faq faq_tag="tag-slug-1, tag-slug-2"]</code> on a post / page', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-strong"><?php _e( 'List all from both FAQ topcis and FAQ tags:', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-strong"><?php _e( 'List all from both FAQ topcis and FAQ tags:', 'wp-faq-manager' ); ?></li>
 
-					<li class="faqinfo-code"><?php _e( 'place <code>[faq faq_topic="topic-slug-1" faq_tag="tag-slug-2"]</code> on a post / page', 'wordpress-faq-manager' ); ?></li>
+					<li class="faqinfo-code"><?php _e( 'place <code>[faq faq_topic="topic-slug-1" faq_tag="tag-slug-2"]</code> on a post / page', 'wp-faq-manager' ); ?></li>
 				</ul>
 
 			</div>

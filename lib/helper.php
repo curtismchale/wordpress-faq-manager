@@ -4,7 +4,7 @@
  *
  * Various helper functions, etc.
  *
- * @package WordPress FAQ Manager
+ * @package WP FAQ Manager
  */
 
 /**

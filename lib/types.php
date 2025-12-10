@@ -4,7 +4,7 @@
  *
  * Contains custom post types, taxonomies, and related functions
  *
- * @package WordPress FAQ Manager
+ * @package WP FAQ Manager
  */
 
 /**
@@ -32,18 +32,18 @@ class WPFAQ_Manager_Types {
 
 		// Set my labels first.
 		$labels = array(
-			'name'                => __( 'FAQs', 'wordpress-faq-manager' ),
-			'singular_name'       => __( 'FAQ', 'wordpress-faq-manager' ),
-			'add_new'             => __( 'Add New FAQ', 'wordpress-faq-manager' ),
-			'add_new_item'        => __( 'Add New FAQ', 'wordpress-faq-manager' ),
-			'edit'                => __( 'Edit', 'wordpress-faq-manager' ),
-			'edit_item'           => __( 'Edit FAQ', 'wordpress-faq-manager' ),
-			'new_item'            => __( 'New FAQ', 'wordpress-faq-manager' ),
-			'view'                => __( 'View FAQ', 'wordpress-faq-manager' ),
-			'view_item'           => __( 'View FAQ', 'wordpress-faq-manager' ),
-			'search_items'        => __( 'Search FAQ', 'wordpress-faq-manager' ),
-			'not_found'           => __( 'No FAQs found', 'wordpress-faq-manager' ),
-			'not_found_in_trash'  => __( 'No FAQs found in Trash', 'wordpress-faq-manager' ),
+			'name'                => __( 'FAQs', 'wp-faq-manager' ),
+			'singular_name'       => __( 'FAQ', 'wp-faq-manager' ),
+			'add_new'             => __( 'Add New FAQ', 'wp-faq-manager' ),
+			'add_new_item'        => __( 'Add New FAQ', 'wp-faq-manager' ),
+			'edit'                => __( 'Edit', 'wp-faq-manager' ),
+			'edit_item'           => __( 'Edit FAQ', 'wp-faq-manager' ),
+			'new_item'            => __( 'New FAQ', 'wp-faq-manager' ),
+			'view'                => __( 'View FAQ', 'wp-faq-manager' ),
+			'view_item'           => __( 'View FAQ', 'wp-faq-manager' ),
+			'search_items'        => __( 'Search FAQ', 'wp-faq-manager' ),
+			'not_found'           => __( 'No FAQs found', 'wp-faq-manager' ),
+			'not_found_in_trash'  => __( 'No FAQs found in Trash', 'wp-faq-manager' ),
 		);
 
 		// Set the labels with their filter.
@@ -98,17 +98,17 @@ class WPFAQ_Manager_Types {
 
 		// Set my labels first.
 		$labels = array(
-			'name'              => __( 'FAQ Topics', 'wordpress-faq-manager' ),
-			'singular_name'     => __( 'FAQ Topic', 'wordpress-faq-manager' ),
-			'search_items'      => __( 'Search FAQ Topics', 'wordpress-faq-manager' ),
-			'popular_items'     => __( 'Popular FAQ Topics', 'wordpress-faq-manager' ),
-			'all_items'         => __( 'All FAQ Topics', 'wordpress-faq-manager' ),
-			'parent_item'       => __( 'Parent FAQ Topic', 'wordpress-faq-manager' ),
-			'parent_item_colon' => __( 'Parent FAQ Topic:', 'wordpress-faq-manager' ),
-			'edit_item'         => __( 'Edit FAQ Topics', 'wordpress-faq-manager' ),
-			'update_item'       => __( 'Update FAQ Topics', 'wordpress-faq-manager' ),
-			'add_new_item'      => __( 'Add New FAQ Topic', 'wordpress-faq-manager' ),
-			'new_item_name'     => __( 'New FAQ Topics', 'wordpress-faq-manager' ),
+			'name'              => __( 'FAQ Topics', 'wp-faq-manager' ),
+			'singular_name'     => __( 'FAQ Topic', 'wp-faq-manager' ),
+			'search_items'      => __( 'Search FAQ Topics', 'wp-faq-manager' ),
+			'popular_items'     => __( 'Popular FAQ Topics', 'wp-faq-manager' ),
+			'all_items'         => __( 'All FAQ Topics', 'wp-faq-manager' ),
+			'parent_item'       => __( 'Parent FAQ Topic', 'wp-faq-manager' ),
+			'parent_item_colon' => __( 'Parent FAQ Topic:', 'wp-faq-manager' ),
+			'edit_item'         => __( 'Edit FAQ Topics', 'wp-faq-manager' ),
+			'update_item'       => __( 'Update FAQ Topics', 'wp-faq-manager' ),
+			'add_new_item'      => __( 'Add New FAQ Topic', 'wp-faq-manager' ),
+			'new_item_name'     => __( 'New FAQ Topics', 'wp-faq-manager' ),
 		);
 
 		// Set the labels with their filter.
@@ -156,22 +156,22 @@ class WPFAQ_Manager_Types {
 
 		// Set my labels first.
 		$labels = array(
-			'name'                       => _x( 'FAQ Tags', 'wordpress-faq-manager' ),
-			'singular_name'              => _x( 'FAQ Tag', 'wordpress-faq-manager' ),
-			'search_items'               => __( 'Search FAQ Tags', 'wordpress-faq-manager' ),
-			'popular_items'              => __( 'Popular FAQ Tags', 'wordpress-faq-manager' ),
-			'all_items'                  => __( 'All FAQ Tags', 'wordpress-faq-manager' ),
+			'name'                       => _x( 'FAQ Tags', 'wp-faq-manager' ),
+			'singular_name'              => _x( 'FAQ Tag', 'wp-faq-manager' ),
+			'search_items'               => __( 'Search FAQ Tags', 'wp-faq-manager' ),
+			'popular_items'              => __( 'Popular FAQ Tags', 'wp-faq-manager' ),
+			'all_items'                  => __( 'All FAQ Tags', 'wp-faq-manager' ),
 			'parent_item'                => null,
 			'parent_item_colon'          => null,
-			'edit_item'                  => __( 'Edit FAQ Tag', 'wordpress-faq-manager' ),
-			'update_item'                => __( 'Update FAQ Tag', 'wordpress-faq-manager' ),
-			'add_new_item'               => __( 'Add New FAQ Tag', 'wordpress-faq-manager' ),
-			'new_item_name'              => __( 'New FAQ Tag Name', 'wordpress-faq-manager' ),
-			'separate_items_with_commas' => __( 'Separate FAQ tags with commas', 'wordpress-faq-manager' ),
-			'add_or_remove_items'        => __( 'Add or remove FAQ tags', 'wordpress-faq-manager' ),
-			'choose_from_most_used'      => __( 'Choose from the most used FAQ tags', 'wordpress-faq-manager' ),
-			'not_found'                  => __( 'No FAQ tags found.', 'wordpress-faq-manager' ),
-			'menu_name'                  => __( 'FAQ Tags', 'wordpress-faq-manager' ),
+			'edit_item'                  => __( 'Edit FAQ Tag', 'wp-faq-manager' ),
+			'update_item'                => __( 'Update FAQ Tag', 'wp-faq-manager' ),
+			'add_new_item'               => __( 'Add New FAQ Tag', 'wp-faq-manager' ),
+			'new_item_name'              => __( 'New FAQ Tag Name', 'wp-faq-manager' ),
+			'separate_items_with_commas' => __( 'Separate FAQ tags with commas', 'wp-faq-manager' ),
+			'add_or_remove_items'        => __( 'Add or remove FAQ tags', 'wp-faq-manager' ),
+			'choose_from_most_used'      => __( 'Choose from the most used FAQ tags', 'wp-faq-manager' ),
+			'not_found'                  => __( 'No FAQ tags found.', 'wp-faq-manager' ),
+			'menu_name'                  => __( 'FAQ Tags', 'wp-faq-manager' ),
 		);
 
 		// Set the labels with their filter.
