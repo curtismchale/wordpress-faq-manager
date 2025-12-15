@@ -98,6 +98,13 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 
 ## Changelog ##
 
+### 2.0.3 ###
+
+* updated Tested version
+* fixing direct file access
+* removed wpfaq_taxlist_shortcode_args filter as it was used in a deprecated way with get_terms
+* fixed internationalizaton strings
+
 ### 2.0.2 ###
 
 * fixed a bug where the rest route location changed so we defined the old way
