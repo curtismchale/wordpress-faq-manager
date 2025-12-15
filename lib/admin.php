@@ -113,43 +113,50 @@ class WPFAQ_Manager_Admin {
      */
     public function save_faq_sort() {
 
-        // Only run on admin.
-        if ( ! is_admin() ) {
-            die();
+        // Only run if doing ajax
+        if ( ! wp_doing_ajax() ) {
+            wp_die(1);
         }
 
-        // Make sure we have our nonce.
-        if ( empty( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpfaq_sort_nonce' ) ) {
-            die(1);
+        if (!current_user_can('edit_posts')){
+            wp_die(1);
+        }
+
+        // Make sure we have our nonce (unslash + sanitize before verify).
+        if (! isset($_POST['nonce'])) {
+            wp_die(1);
+        }
+
+        $nonce = sanitize_text_field( wp_unslash( $_POST['nonce'] ) );
+
+        if (! wp_verify_nonce($nonce, 'wpfaq_sort_nonce')) {
+            wp_die(1);
         }
 
         // Bail if the FAQ order hasn't been passed.
-        if ( empty( $_POST['order'] ) ) {
-            die(1);
+        if (empty($_POST['order'])) {
+            wp_die(1);
         }
 
         // Call the WordPress database class.
         global $wpdb;
 
-        // Create an array of items.
-        $items  = explode( ',', $_POST['order'] );
+        // Sanitize order string before explode.
+        $order = sanitize_text_field(wp_unslash($_POST['order']));
+        $items = array_filter(array_map('absint', explode(',', $order)));
 
         // Set a counter.
         $count  = 0;
 
         // Loop the items passed.
         foreach ( $items as $item_id ) {
-
-            $wpdb->update( $wpdb->posts,
-                array(
-                    'menu_order' => absint( $count )
-                ),
-                array(
-                    'ID' => absint( $item_id )
-                )
+            $wpdb->update(
+                $wpdb->posts,
+                array( 'menu_order' => $count ),
+                array( 'ID' => $item_id ),
+                array( '%d' ),
+                array( '%d' )
             );
-
-            // Increment the counter.
             $count++;
         }
 
@@ -157,7 +164,7 @@ class WPFAQ_Manager_Admin {
         delete_transient( 'wpfaq_admin_fetch_faqs' );
 
         // And die.
-        die(1);
+        wp_die(1);
     }
 
     /**
