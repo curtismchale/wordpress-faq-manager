@@ -14,6 +14,8 @@
  * GitHub Plugin URI: https://github.com/curtismchale/wordpress-faq-manager
  */
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 // Define our base file.
 if( ! defined( 'WPFAQ_BASE' ) ) {
 	define( 'WPFAQ_BASE', plugin_basename( __FILE__ ) );

@@ -7,6 +7,8 @@
  * @package WP FAQ Manager
  */
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 /**
  * Start our engines.
  */
@@ -277,11 +279,8 @@ class WPFAQ_Manager_Data {
      */
     public static function get_tax_shortcode_terms( $term = '' ) {
 
-        // Filter the available args.
-        $args    = apply_filters( 'wpfaq_taxlist_shortcode_args', array( 'hide_empty' => false ), $term );
-
         // Fetch my terms.
-        $terms   = get_terms( array( $term ), $args );
+        $terms   = get_terms( array( $term ) );
 
         // Return the terms if we have them, or false.
         return empty( $terms ) || is_wp_error( $terms ) ? false : $terms;

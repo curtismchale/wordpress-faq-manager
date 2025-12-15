@@ -7,6 +7,8 @@
  * @package WordPress FAQ Manager
  */
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+
 /**
  * Start our engines.
  */
