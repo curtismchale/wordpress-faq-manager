@@ -125,16 +125,16 @@ class Search_FAQ_Widget extends WP_Widget
 		echo '<form role="search" method="get" class="search-form" id="faq-search" action="' . esc_url(home_url('/')) . '">';
 
 		echo '<label>';
-		echo '<span class="screen-reader-text">' . __('Search FAQs for:', 'wp-faq-manager') . '</span>';
-		echo '<input type="search" class="search-field" placeholder="' . __('Search FAQs &hellip;', 'wp-faq-manager') . '" value="' . get_search_query() . '" name="s" />';
+		echo '<span class="screen-reader-text">' . esc_html__('Search FAQs for:', 'wp-faq-manager') . '</span>';
+		echo '<input type="search" class="search-field" placeholder="' . esc_html__('Search FAQs &hellip;', 'wp-faq-manager') . '" value="' . esc_attr(get_search_query()) . '" name="s" />';
 		echo '</label>';
-		echo '<input type="submit" class="search-submit" value="' . esc_attr_x('Search', 'submit button') . '" />';
+		echo '<input type="submit" class="search-submit" value="' . esc_attr_x('Search', 'submit button', 'wp-faq-manager') . '" />';
 		echo '<input type="hidden" name="post_type" value="question" />';
 
 		echo '</form>';
 
 		// Output the closing widget markup.
-		echo $args['after_widget'];
+		echo wp_kses_post($args['after_widget']);
 	}
 
 	/**
