@@ -112,7 +112,7 @@ class Search_FAQ_Widget extends WP_Widget
 		$title  = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
 
 		// Output the opening widget markup.
-		echo $args['before_widget'];
+		echo wp_kses_post($args['before_widget']);
 
 		// Output the title (if we have one).
 		if (! empty($title)) {
@@ -126,7 +126,7 @@ class Search_FAQ_Widget extends WP_Widget
 
 		echo '<label>';
 		echo '<span class="screen-reader-text">' . esc_html__('Search FAQs for:', 'wp-faq-manager') . '</span>';
-		echo '<input type="search" class="search-field" placeholder="' . esc_html__('Search FAQs &hellip;', 'wp-faq-manager') . '" value="' . esc_attr(get_search_query()) . '" name="s" />';
+		echo '<input type="search" class="search-field" placeholder="' . esc_attr__('Search FAQs &hellip;', 'wp-faq-manager') . '" value="' . esc_attr(get_search_query()) . '" name="s" />';
 		echo '</label>';
 		echo '<input type="submit" class="search-submit" value="' . esc_attr_x('Search', 'submit button', 'wp-faq-manager') . '" />';
 		echo '<input type="hidden" name="post_type" value="question" />';
@@ -152,7 +152,9 @@ class Search_FAQ_Widget extends WP_Widget
 		$instance = $old_instance;
 
 		// Set our title to be sanitized.
-		$instance['title']  = sanitize_text_field($new_instance['title']);
+		$instance['title'] = isset($new_instance['title'])
+			? sanitize_text_field(wp_unslash($new_instance['title']))
+			: '';
 
 		// Return the instance.
 		return $instance;
@@ -174,11 +176,11 @@ class Search_FAQ_Widget extends WP_Widget
 		));
 
 		// Now set the value for each item in the array.
-		$title  = $instance['title'];
+		$title = isset($instance['title']) ? $instance['title'] : '';
 ?>
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title:', 'wp-faq-manager'); ?></label>-
-			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
+			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'wp-faq-manager'); ?></label>
+			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
 		</p>
 
 	<?php
@@ -231,11 +233,13 @@ class Random_FAQ_Widget extends WP_Widget
 		$more   = empty($instance['more']) ? __('See the entire answer', 'wp-faq-manager') : $instance['more'];
 
 		// Output the opening widget markup.
-		echo $args['before_widget'];
+		echo wp_kses_post($args['before_widget']);
 
 		// Output the title (if we have one).
 		if (! empty($title)) {
-			echo $args['before_title'] . $title . $args['after_title'];
+			echo wp_kses_post($args['before_title'])
+				. esc_html($title)
+				. wp_kses_post($args['after_title']);
 		}
 
 		// Loop the FAQs we have.
@@ -252,12 +256,12 @@ class Random_FAQ_Widget extends WP_Widget
 			echo '<div class="faq-random-single">';
 
 			// Output the title of the individual FAQ.
-			if (! empty($faq->post_title)) {
+			if (! empty($stitle)) {
 				echo '<h5 class="faq-widget-title">' . esc_html($stitle) . '</h5>';
 			}
 
 			// Output the text.
-			echo wpautop($text);
+			echo wp_kses_post(wpautop($text));
 
 			// Output the "read more" portion.
 			echo '<p class="faq-single-random-read-more">';
@@ -269,7 +273,7 @@ class Random_FAQ_Widget extends WP_Widget
 		}
 
 		// Output the closing widget markup.
-		echo $args['after_widget'];
+		echo wp_kses_post($args['after_widget']);
 	}
 
 	/**
@@ -283,19 +287,21 @@ class Random_FAQ_Widget extends WP_Widget
 	public function update($new_instance, $old_instance)
 	{
 
-		// Set our instance variable as the existing data.
 		$instance = $old_instance;
 
-		// Set our values to be sanitized.
-		$instance['title']  = sanitize_text_field($new_instance['title']);
-		$instance['more']   = sanitize_text_field($new_instance['more']);
-		$instance['chars']  = absint($new_instance['chars']);
-		$instance['count']  = absint($new_instance['count']);
+		$instance['title'] = isset($new_instance['title'])
+			? sanitize_text_field(wp_unslash($new_instance['title']))
+			: '';
 
-		// Delete our transient.
+		$instance['more'] = isset($new_instance['more'])
+			? sanitize_text_field(wp_unslash($new_instance['more']))
+			: '';
+
+		$instance['chars'] = isset($new_instance['chars']) ? absint($new_instance['chars']) : 0;
+		$instance['count'] = isset($new_instance['count']) ? absint($new_instance['count']) : 1;
+
 		delete_transient('wpfaq_widget_fetch_random');
 
-		// Return the instance.
 		return $instance;
 	}
 
@@ -324,24 +330,24 @@ class Random_FAQ_Widget extends WP_Widget
 		$count  = $instance['count'];
 	?>
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title:', 'wp-faq-manager'); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
+			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'wp-faq-manager'); ?></label>
+			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('more'); ?>"><?php _e('"See More" text:', 'wp-faq-manager'); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('more'); ?>" name="<?php echo $this->get_field_name('more'); ?>" type="text" value="<?php echo esc_attr($more); ?>" />
+			<label for="<?php echo esc_attr($this->get_field_id('more')); ?>"><?php esc_html_e('"See More" text:', 'wp-faq-manager'); ?></label>
+			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('more')); ?>" name="<?php echo esc_attr($this->get_field_name('more')); ?>" type="text" value="<?php echo esc_attr($more); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('chars'); ?>"><?php _e('Character Count:', 'wp-faq-manager'); ?></label>
-			<input class="small-text" id="<?php echo $this->get_field_id('chars'); ?>" name="<?php echo $this->get_field_name('chars'); ?>" type="text" value="<?php echo esc_attr($chars); ?>" /><br>
-			<span class="description"><?php echo esc_html('Enter the amount of characters to display. Use zero to show all.'); ?></span>
+			<label for="<?php echo esc_attr($this->get_field_id('chars')); ?>"><?php esc_html_e('Character Count:', 'wp-faq-manager'); ?></label>
+			<input class="small-text" id="<?php echo esc_attr($this->get_field_id('chars')); ?>" name="<?php echo esc_attr($this->get_field_name('chars')); ?>" type="number" value="<?php echo esc_attr($chars); ?>" /><br>
+			<span class="description"><?php esc_html_e('Enter the amount of characters to display. Use zero to show all.', 'wp-faq-manager'); ?></span>
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('count'); ?>"><?php _e('Post Count:', 'wp-faq-manager'); ?></label>
-			<input class="small-text" id="<?php echo $this->get_field_id('count'); ?>" name="<?php echo $this->get_field_name('count'); ?>" type="text" value="<?php echo esc_attr($count); ?>" />
+			<label for="<?php echo esc_attr($this->get_field_id('count')); ?>"><?php esc_html_e('Post Count:', 'wp-faq-manager'); ?></label>
+			<input class="small-text" id="<?php echo esc_attr($this->get_field_id('count')); ?>" name="<?php echo esc_attr($this->get_field_name('count')); ?>" type="text" value="<?php echo esc_attr($count); ?>" />
 		</p>
 
 	<?php
@@ -393,12 +399,15 @@ class Recent_FAQ_Widget extends WP_Widget
 		$title  = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
 
 		// Output the opening widget markup.
-		echo $args['before_widget'];
+		echo wp_kses_post($args['before_widget']);
 
 		// Output the title (if we have one).
 		if (! empty($title)) {
-			echo $args['before_title'] . $title . $args['after_title'];
+			echo wp_kses_post($args['before_title'])
+				. esc_html($title)
+				. wp_kses_post($args['after_title']);
 		}
+
 
 		// Set a div around the list
 		echo '<div class="faq-recent-list">';
@@ -413,7 +422,7 @@ class Recent_FAQ_Widget extends WP_Widget
 
 			// Output the actual list item.
 			echo '<li>';
-			echo '<a href="' . esc_url($link) . '" title=" ' . esc_attr($stitle) . '">' . esc_html($stitle) . '</a>';
+			echo '<a href="' . esc_url($link) . '" title="' . esc_attr($stitle) . '">' . esc_html($stitle) . '</a>';
 			echo '</li>';
 		}
 
@@ -422,7 +431,7 @@ class Recent_FAQ_Widget extends WP_Widget
 		echo '</div>';
 
 		// Output the closing widget markup.
-		echo $args['after_widget'];
+		echo wp_kses_post($args['after_widget']);
 	}
 
 	/**
@@ -436,19 +445,19 @@ class Recent_FAQ_Widget extends WP_Widget
 	public function update($new_instance, $old_instance)
 	{
 
-		// Set our instance variable as the existing data.
 		$instance = $old_instance;
 
-		// Set our values to be sanitized.
-		$instance['title']  = sanitize_text_field($new_instance['title']);
-		$instance['count']  = absint($new_instance['count']);
+		$instance['title'] = isset($new_instance['title'])
+			? sanitize_text_field(wp_unslash($new_instance['title']))
+			: '';
 
-		// Delete our transient.
+		$instance['count'] = isset($new_instance['count']) ? absint($new_instance['count']) : 1;
+
 		delete_transient('wpfaq_widget_fetch_recent');
 
-		// Return the instance.
 		return $instance;
 	}
+
 
 	/**
 	 * The widget settings form.
@@ -467,17 +476,18 @@ class Recent_FAQ_Widget extends WP_Widget
 		));
 
 		// Now set the value for each item in the array.
-		$title  = $instance['title'];
-		$count  = $instance['count'];
+		$title = isset($instance['title']) ? $instance['title'] : '';
+		$count = isset($instance['count']) ? $instance['count'] : 5;
+
 	?>
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title:', 'wp-faq-manager'); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
+			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'wp-faq-manager'); ?></label>
+			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('count'); ?>"><?php _e('Post Count:', 'wp-faq-manager'); ?></label>
-			<input class="small-text" id="<?php echo $this->get_field_id('count'); ?>" name="<?php echo $this->get_field_name('count'); ?>" type="text" value="<?php echo esc_attr($count); ?>" />
+			<label for="<?php echo esc_attr($this->get_field_id('count')); ?>"><?php esc_html_e('Post Count:', 'wp-faq-manager'); ?></label>
+			<input class="small-text" min="0" step="1" id="<?php echo esc_attr($this->get_field_id('count')); ?>" name="<?php echo esc_attr($this->get_field_name('count')); ?>" type="number" value="<?php echo esc_attr($count); ?>" />
 		</p>
 
 	<?php
@@ -518,17 +528,24 @@ class Topics_FAQ_Widget extends WP_Widget
 	{
 
 		// Make sure we have a taxonomy.
-		$tax    = empty($instance['tax']) ? 'faq-topic' : esc_attr($instance['tax']);
+		$tax = empty($instance['tax']) ? 'faq-topic' : sanitize_key($instance['tax']);
+
+		$allowed = array('faq-topic', 'faq-tags'); // whatever your plugin registers
+		if (! in_array($tax, $allowed, true)) {
+			$tax = 'faq-topic';
+		}
 
 		// Check for a title, then wrap the filter around it.
 		$title  = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
 
 		// Output the opening widget markup.
-		echo $args['before_widget'];
+		echo wp_kses_post($args['before_widget']);
 
 		// Output the title (if we have one).
 		if (! empty($title)) {
-			echo $args['before_title'] . $title . $args['after_title'];
+			echo wp_kses_post($args['before_title'])
+				. esc_html($title)
+				. wp_kses_post($args['after_title']);
 		}
 
 		// Set a div around the list.
@@ -555,7 +572,7 @@ class Topics_FAQ_Widget extends WP_Widget
 		echo '</div>';
 
 		// Output the closing widget markup.
-		echo $args['after_widget'];
+		echo wp_kses_post($args['after_widget']);
 	}
 
 	/**
@@ -566,17 +583,26 @@ class Topics_FAQ_Widget extends WP_Widget
 	 *
 	 * @return array instance       The data being stored.
 	 */
+
 	public function update($new_instance, $old_instance)
 	{
 
-		// Set our instance variable as the existing data.
 		$instance = $old_instance;
 
-		// Set our values to be sanitized.
-		$instance['title']  = sanitize_text_field($new_instance['title']);
-		$instance['tax']    = sanitize_text_field($new_instance['tax']);
+		$instance['title'] = isset($new_instance['title'])
+			? sanitize_text_field(wp_unslash($new_instance['title']))
+			: '';
 
-		// Return the instance.
+		// Taxonomy slug: sanitize as a key and validate against known values.
+		$tax = isset($new_instance['tax']) ? sanitize_key(wp_unslash($new_instance['tax'])) : 'faq-topic';
+
+		$allowed = array('faq-topic', 'faq-tags'); // adjust to whatever you support
+		if (! in_array($tax, $allowed, true)) {
+			$tax = 'faq-topic';
+		}
+
+		$instance['tax'] = $tax;
+
 		return $instance;
 	}
 
@@ -597,19 +623,20 @@ class Topics_FAQ_Widget extends WP_Widget
 		));
 
 		// Now set the value for each item in the array.
-		$title  = $instance['title'];
-		$tax    = $instance['tax'];
+		$title = isset($instance['title']) ? $instance['title'] : '';
+		$tax   = isset($instance['tax']) ? $instance['tax'] : 'faq-topic';
+
 	?>
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title:', 'wp-faq-manager'); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
+			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'wp-faq-manager'); ?></label>
+			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo $this->get_field_id('count'); ?>"><?php _e('Taxonomy:', 'wp-faq-managar'); ?></label>
-			<select name="<?php echo $this->get_field_name('tax'); ?>" id="<?php echo $this->get_field_id('tax'); ?>" class="widefat">
-				<option value="faq-topic" <?php selected($tax, 'faq-topic', true); ?>><?php _e('FAQ Topics', 'wp-faq-manager'); ?></option>
-				<option value="faq-tags" <?php selected($tax, 'faq-tags', true); ?>><?php _e('FAQ Tags', 'wp-faq-manager'); ?></option>
+			<label for="<?php echo esc_attr($this->get_field_id('tax')); ?>"><?php esc_html_e('Taxonomy:', 'wp-faq-manager'); ?></label>
+			<select name="<?php echo esc_attr($this->get_field_name('tax')); ?>" id="<?php echo esc_attr($this->get_field_id('tax')); ?>" class="widefat">
+				<option value="faq-topic" <?php selected($tax, 'faq-topic', true); ?>><?php esc_html_e('FAQ Topics', 'wp-faq-manager'); ?></option>
+				<option value="faq-tags" <?php selected($tax, 'faq-tags', true); ?>><?php esc_html_e('FAQ Tags', 'wp-faq-manager'); ?></option>
 			</select>
 		</p>
 
@@ -671,17 +698,22 @@ class Cloud_FAQ_Widget extends WP_Widget
 		$clargs = apply_filters('wpfaq_tax_cloud_widget_args', $clargs);
 
 		// Now add in the taxonomy items.
-		$clargs = wp_parse_args(array('taxonomy' => array($topics, $tags)), $clargs);
+		$clargs = wp_parse_args(
+			array('taxonomy' => array_filter(array($topics, $tags))),
+			$clargs
+		);
 
 		// Check for a title, then wrap the filter around it.
 		$title  = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
 
 		// Output the opening widget markup.
-		echo $args['before_widget'];
+		echo wp_kses_post($args['before_widget']);
 
 		// Output the title (if we have one).
 		if (! empty($title)) {
-			echo $args['before_title'] . $title . $args['after_title'];
+			echo wp_kses_post($args['before_title'])
+				. esc_html($title)
+				. wp_kses_post($args['after_title']);
 		}
 
 		// Set a div around the list.
@@ -694,7 +726,7 @@ class Cloud_FAQ_Widget extends WP_Widget
 		echo '</div>';
 
 		// Output the closing widget markup.
-		echo $args['after_widget'];
+		echo wp_kses_post($args['after_widget']);
 	}
 
 	/**
@@ -705,18 +737,20 @@ class Cloud_FAQ_Widget extends WP_Widget
 	 *
 	 * @return array instance       The data being stored.
 	 */
+
 	public function update($new_instance, $old_instance)
 	{
 
-		// Set our instance variable as the existing data.
 		$instance = $old_instance;
 
-		// Set our values to be sanitized.
-		$instance['title']      = sanitize_text_field($new_instance['title']);
-		$instance['to_include'] = sanitize_text_field($new_instance['to_include']);
-		$instance['ta_include'] = sanitize_text_field($new_instance['ta_include']);
+		$instance['title'] = isset($new_instance['title'])
+			? sanitize_text_field(wp_unslash($new_instance['title']))
+			: '';
 
-		// Return the instance.
+		// Checkboxes: store as 1/0.
+		$instance['to_include'] = ! empty($new_instance['to_include']) ? 1 : 0;
+		$instance['ta_include'] = ! empty($new_instance['ta_include']) ? 1 : 0;
+
 		return $instance;
 	}
 
@@ -743,18 +777,18 @@ class Cloud_FAQ_Widget extends WP_Widget
 		$ta_inc = ! empty($instance['ta_include']) ? 'on' : '';
 	?>
 		<p>
-			<label for="<?php echo $this->get_field_id('title'); ?>"><?php _e('Widget Title:', 'wp-faq-manager'); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id('title'); ?>" name="<?php echo $this->get_field_name('title'); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
+			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'wp-faq-manager'); ?></label>
+			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
 		</p>
 
 		<p>
-			<input class="checkbox" type="checkbox" <?php checked($to_inc, 'on', true) ?> id="<?php echo $this->get_field_id('to_include'); ?>" value="on" name="<?php echo $this->get_field_name('to_include'); ?>" />
-			<label for="<?php echo $this->get_field_id('to_include'); ?>"><?php _e('Include FAQ Topics', 'wp-faq-manager'); ?></label>
+			<input class="checkbox" type="checkbox" <?php checked($to_inc, 'on', true) ?> id="<?php echo esc_attr($this->get_field_id('to_include')); ?>" value="on" name="<?php echo esc_attr($this->get_field_name('to_include')); ?>" />
+			<label for="<?php echo esc_attr($this->get_field_id('to_include')); ?>"><?php esc_html_e('Include FAQ Topics', 'wp-faq-manager'); ?></label>
 		</p>
 
 		<p>
-			<input class="checkbox" type="checkbox" <?php checked($ta_inc, 'on', true) ?> id="<?php echo $this->get_field_id('ta_include'); ?>" value="on" name="<?php echo $this->get_field_name('ta_include'); ?>" />
-			<label for="<?php echo $this->get_field_id('ta_include'); ?>"><?php _e('Include FAQ Tags', 'wp-faq-manager'); ?></label>
+			<input class="checkbox" type="checkbox" <?php checked($ta_inc, 'on', true) ?> id="<?php echo esc_attr($this->get_field_id('ta_include')); ?>" value="on" name="<?php echo esc_attr($this->get_field_name('ta_include')); ?>" />
+			<label for="<?php echo esc_attr($this->get_field_id('ta_include')); ?>"><?php esc_html_e('Include FAQ Tags', 'wp-faq-manager'); ?></label>
 		</p>
 
 <?php
