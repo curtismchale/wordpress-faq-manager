@@ -90,11 +90,11 @@ class Search_FAQ_Widget extends WP_Widget
 		// Set my widget ops.
 		$widget_ops = array(
 			'classname'     => 'faq-search-widget widget_search',
-			'description'   => __('Puts a search box for just FAQs', 'wp-faq-manager'),
+			'description'   => __('Puts a search box for just FAQs', 'easy-faq-manager'),
 		);
 
 		// Set my parent construct.
-		parent::__construct('faq_search', __('FAQ Widget - Search', 'wp-faq-manager'), $widget_ops);
+		parent::__construct('faq_search', __('FAQ Widget - Search', 'easy-faq-manager'), $widget_ops);
 	}
 
 	/**
@@ -125,10 +125,10 @@ class Search_FAQ_Widget extends WP_Widget
 		echo '<form role="search" method="get" class="search-form" id="faq-search" action="' . esc_url(home_url('/')) . '">';
 
 		echo '<label>';
-		echo '<span class="screen-reader-text">' . esc_html__('Search FAQs for:', 'wp-faq-manager') . '</span>';
-		echo '<input type="search" class="search-field" placeholder="' . esc_attr__('Search FAQs &hellip;', 'wp-faq-manager') . '" value="' . esc_attr(get_search_query()) . '" name="s" />';
+		echo '<span class="screen-reader-text">' . esc_html__('Search FAQs for:', 'easy-faq-manager') . '</span>';
+		echo '<input type="search" class="search-field" placeholder="' . esc_attr__('Search FAQs &hellip;', 'easy-faq-manager') . '" value="' . esc_attr(get_search_query()) . '" name="s" />';
 		echo '</label>';
-		echo '<input type="submit" class="search-submit" value="' . esc_attr_x('Search', 'submit button', 'wp-faq-manager') . '" />';
+		echo '<input type="submit" class="search-submit" value="' . esc_attr_x('Search', 'submit button', 'easy-faq-manager') . '" />';
 		echo '<input type="hidden" name="post_type" value="question" />';
 
 		echo '</form>';
@@ -172,14 +172,14 @@ class Search_FAQ_Widget extends WP_Widget
 
 		// Set the default values (if any).
 		$instance   = wp_parse_args((array) $instance, array(
-			'title' => __('Search FAQs', 'wp-faq-manager'),
+			'title' => __('Search FAQs', 'easy-faq-manager'),
 		));
 
 		// Now set the value for each item in the array.
 		$title = isset($instance['title']) ? $instance['title'] : '';
 ?>
 		<p>
-			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'wp-faq-manager'); ?></label>
+			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'easy-faq-manager'); ?></label>
 			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
 		</p>
 
@@ -202,11 +202,11 @@ class Random_FAQ_Widget extends WP_Widget
 		// Set my widget ops.
 		$widget_ops = array(
 			'classname'     => 'faq-random-widget',
-			'description'   => __('Lists a single random FAQ on the sidebar', 'wp-faq-manager'),
+			'description'   => __('Lists a single random FAQ on the sidebar', 'easy-faq-manager'),
 		);
 
 		// Set my parent construct.
-		parent::__construct('faq_random', __('FAQ Widget - Random', 'wp-faq-manager'), $widget_ops);
+		parent::__construct('faq_random', __('FAQ Widget - Random', 'easy-faq-manager'), $widget_ops);
 	}
 
 	/**
@@ -230,7 +230,7 @@ class Random_FAQ_Widget extends WP_Widget
 
 		// Check for a title, then wrap the filter around it.
 		$title  = empty($instance['title']) ? '' : apply_filters('widget_title', $instance['title']);
-		$more   = empty($instance['more']) ? __('See the entire answer', 'wp-faq-manager') : $instance['more'];
+		$more   = empty($instance['more']) ? __('See the entire answer', 'easy-faq-manager') : $instance['more'];
 
 		// Output the opening widget markup.
 		echo wp_kses_post($args['before_widget']);
@@ -318,7 +318,7 @@ class Random_FAQ_Widget extends WP_Widget
 		// Set the default values (if any).
 		$instance   = wp_parse_args((array) $instance, array(
 			'title' => '',
-			'more'  => __('See the entire answer', 'wp-faq-manager'),
+			'more'  => __('See the entire answer', 'easy-faq-manager'),
 			'chars' => 0,
 			'count' => 1,
 		));
@@ -330,23 +330,23 @@ class Random_FAQ_Widget extends WP_Widget
 		$count  = $instance['count'];
 	?>
 		<p>
-			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'wp-faq-manager'); ?></label>
+			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'easy-faq-manager'); ?></label>
 			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo esc_attr($this->get_field_id('more')); ?>"><?php esc_html_e('"See More" text:', 'wp-faq-manager'); ?></label>
+			<label for="<?php echo esc_attr($this->get_field_id('more')); ?>"><?php esc_html_e('"See More" text:', 'easy-faq-manager'); ?></label>
 			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('more')); ?>" name="<?php echo esc_attr($this->get_field_name('more')); ?>" type="text" value="<?php echo esc_attr($more); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo esc_attr($this->get_field_id('chars')); ?>"><?php esc_html_e('Character Count:', 'wp-faq-manager'); ?></label>
+			<label for="<?php echo esc_attr($this->get_field_id('chars')); ?>"><?php esc_html_e('Character Count:', 'easy-faq-manager'); ?></label>
 			<input class="small-text" id="<?php echo esc_attr($this->get_field_id('chars')); ?>" name="<?php echo esc_attr($this->get_field_name('chars')); ?>" type="number" value="<?php echo esc_attr($chars); ?>" /><br>
-			<span class="description"><?php esc_html_e('Enter the amount of characters to display. Use zero to show all.', 'wp-faq-manager'); ?></span>
+			<span class="description"><?php esc_html_e('Enter the amount of characters to display. Use zero to show all.', 'easy-faq-manager'); ?></span>
 		</p>
 
 		<p>
-			<label for="<?php echo esc_attr($this->get_field_id('count')); ?>"><?php esc_html_e('Post Count:', 'wp-faq-manager'); ?></label>
+			<label for="<?php echo esc_attr($this->get_field_id('count')); ?>"><?php esc_html_e('Post Count:', 'easy-faq-manager'); ?></label>
 			<input class="small-text" id="<?php echo esc_attr($this->get_field_id('count')); ?>" name="<?php echo esc_attr($this->get_field_name('count')); ?>" type="text" value="<?php echo esc_attr($count); ?>" />
 		</p>
 
@@ -369,11 +369,11 @@ class Recent_FAQ_Widget extends WP_Widget
 		// Set my widget ops.
 		$widget_ops = array(
 			'classname'     => 'faq-recent-widget recent-questions-widget',
-			'description'   => __('List recent questions', 'wp-faq-manager'),
+			'description'   => __('List recent questions', 'easy-faq-manager'),
 		);
 
 		// Set my parent construct.
-		parent::__construct('recent_questions', __('FAQ Widget - Recent', 'wp-faq-manager'), $widget_ops);
+		parent::__construct('recent_questions', __('FAQ Widget - Recent', 'easy-faq-manager'), $widget_ops);
 	}
 
 	/**
@@ -481,12 +481,12 @@ class Recent_FAQ_Widget extends WP_Widget
 
 	?>
 		<p>
-			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'wp-faq-manager'); ?></label>
+			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'easy-faq-manager'); ?></label>
 			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo esc_attr($this->get_field_id('count')); ?>"><?php esc_html_e('Post Count:', 'wp-faq-manager'); ?></label>
+			<label for="<?php echo esc_attr($this->get_field_id('count')); ?>"><?php esc_html_e('Post Count:', 'easy-faq-manager'); ?></label>
 			<input class="small-text" min="0" step="1" id="<?php echo esc_attr($this->get_field_id('count')); ?>" name="<?php echo esc_attr($this->get_field_name('count')); ?>" type="number" value="<?php echo esc_attr($count); ?>" />
 		</p>
 
@@ -509,11 +509,11 @@ class Topics_FAQ_Widget extends WP_Widget
 		// Set my widget ops.
 		$widget_ops = array(
 			'classname'     => 'recent-faqtax-widget',
-			'description'   => __('List FAQ topics or tags', 'wp-faq-manager'),
+			'description'   => __('List FAQ topics or tags', 'easy-faq-manager'),
 		);
 
 		// Set my parent construct.
-		parent::__construct('recent_faqtax', __('FAQ Widget - Taxonomies', 'wp-faq-manager'), $widget_ops);
+		parent::__construct('recent_faqtax', __('FAQ Widget - Taxonomies', 'easy-faq-manager'), $widget_ops);
 	}
 
 	/**
@@ -628,15 +628,15 @@ class Topics_FAQ_Widget extends WP_Widget
 
 	?>
 		<p>
-			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'wp-faq-manager'); ?></label>
+			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'easy-faq-manager'); ?></label>
 			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
 		</p>
 
 		<p>
-			<label for="<?php echo esc_attr($this->get_field_id('tax')); ?>"><?php esc_html_e('Taxonomy:', 'wp-faq-manager'); ?></label>
+			<label for="<?php echo esc_attr($this->get_field_id('tax')); ?>"><?php esc_html_e('Taxonomy:', 'easy-faq-manager'); ?></label>
 			<select name="<?php echo esc_attr($this->get_field_name('tax')); ?>" id="<?php echo esc_attr($this->get_field_id('tax')); ?>" class="widefat">
-				<option value="faq-topic" <?php selected($tax, 'faq-topic', true); ?>><?php esc_html_e('FAQ Topics', 'wp-faq-manager'); ?></option>
-				<option value="faq-tags" <?php selected($tax, 'faq-tags', true); ?>><?php esc_html_e('FAQ Tags', 'wp-faq-manager'); ?></option>
+				<option value="faq-topic" <?php selected($tax, 'faq-topic', true); ?>><?php esc_html_e('FAQ Topics', 'easy-faq-manager'); ?></option>
+				<option value="faq-tags" <?php selected($tax, 'faq-tags', true); ?>><?php esc_html_e('FAQ Tags', 'easy-faq-manager'); ?></option>
 			</select>
 		</p>
 
@@ -659,11 +659,11 @@ class Cloud_FAQ_Widget extends WP_Widget
 		// Set my widget ops.
 		$widget_ops = array(
 			'classname'     => 'faq-cloud-widget',
-			'description'   => __('A tag cloud of FAQ topics and tags', 'wp-faq-manager'),
+			'description'   => __('A tag cloud of FAQ topics and tags', 'easy-faq-manager'),
 		);
 
 		// Set my parent construct.
-		parent::__construct('faq_cloud', __('FAQ Widget - Cloud', 'wp-faq-manager'), $widget_ops);
+		parent::__construct('faq_cloud', __('FAQ Widget - Cloud', 'easy-faq-manager'), $widget_ops);
 	}
 
 	/**
@@ -777,18 +777,18 @@ class Cloud_FAQ_Widget extends WP_Widget
 		$ta_inc = ! empty($instance['ta_include']) ? 'on' : '';
 	?>
 		<p>
-			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'wp-faq-manager'); ?></label>
+			<label for="<?php echo esc_attr($this->get_field_id('title')); ?>"><?php esc_html_e('Widget Title:', 'easy-faq-manager'); ?></label>
 			<input class="widefat" id="<?php echo esc_attr($this->get_field_id('title')); ?>" name="<?php echo esc_attr($this->get_field_name('title')); ?>" type="text" value="<?php echo esc_attr($title); ?>" />
 		</p>
 
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked($to_inc, 'on', true) ?> id="<?php echo esc_attr($this->get_field_id('to_include')); ?>" value="on" name="<?php echo esc_attr($this->get_field_name('to_include')); ?>" />
-			<label for="<?php echo esc_attr($this->get_field_id('to_include')); ?>"><?php esc_html_e('Include FAQ Topics', 'wp-faq-manager'); ?></label>
+			<label for="<?php echo esc_attr($this->get_field_id('to_include')); ?>"><?php esc_html_e('Include FAQ Topics', 'easy-faq-manager'); ?></label>
 		</p>
 
 		<p>
 			<input class="checkbox" type="checkbox" <?php checked($ta_inc, 'on', true) ?> id="<?php echo esc_attr($this->get_field_id('ta_include')); ?>" value="on" name="<?php echo esc_attr($this->get_field_name('ta_include')); ?>" />
-			<label for="<?php echo esc_attr($this->get_field_id('ta_include')); ?>"><?php esc_html_e('Include FAQ Tags', 'wp-faq-manager'); ?></label>
+			<label for="<?php echo esc_attr($this->get_field_id('ta_include')); ?>"><?php esc_html_e('Include FAQ Tags', 'easy-faq-manager'); ?></label>
 		</p>
 
 <?php

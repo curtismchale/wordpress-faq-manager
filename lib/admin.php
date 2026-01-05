@@ -42,10 +42,10 @@ class WPFAQ_Manager_Admin
 	{
 
 		// Load the sorting page.
-		add_submenu_page('edit.php?post_type=question', __('Sort FAQs', 'wp-faq-manager'), __('Sort FAQs', 'wp-faq-manager'), apply_filters('faq-caps', 'manage_options', 'sort'), 'sort-page', array($this, 'sort_page'));
+		add_submenu_page('edit.php?post_type=question', __('Sort FAQs', 'easy-faq-manager'), __('Sort FAQs', 'easy-faq-manager'), apply_filters('faq-caps', 'manage_options', 'sort'), 'sort-page', array($this, 'sort_page'));
 
 		// Load the instructions page.
-		add_submenu_page('edit.php?post_type=question', __('FAQ Manager Instructions', 'wp-faq-manager'), __('Instructions', 'wp-faq-manager'), apply_filters('faq-caps', 'manage_options', 'instructions'), 'instructions', array($this, 'instructions_page'));
+		add_submenu_page('edit.php?post_type=question', __('FAQ Manager Instructions', 'easy-faq-manager'), __('Instructions', 'easy-faq-manager'), apply_filters('faq-caps', 'manage_options', 'instructions'), 'instructions', array($this, 'instructions_page'));
 	}
 
 	/**
@@ -60,7 +60,7 @@ class WPFAQ_Manager_Admin
 		echo '<div id="faq-admin-sort" class="wrap faq-admin-page-wrap faq-admin-sort-wrap">';
 
 		// Title it.
-		echo '<h1>' . __('Sort FAQs', 'wp-faq-manager') . '<span class="spinner faq-sort-spinner"></span></h1>';
+		echo '<h1>' . __('Sort FAQs', 'easy-faq-manager') . '<span class="spinner faq-sort-spinner"></span></h1>';
 
 		// SHow the message or the items.
 		echo self::sort_display();
@@ -79,14 +79,14 @@ class WPFAQ_Manager_Admin
 
 		// Fetch my FAQs to sort and return a message if we have none.
 		if (false === $faqs = WPFAQ_Manager_Data::get_admin_faqs()) {
-			return '<p>' . __('You have no FAQs to sort.', 'wp-faq-manager') . '</p>';
+			return '<p>' . __('You have no FAQs to sort.', 'easy-faq-manager') . '</p>';
 		}
 
 		// Set an empty.
 		$build  = '';
 
 		// Set the message about where this works.
-		$build .= '<p>' . __('<strong>Note:</strong> this only affects the FAQs listed using the shortcode functions', 'wp-faq-manager') . '</p>';
+		$build .= '<p>' . __('<strong>Note:</strong> this only affects the FAQs listed using the shortcode functions', 'easy-faq-manager') . '</p>';
 
 		// Now open this with a div.
 		$build .= '<div class="faq-sort-list">';
@@ -236,12 +236,12 @@ class WPFAQ_Manager_Admin
 
 			case 'update-sort':
 
-				$text   = __('FAQ sort order has been saved.', 'wp-faq-manager');
+				$text   = __('FAQ sort order has been saved.', 'easy-faq-manager');
 				break;
 
 			case 'error-sort':
 
-				$text   = __('There was an error saving the sort order. Please try again later.', 'wp-faq-manager');
+				$text   = __('There was an error saving the sort order. Please try again later.', 'easy-faq-manager');
 				break;
 		}
 
@@ -356,7 +356,7 @@ class WPFAQ_Manager_Admin
 		if ($file === WPFAQ_BASE) {
 
 			// Our instruction links.
-			$instruct   = '<a href="' . admin_url('edit.php?post_type=question&page=instructions') . '">' . __('How-To', 'wp-faq-manager') . '</a>';
+			$instruct   = '<a href="' . admin_url('edit.php?post_type=question&page=instructions') . '">' . __('How-To', 'easy-faq-manager') . '</a>';
 
 			// Add them all into the array.
 			array_push($links, $instruct);
@@ -401,7 +401,7 @@ class WPFAQ_Manager_Admin
 	 */
 	public function title_text($title)
 	{
-		return false !== WPFAQ_Manager_Helper::check_current_screen() ? __('Enter question title here', 'wp-faq-manager') : $title;
+		return false !== WPFAQ_Manager_Helper::check_current_screen() ? __('Enter question title here', 'easy-faq-manager') : $title;
 	}
 
 	/**
@@ -415,46 +415,46 @@ class WPFAQ_Manager_Admin
 
 		<div id="faq-admin-instructions" class="wrap faq-admin-page-wrap faq-admin-instructions-wrap">
 
-			<h1><?php esc_html_e('FAQ Manager Instructions', 'wp-faq-manager'); ?></h1>
+			<h1><?php esc_html_e('FAQ Manager Instructions', 'easy-faq-manager'); ?></h1>
 
 			<div class="faqinfo-intro-content">
 
-				<p><?php esc_html_e('The FAQ Manager plugin uses a combination of a custom post type and custom taxonomies.', 'wp-faq-manager'); ?></p>
+				<p><?php esc_html_e('The FAQ Manager plugin uses a combination of a custom post type and custom taxonomies.', 'easy-faq-manager'); ?></p>
 
-				<p><?php esc_html_e('The plugin will automatically create single posts using your existing permalink structure, and the FAQ topics and tags can be added to your menu using the WP Menu Manager.', 'wp-faq-manager'); ?></p>
+				<p><?php esc_html_e('The plugin will automatically create single posts using your existing permalink structure, and the FAQ topics and tags can be added to your menu using the WP Menu Manager.', 'easy-faq-manager'); ?></p>
 
-				<h4 class="faqinfo-callout"><span class="dashicons dashicons-megaphone faqinfo-dashicon"></span><?php esc_html_e('Questions? Issues? Bugs?', 'wp-faq-manager'); ?> <a href="https://github.com/curtismchale/wp-faq-manager/issues" target="_blank" title="<?php esc_html_e('WordPress FAQ Manager on GitHub', 'wp-faq-manager'); ?>"><?php esc_html_e('Please report them on GitHub', 'wp-faq-manager'); ?></a>.</h4>
+				<h4 class="faqinfo-callout"><span class="dashicons dashicons-megaphone faqinfo-dashicon"></span><?php esc_html_e('Questions? Issues? Bugs?', 'easy-faq-manager'); ?> <a href="https://github.com/curtismchale/easy-faq-manager/issues" target="_blank" title="<?php esc_html_e('WordPress FAQ Manager on GitHub', 'easy-faq-manager'); ?>"><?php esc_html_e('Please report them on GitHub', 'easy-faq-manager'); ?></a>.</h4>
 			</div>
 
 			<div class="faqinfo-instruction-content">
 
-				<h2 class="title"><?php esc_html_e('Shortcodes', 'wp-faq-manager'); ?></h2>
+				<h2 class="title"><?php esc_html_e('Shortcodes', 'easy-faq-manager'); ?></h2>
 
-				<p><?php esc_html_e('The plugin also has the option of using shortcodes. To use them, follow the syntax accordingly in the HTML tab:', 'wp-faq-manager'); ?></p>
+				<p><?php esc_html_e('The plugin also has the option of using shortcodes. To use them, follow the syntax accordingly in the HTML tab:', 'easy-faq-manager'); ?></p>
 
 				<ul class="faqinfo-list">
 
-					<li class="faqinfo-strong"><?php esc_html_e('For the complete list (including title and content):', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-strong"><?php esc_html_e('For the complete list (including title and content):', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq]</code> on a post / page', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq]</code> on a post / page', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('For the question title, and a link to the FAQ on a separate page:', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-strong"><?php esc_html_e('For the question title, and a link to the FAQ on a separate page:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faqlist]</code> on a post / page', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-code"><?php esc_html_e('place <code>[faqlist]</code> on a post / page', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('For a list with a group of titles that link to complete content later in page:', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-strong"><?php esc_html_e('For a list with a group of titles that link to complete content later in page:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faqcombo]</code> on a post / page', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-code"><?php esc_html_e('place <code>[faqcombo]</code> on a post / page', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('For a list of taxonomy titles that link to the related archive page:', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-strong"><?php esc_html_e('For a list of taxonomy titles that link to the related archive page:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faqtaxlist type="topics"]</code> or <code>[faqtaxlist type="tags"]</code> on a post / page', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-code"><?php esc_html_e('place <code>[faqtaxlist type="topics"]</code> or <code>[faqtaxlist type="tags"]</code> on a post / page', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('Show optional description: <code>[faqtaxlist type="topics" desc="true"]</code>', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-code"><?php esc_html_e('Show optional description: <code>[faqtaxlist type="topics" desc="true"]</code>', 'easy-faq-manager'); ?></li>
 
 					<li class="faqinfo-details">
-						<strong><?php esc_html_e('Please note:', 'wp-faq-manager'); ?></strong>
-						<?php esc_html_e('The combo and taxonomy list shortcodes will not recognize the pagination and expand/collapse.', 'wp-faq-manager'); ?>
+						<strong><?php esc_html_e('Please note:', 'easy-faq-manager'); ?></strong>
+						<?php esc_html_e('The combo and taxonomy list shortcodes will not recognize the pagination and expand/collapse.', 'easy-faq-manager'); ?>
 					</li>
 
 
@@ -464,47 +464,47 @@ class WPFAQ_Manager_Admin
 
 			<div class="faqinfo-instruction-content">
 
-				<h2 class="title"><?php esc_html_e('The following options apply to all the <code>shortcode</code> types', 'wp-faq-manager'); ?></h2>
+				<h2 class="title"><?php esc_html_e('The following options apply to all the <code>shortcode</code> types', 'easy-faq-manager'); ?></h2>
 
-				<p><?php esc_html_e('The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).', 'wp-faq-manager'); ?></p>
+				<p><?php esc_html_e('The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).', 'easy-faq-manager'); ?></p>
 
 				<ul class="faqinfo-list">
 
-					<li class="faqinfo-strong"><?php esc_html_e('To display only 5:', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-strong"><?php esc_html_e('To display only 5:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq limit="5"]</code> on a post / page', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq limit="5"]</code> on a post / page', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('To display ALL:', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-strong"><?php esc_html_e('To display ALL:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq limit="-1"]</code> on a post / page', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq limit="-1"]</code> on a post / page', 'easy-faq-manager'); ?></li>
 
 				</ul>
 
 				<ul class="faqinfo-list">
 
-					<li class="faqinfo-strong"><?php esc_html_e('For a single FAQ:', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-strong"><?php esc_html_e('For a single FAQ:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_id="ID"]</code> on a post / page', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_id="ID"]</code> on a post / page', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('List all from a single FAQ topic category:', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-strong"><?php esc_html_e('List all from a single FAQ topic category:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_topic="topic-slug"]</code> on a post / page', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_topic="topic-slug"]</code> on a post / page', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('List all from multiple FAQ topic categories:', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-strong"><?php esc_html_e('List all from multiple FAQ topic categories:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_topic="topic-slug-1, topic-slug-2"]</code> on a post / page', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_topic="topic-slug-1, topic-slug-2"]</code> on a post / page', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('List all from a single FAQ tag:', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-strong"><?php esc_html_e('List all from a single FAQ tag:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_tag="tag-slug"]</code> on a post / page', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_tag="tag-slug"]</code> on a post / page', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('List all from multiple FAQ tags:', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-strong"><?php esc_html_e('List all from multiple FAQ tags:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_tag="tag-slug-1, tag-slug-2"]</code> on a post / page', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_tag="tag-slug-1, tag-slug-2"]</code> on a post / page', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('List all from both FAQ topics and FAQ tags:', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-strong"><?php esc_html_e('List all from both FAQ topics and FAQ tags:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_topic="topic-slug-1" faq_tag="tag-slug-2"]</code> on a post / page', 'wp-faq-manager'); ?></li>
+					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_topic="topic-slug-1" faq_tag="tag-slug-2"]</code> on a post / page', 'easy-faq-manager'); ?></li>
 				</ul>
 
 			</div>

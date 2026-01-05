@@ -1,34 +1,35 @@
 <?php
+
 /**
- * Plugin Name: WP FAQ Manager
+ * Plugin Name: Easy FAQ Manager
  * Plugin URI: https://sfndesign.ca/wordpress-faq-manager/
  * Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
  * Author: Curtis McHale
  * Author URI: https://sfndesign.ca/
  * Version: 2.0.2
- * Text Domain: wp-faq-manager
+ * Text Domain: easy-faq-manager
  * Requires WP: 4.0
  * Requires PHP: 7.0
- * Domain Path: languages
+ * Domain Path: /languages
  * License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
  * GitHub Plugin URI: https://github.com/curtismchale/wordpress-faq-manager
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if (! defined('ABSPATH')) exit; // Exit if accessed directly
 
 // Define our base file.
-if( ! defined( 'WPFAQ_BASE' ) ) {
-	define( 'WPFAQ_BASE', plugin_basename( __FILE__ ) );
+if (! defined('WPFAQ_BASE')) {
+	define('WPFAQ_BASE', plugin_basename(__FILE__));
 }
 
 // Define our base directory.
-if ( ! defined( 'WPFAQ_DIR' ) ) {
-	define( 'WPFAQ_DIR', plugin_dir_path( __FILE__ ) );
+if (! defined('WPFAQ_DIR')) {
+	define('WPFAQ_DIR', plugin_dir_path(__FILE__));
 }
 
 // Define our version.
-if( ! defined( 'WPFAQ_VER' ) ) {
-	define( 'WPFAQ_VER', '2.0.0' );
+if (! defined('WPFAQ_VER')) {
+	define('WPFAQ_VER', '2.0.0');
 }
 
 
@@ -46,11 +47,12 @@ class WPFAQ_Manager_Base
 	/**
 	 * This is our constructor. There are many like it, but this one is mine.
 	 */
-	private function __construct() {
-		add_action( 'plugins_loaded',               array( $this, 'textdomain'          )           );
-		add_action( 'plugins_loaded',               array( $this, 'load_files'          )           );
-		register_activation_hook    ( __FILE__,     array( $this, 'flush_rewrite_rules' )           );
-		register_deactivation_hook  ( __FILE__,     array( $this, 'flush_rewrite_rules' )           );
+	private function __construct()
+	{
+		add_action('plugins_loaded',               array($this, 'textdomain'));
+		add_action('plugins_loaded',               array($this, 'load_files'));
+		register_activation_hook(__FILE__,     array($this, 'flush_rewrite_rules'));
+		register_deactivation_hook(__FILE__,     array($this, 'flush_rewrite_rules'));
 	}
 
 	/**
@@ -59,9 +61,10 @@ class WPFAQ_Manager_Base
 	 *
 	 * @return $instance
 	 */
-	public static function getInstance() {
+	public static function getInstance()
+	{
 
-		if ( ! self::$instance ) {
+		if (! self::$instance) {
 			self::$instance = new self;
 		}
 
@@ -73,8 +76,9 @@ class WPFAQ_Manager_Base
 	 *
 	 * @return void
 	 */
-	public function textdomain() {
-		load_plugin_textdomain( 'wp-faq-manager', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+	public function textdomain()
+	{
+		load_plugin_textdomain('easy-faq-manager', false, dirname(plugin_basename(__FILE__)) . '/languages/');
 	}
 
 	/**
@@ -82,32 +86,33 @@ class WPFAQ_Manager_Base
 	 *
 	 * @return void
 	 */
-	public function load_files() {
+	public function load_files()
+	{
 
 		// Load our helper file.
-		require_once( WPFAQ_DIR . 'lib/helper.php' );
+		require_once(WPFAQ_DIR . 'lib/helper.php');
 
 		// Load our custom post type and taxonomies.
-		require_once( WPFAQ_DIR . 'lib/types.php' );
+		require_once(WPFAQ_DIR . 'lib/types.php');
 
 		// Load our widgets file.
-		require_once( WPFAQ_DIR . 'lib/widgets.php' );
+		require_once(WPFAQ_DIR . 'lib/widgets.php');
 
 		// Load our data file.
-		require_once( WPFAQ_DIR . 'lib/data.php' );
+		require_once(WPFAQ_DIR . 'lib/data.php');
 
 		// Load our legacy file for backwards compatibility.
-		require_once( WPFAQ_DIR . 'lib/legacy.php' );
+		require_once(WPFAQ_DIR . 'lib/legacy.php');
 
 		// Load our front-end display functions.
-		if ( ! is_admin() ) {
-			require_once( WPFAQ_DIR . 'lib/front.php' );
-			require_once( WPFAQ_DIR . 'lib/shortcodes.php' );
+		if (! is_admin()) {
+			require_once(WPFAQ_DIR . 'lib/front.php');
+			require_once(WPFAQ_DIR . 'lib/shortcodes.php');
 		}
 
 		// Load our admin-related functions.
-		if ( is_admin() ) {
-			require_once( WPFAQ_DIR . 'lib/admin.php' );
+		if (is_admin()) {
+			require_once(WPFAQ_DIR . 'lib/admin.php');
 		}
 	}
 
@@ -116,7 +121,8 @@ class WPFAQ_Manager_Base
 	 *
 	 * @return void
 	 */
-	public function flush_rewrite_rules() {
+	public function flush_rewrite_rules()
+	{
 		flush_rewrite_rules();
 	}
 
