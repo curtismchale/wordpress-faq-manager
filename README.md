@@ -6,7 +6,7 @@
 
 **Requires at least:** 4.0
 
-**Requires PHP:** 7.0
+**Requires PHP:** 8.3
 
 **Tested up to:** 6.9
 
@@ -106,6 +106,8 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 * fixed internationalizaton strings
 * updated data sanitization for sorting FAQ save function
 * hardened escaping in widgets and instructions page
+* fixed a bunch of AJAX calls
+* fixed direct database calls to use built in WP functions
 
 ### 2.0.2 ###
 

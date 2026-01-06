@@ -6,12 +6,13 @@
  * Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
  * Author: Curtis McHale
  * Author URI: https://sfndesign.ca/
- * Version: 2.0.2
+ * Version: 2.0.3
  * Text Domain: easy-faq-manager
- * Requires WP: 4.0
- * Requires PHP: 7.0
+ * Requires WP: 6.0
+ * Requires PHP: 8.3
  * Domain Path: /languages
- * License: GPL version 2 or later - http://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+ * License: GPL-2.0-or-later
+ * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * GitHub Plugin URI: https://github.com/curtismchale/wordpress-faq-manager
  */
 

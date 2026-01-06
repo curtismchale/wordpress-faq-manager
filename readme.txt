@@ -2,10 +2,10 @@
 Contributors: curtismchale, norcross
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 4.0
-Requires PHP: 7.4
+Requires PHP: 8.3
 Tested up to: 6.9
 Stable tag: 2.0.3
-License: GPLv2 or later
+License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Uses custom post types and taxonomies to manage an FAQ section for your site.
