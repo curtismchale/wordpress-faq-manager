@@ -102,6 +102,7 @@ class WPFAQ_Manager_Shortcodes
 			$build .= '<div class="faq-answer" rel="' . esc_attr($faq->post_name) . '">';
 
 			// Show the content, with the optional filter.
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress hook.
 			$build .= false !== $filter ? apply_filters('the_content', $faq->post_content) : wpautop($faq->post_content);
 
 			// Show the "read more" link.
@@ -376,8 +377,13 @@ class WPFAQ_Manager_Shortcodes
 			// Handle the content itself.
 			$build .= '<div class="faq-answer">';
 
+
 			// Show the content, with the optional filter.
-			$build .= false !== $filter ? apply_filters('the_content', $faq->post_content) : wpautop($faq->post_content);
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Core WordPress hook.
+			$build .= false !== $filter
+				? apply_filters('the_content', $faq->post_content)
+				: wpautop($faq->post_content);
+
 
 			// Show the "back to top" if requested.
 			if (! empty($bktop)) {
