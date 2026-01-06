@@ -285,19 +285,24 @@ class WPFAQ_Manager_Admin
 		}
 
 		// Bail on trash or draft page.
-		if (! empty($_REQUEST['post_status']) && in_array($_REQUEST['post_status'], array('trash', 'draft'))) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Admin list-table view vars (read-only) used for sorting/filtering.
+		$post_status = isset($_GET['post_status'])
+			? sanitize_key(wp_unslash($_GET['post_status']))
+			: '';
+
+		if (in_array($post_status, array('trash', 'draft'), true)) {
 			return $query;
 		}
 
 		// Bail on a month-based lookup.
-		if (! empty($_REQUEST['m'])) {
+		if (isset($_GET['m']) && '' !== $_GET['m']) {
 			return $query;
 		}
 
-		// Our standard setup to sort in accending menu order.
-		if (empty($_REQUEST['order']) && empty($_REQUEST['orderby'])) {
-			$query->query_vars['order']      = 'ASC';
-			$query->query_vars['orderby']    = 'menu_order';
+		// Our standard setup to sort in ascending menu order.
+		if (empty($_GET['order']) && empty($_GET['orderby'])) {
+			$query->set('order', 'ASC');
+			$query->set('orderby', 'menu_order');
 		}
 
 		// send back the query
