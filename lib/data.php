@@ -310,18 +310,16 @@ class WPFAQ_Manager_Data
 			global $wpdb;
 
 			// Set up our query.
-			$data = $wpdb->get_col(
-				$wpdb->prepare(
-					"
-					SELECT ID
-					FROM   {$wpdb->posts}
-					WHERE  post_type   = %s
-					AND    post_status = %s
-					",
-					'question',
-					'publish'
+			$data = get_posts(
+				array(
+					'post_type'      => 'question',
+					'post_status'    => 'publish',
+					'fields'         => 'ids',
+					'posts_per_page' => -1,
+					'no_found_rows'  => true,
 				)
 			);
+
 
 
 			// Set an empty transient if we have none.
