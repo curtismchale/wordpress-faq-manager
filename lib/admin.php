@@ -440,21 +440,70 @@ class WPFAQ_Manager_Admin
 
 					<li class="faqinfo-strong"><?php esc_html_e('For the complete list (including title and content):', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq]</code> on a post / page', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-code">
+						<?php
+						printf(
+							/* translators: %s is the [faq] shortcode wrapped in <code> tags. */
+							esc_html__('Place %s on a post / page', 'easy-faq-manager'),
+							'<code>[faq]</code>'
+						);
+						?>
+					</li>
 
 					<li class="faqinfo-strong"><?php esc_html_e('For the question title, and a link to the FAQ on a separate page:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faqlist]</code> on a post / page', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-code">
+						<?php
+						printf(
+							/* translators: %s is the [faq] shortcode wrapped in <code> tags. */
+							esc_html__('Place %s on a post / page', 'easy-faq-manager'),
+							'<code>[faqlist]</code>'
+						);
+						?>
+					</li>
 
 					<li class="faqinfo-strong"><?php esc_html_e('For a list with a group of titles that link to complete content later in page:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faqcombo]</code> on a post / page', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-code">
+						<?php
+						printf(
+							/* translators: %s is the [faq] shortcode wrapped in <code> tags. */
+							esc_html__('Place %s on a post / page', 'easy-faq-manager'),
+							'<code>[faqcombo]</code>'
+						);
+						?>
+					</li>
+
 
 					<li class="faqinfo-strong"><?php esc_html_e('For a list of taxonomy titles that link to the related archive page:', 'easy-faq-manager'); ?></li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faqtaxlist type="topics"]</code> or <code>[faqtaxlist type="tags"]</code> on a post / page', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-code">
+						<?php
+						printf(
+							/* translators: %1$s and %2$s are shortcode examples wrapped in <code> tags. */
+							esc_html__(
+								'Place %1$s or %2$s on a post / page',
+								'easy-faq-manager'
+							),
+							'<code>[faqtaxlist type="topics"]</code>',
+							'<code>[faqtaxlist type="tags"]</code>'
+						);
+						?>
+					</li>
 
-					<li class="faqinfo-code"><?php esc_html_e('Show optional description: <code>[faqtaxlist type="topics" desc="true"]</code>', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-code">
+						<?php
+						printf(
+							/* translators: %s is a shortcode example wrapped in <code> tags. */
+							esc_html__(
+								'Show optional description: %s',
+								'easy-faq-manager'
+							),
+							'<code>[faqtaxlist type="topics" desc="true"]</code>'
+						);
+						?>
+					</li>
+
 
 					<li class="faqinfo-details">
 						<strong><?php esc_html_e('Please note:', 'easy-faq-manager'); ?></strong>
@@ -472,43 +521,125 @@ class WPFAQ_Manager_Admin
 
 				<p><?php esc_html_e('The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).', 'easy-faq-manager'); ?></p>
 
+
 				<ul class="faqinfo-list">
 
-					<li class="faqinfo-strong"><?php esc_html_e('To display only 5:', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-strong">
+						<?php esc_html_e('To display only 5:', 'easy-faq-manager'); ?>
+					</li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq limit="5"]</code> on a post / page', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-code">
+						<?php
+						printf(
+							/* translators: %s is a shortcode example wrapped in <code> tags. */
+							esc_html__('Place %s on a post / page', 'easy-faq-manager'),
+							'<code>[faq limit="5"]</code>'
+						);
+						?>
+					</li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('To display ALL:', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-strong">
+						<?php esc_html_e('To display ALL:', 'easy-faq-manager'); ?>
+					</li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq limit="-1"]</code> on a post / page', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-code">
+						<?php
+						printf(
+							/* translators: %s is a shortcode example wrapped in <code> tags. */
+							esc_html__('Place %s on a post / page', 'easy-faq-manager'),
+							'<code>[faq limit="-1"]</code>'
+						);
+						?>
+					</li>
 
 				</ul>
 
 				<ul class="faqinfo-list">
 
-					<li class="faqinfo-strong"><?php esc_html_e('For a single FAQ:', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-strong">
+						<?php esc_html_e('For a single FAQ:', 'easy-faq-manager'); ?>
+					</li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_id="ID"]</code> on a post / page', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-code">
+						<?php
+						printf(
+							/* translators: %s is a shortcode example wrapped in <code> tags. */
+							esc_html__('Place %s on a post / page', 'easy-faq-manager'),
+							'<code>[faq faq_id="ID"]</code>'
+						);
+						?>
+					</li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('List all from a single FAQ topic category:', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-strong">
+						<?php esc_html_e('List all from a single FAQ topic category:', 'easy-faq-manager'); ?>
+					</li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_topic="topic-slug"]</code> on a post / page', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-code">
+						<?php
+						printf(
+							/* translators: %s is a shortcode example wrapped in <code> tags. */
+							esc_html__('Place %s on a post / page', 'easy-faq-manager'),
+							'<code>[faq faq_topic="topic-slug"]</code>'
+						);
+						?>
+					</li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('List all from multiple FAQ topic categories:', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-strong">
+						<?php esc_html_e('List all from multiple FAQ topic categories:', 'easy-faq-manager'); ?>
+					</li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_topic="topic-slug-1, topic-slug-2"]</code> on a post / page', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-code">
+						<?php
+						printf(
+							/* translators: %s is a shortcode example wrapped in <code> tags. */
+							esc_html__('Place %s on a post / page', 'easy-faq-manager'),
+							'<code>[faq faq_topic="topic-slug-1, topic-slug-2"]</code>'
+						);
+						?>
+					</li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('List all from a single FAQ tag:', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-strong">
+						<?php esc_html_e('List all from a single FAQ tag:', 'easy-faq-manager'); ?>
+					</li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_tag="tag-slug"]</code> on a post / page', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-code">
+						<?php
+						printf(
+							/* translators: %s is a shortcode example wrapped in <code> tags. */
+							esc_html__('Place %s on a post / page', 'easy-faq-manager'),
+							'<code>[faq faq_tag="tag-slug"]</code>'
+						);
+						?>
+					</li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('List all from multiple FAQ tags:', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-strong">
+						<?php esc_html_e('List all from multiple FAQ tags:', 'easy-faq-manager'); ?>
+					</li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_tag="tag-slug-1, tag-slug-2"]</code> on a post / page', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-code">
+						<?php
+						printf(
+							/* translators: %s is a shortcode example wrapped in <code> tags. */
+							esc_html__('Place %s on a post / page', 'easy-faq-manager'),
+							'<code>[faq faq_tag="tag-slug-1, tag-slug-2"]</code>'
+						);
+						?>
+					</li>
 
-					<li class="faqinfo-strong"><?php esc_html_e('List all from both FAQ topics and FAQ tags:', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-strong">
+						<?php esc_html_e('List all from both FAQ topics and FAQ tags:', 'easy-faq-manager'); ?>
+					</li>
 
-					<li class="faqinfo-code"><?php esc_html_e('place <code>[faq faq_topic="topic-slug-1" faq_tag="tag-slug-2"]</code> on a post / page', 'easy-faq-manager'); ?></li>
+					<li class="faqinfo-code">
+						<?php
+						printf(
+							/* translators: %s is a shortcode example wrapped in <code> tags. */
+							esc_html__('Place %s on a post / page', 'easy-faq-manager'),
+							'<code>[faq faq_topic="topic-slug-1" faq_tag="tag-slug-2"]</code>'
+						);
+						?>
+					</li>
+
 				</ul>
 
 			</div>
