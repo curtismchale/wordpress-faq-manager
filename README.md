@@ -1,4 +1,4 @@
-# WP FAQ Manager #
+# Easy FAQ Manager for WP #
 
 **Contributors:** curtismchale, norcross
 

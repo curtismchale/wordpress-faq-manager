@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Plugin Name: Easy FAQ Manager
+ * Plugin Name: Easy FAQ Manager for WP
  * Plugin URI: https://sfndesign.ca/wordpress-faq-manager/
  * Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
  * Author: Curtis McHale
