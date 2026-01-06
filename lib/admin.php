@@ -63,7 +63,10 @@ class WPFAQ_Manager_Admin
 		echo '<h1>' . esc_html__('Sort FAQs', 'easy-faq-manager') . '<span class="spinner faq-sort-spinner"></span></h1>';
 
 		// SHow the message or the items.
-		echo self::sort_display();
+		echo wp_kses_post(self::sort_display());
+
+		// Include our nonce.
+		wp_nonce_field('wpfaq_sort_nonce', 'wpfaq_sort_nonce', false, false);
 
 		// Close out the page.
 		echo '</div>';
@@ -101,9 +104,6 @@ class WPFAQ_Manager_Admin
 
 		// Close the list wrap.
 		$build .= '</ul>';
-
-		// Include our nonce.
-		$build .= wp_nonce_field('wpfaq_sort_nonce', 'wpfaq_sort_nonce', false, false);
 
 		// Close the div.
 		$build .= '</div>';
