@@ -89,7 +89,14 @@ class WPFAQ_Manager_Admin
 		$build  = '';
 
 		// Set the message about where this works.
-		$build .= '<p>' . esc_html__('<strong>Note:</strong> this only affects the FAQs listed using the shortcode functions', 'easy-faq-manager') . '</p>';
+		$build .= '<p>' .
+			sprintf(
+				/* translators: %s is the word "Note:" in bold. */
+				esc_html__('%s this only affects the FAQs listed using the shortcode functions', 'easy-faq-manager'),
+				'<strong>' . esc_html__('Note:', 'easy-faq-manager') . '</strong>'
+			) .
+			'</p>';
+
 
 		// Now open this with a div.
 		$build .= '<div class="faq-sort-list">';
