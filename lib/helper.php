@@ -1,4 +1,5 @@
 <?php
+
 /**
  * WP FAQ Manager - Helper Module
  *
@@ -7,12 +8,13 @@
  * @package WP FAQ Manager
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
+if (! defined('ABSPATH')) exit; // Exit if accessed directly
 
 /**
  * Start our engines.
  */
-class WPFAQ_Manager_Helper {
+class WPFAQ_Manager_Helper
+{
 
 	/**
 	 * Check for a legacy option value within a serialized data array.
@@ -22,28 +24,29 @@ class WPFAQ_Manager_Helper {
 	 *
 	 * @return mixed            The stored value, default, or nothing.
 	 */
-	public static function get_legacy_option( $key = '', $default = '' ) {
+	public static function get_legacy_option($key = '', $default = '')
+	{
 
 		// Bail without a key, as it's required.
-		if ( empty( $key ) ) {
+		if (empty($key)) {
 			return false;
 		}
 
 		// Our total settings array.
-		$settings   = get_option( 'faq_options' );
+		$settings   = get_option('faq_options');
 
 		// If we have no settings, return the default or nothing.
-		if ( empty( $settings ) ) {
-			return ! empty( $default ) ? $default : false;
+		if (empty($settings)) {
+			return ! empty($default) ? $default : false;
 		}
 
 		// Return the value we have.
-		if ( isset( $settings[ $key ] ) ) {
-			return $settings[ $key ];
+		if (isset($settings[$key])) {
+			return $settings[$key];
 		}
 
 		// Handle the fallback check if we don't have the key.
-		return ! empty( $default ) ? $default : false;
+		return ! empty($default) ? $default : false;
 	}
 
 	/**
@@ -54,10 +57,11 @@ class WPFAQ_Manager_Helper {
 	 *
 	 * @return bool            Whether or not we are.
 	 */
-	public static function check_current_screen( $action = 'compare', $check = 'post_type' ) {
+	public static function check_current_screen($action = 'compare', $check = 'post_type')
+	{
 
 		// Bail if not on admin or our function doesnt exist.
-		if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
+		if (! is_admin() || ! function_exists('get_current_screen')) {
 			return false;
 		}
 
@@ -65,32 +69,32 @@ class WPFAQ_Manager_Helper {
 		$screen = get_current_screen();
 
 		// Bail without.
-		if ( empty( $screen ) || ! is_object( $screen ) ) {
+		if (empty($screen) || ! is_object($screen)) {
 			return false;
 		}
 
 		// If the check is false, return the entire screen object.
-		if ( empty( $check ) ) {
+		if (empty($check)) {
 			return $screen;
 		}
 
 		// Do the post type check.
-		if ( 'post_type' === $check ) {
+		if ('post_type' === $check) {
 
 			// If we have no post type, it's false right off the bat.
-			if ( empty( $screen->post_type ) ) {
+			if (empty($screen->post_type)) {
 				return false;
 			}
 
 			// Handle my different action types.
-			switch ( $action ) {
+			switch ($action) {
 
-				case 'compare' :
+				case 'compare':
 
 					return 'question' === $screen->post_type ? true : false;
 					break;
 
-				case 'return' :
+				case 'return':
 
 					return $screen->post_type;
 					break;
@@ -106,20 +110,21 @@ class WPFAQ_Manager_Helper {
 	 *
 	 * @return bool           Whether or not we are.
 	 */
-	public static function check_site_location() {
+	public static function check_site_location()
+	{
 
 		// Check single posts.
-		if ( is_singular( 'question' ) ) {
+		if (is_singular('question')) {
 			return true;
 		}
 
 		// Check the overall archive.
-		if ( is_post_type_archive( 'question' ) ) {
+		if (is_post_type_archive('question')) {
 			return true;
 		}
 
 		// Our two taxonomies.
-		if ( is_tax( 'faq-topic' ) || is_tax( 'faq-tags' ) ) {
+		if (is_tax('faq-topic') || is_tax('faq-tags')) {
 			return true;
 		}
 
@@ -135,18 +140,19 @@ class WPFAQ_Manager_Helper {
 	 *
 	 * @return string $htype      The h type tag being returned.
 	 */
-	public static function check_htype_tag( $htype = 'h3', $shortcode = 'main' ) {
+	public static function check_htype_tag($htype = 'h3', $shortcode = 'main')
+	{
 
 		// Run the filter first.
-		$htype  = apply_filters( 'wpfaq_display_htype', $htype, $shortcode );
+		$htype  = apply_filters('wpfaq_display_htype', $htype, $shortcode);
 
 		// If it was set to empty, just return the default tag.
-		if ( empty( $htype ) ) {
+		if (empty($htype)) {
 			return 'h3';
 		}
 
 		// And then return it making sure it is a valid type.
-		return in_array( $htype, array( 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', ) ) ? $htype : 'h3';
+		return in_array($htype, array('h1', 'h2', 'h3', 'h4', 'h5', 'h6',)) ? $htype : 'h3';
 	}
 
 	/**
@@ -159,18 +165,19 @@ class WPFAQ_Manager_Helper {
 	 *
 	 * @return mixed HTML      The pagination links, or nothing if none can be generated.
 	 */
-	public static function build_pagination( $atts = array(), $link = '', $paged = 1, $type = 'main' ) {
+	public static function build_pagination($atts = array(), $link = '', $paged = 1, $type = 'main')
+	{
 
 		// If we have our "all" or -1 set as a limit, bail.
-		if ( $atts['limit'] === 'all' || $atts['limit'] == -1 ) {
+		if ($atts['limit'] === 'all' || $atts['limit'] == -1) {
 			return;
 		}
 
 		// Get the base link setup for pagination.
-		$base   = trailingslashit( $link );
+		$base   = trailingslashit($link);
 
 		// Figure out our total.
-		$total  = WPFAQ_Manager_Data::get_total_faq_count( $atts['limit'] );
+		$total  = WPFAQ_Manager_Data::get_total_faq_count($atts['limit']);
 
 		// The actual pagination args.
 		$args   = array(
@@ -179,8 +186,8 @@ class WPFAQ_Manager_Helper {
 			'type'      => 'plain',
 			'current'   => $paged,
 			'total'     => $total,
-			'prev_text' => __( '&laquo;' ),
-			'next_text' => __( '&raquo;' ),
+			'prev_text' => __('&laquo;', 'easy-faq-manager'),
+			'next_text' => __('&raquo;', 'easy-faq-manager'),
 		);
 
 		// The empty markup.
@@ -190,7 +197,7 @@ class WPFAQ_Manager_Helper {
 		$build .= '<p class="faq-nav">';
 
 		// The actual pagination call with our filtered args.
-		$build .= paginate_links( apply_filters( 'wpfaq_shortcode_paginate_args', $args, $type ) );
+		$build .= paginate_links(apply_filters('wpfaq_shortcode_paginate_args', $args, $type));
 
 		// The closing markup for pagination.
 		$build .= '</p>';
@@ -204,5 +211,3 @@ class WPFAQ_Manager_Helper {
 
 // Call our class.
 new WPFAQ_Manager_Helper();
-
-

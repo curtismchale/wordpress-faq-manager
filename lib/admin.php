@@ -60,10 +60,10 @@ class WPFAQ_Manager_Admin
 		echo '<div id="faq-admin-sort" class="wrap faq-admin-page-wrap faq-admin-sort-wrap">';
 
 		// Title it.
-		echo '<h1>' . __('Sort FAQs', 'easy-faq-manager') . '<span class="spinner faq-sort-spinner"></span></h1>';
+		echo '<h1>' . esc_html__('Sort FAQs', 'easy-faq-manager') . '<span class="spinner faq-sort-spinner"></span></h1>';
 
 		// SHow the message or the items.
-		echo self::sort_display();
+		echo wp_kses_post(self::sort_display());
 
 		// Close out the page.
 		echo '</div>';
@@ -79,14 +79,14 @@ class WPFAQ_Manager_Admin
 
 		// Fetch my FAQs to sort and return a message if we have none.
 		if (false === $faqs = WPFAQ_Manager_Data::get_admin_faqs()) {
-			return '<p>' . __('You have no FAQs to sort.', 'easy-faq-manager') . '</p>';
+			return '<p>' . esc_html__('You have no FAQs to sort.', 'easy-faq-manager') . '</p>';
 		}
 
 		// Set an empty.
 		$build  = '';
 
 		// Set the message about where this works.
-		$build .= '<p>' . __('<strong>Note:</strong> this only affects the FAQs listed using the shortcode functions', 'easy-faq-manager') . '</p>';
+		$build .= '<p>' . esc_html__('<strong>Note:</strong> this only affects the FAQs listed using the shortcode functions', 'easy-faq-manager') . '</p>';
 
 		// Now open this with a div.
 		$build .= '<div class="faq-sort-list">';
@@ -255,7 +255,7 @@ class WPFAQ_Manager_Admin
 		$build .= '<p>' . esc_html($text) . '</p>';
 
 		// Add the button.
-		$build .= '<button class="notice-dismiss" type="button"><span class="screen-reader-text">' . __('Dismiss this notice.') . '</span></button>';
+		$build .= '<button class="notice-dismiss" type="button"><span class="screen-reader-text">' . __('Dismiss this notice.', 'easy-faq-manager') . '</span></button>';
 
 		// Close the message wrapper.
 		$build .= '</div>';

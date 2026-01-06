@@ -1,4 +1,4 @@
-=== WP FAQ Manager ===
+=== Easy FAQ Manager ===
 Contributors: curtismchale, norcross
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 4.0
@@ -17,7 +17,7 @@ Uses custom post types and taxonomies to manage an FAQ section for your site. In
 
 This section describes how to install the plugin and get it working.
 
-1. Upload the 'wordpress-faq-manager' folder to the `/wp-content/plugins/` directory or install via the WP admin panel
+1. Upload the 'easy-faq-manager' folder to the `/wp-content/plugins/` directory or install via the WP admin panel
 1. Activate the plugin through the 'Plugins' menu in WordPress
 1. That's it.
 

@@ -164,8 +164,8 @@ class WPFAQ_Manager_Types
 
 		// Set my labels first.
 		$labels = array(
-			'name'                       => _x('FAQ Tags', 'easy-faq-manager'),
-			'singular_name'              => _x('FAQ Tag', 'easy-faq-manager'),
+			'name'                       => _x('FAQ Tags', 'taxonomy general name', 'easy-faq-manager'),
+			'singular_name'              => _x('FAQ Tag', 'taxonomy single name', 'easy-faq-manager'),
 			'search_items'               => __('Search FAQ Tags', 'easy-faq-manager'),
 			'popular_items'              => __('Popular FAQ Tags', 'easy-faq-manager'),
 			'all_items'                  => __('All FAQ Tags', 'easy-faq-manager'),
