@@ -63,7 +63,7 @@ class WPFAQ_Manager_Admin
 		echo '<h1>' . esc_html__('Sort FAQs', 'easy-faq-manager') . '<span class="spinner faq-sort-spinner"></span></h1>';
 
 		// SHow the message or the items.
-		echo wp_kses_post(self::sort_display());
+		echo self::sort_display();
 
 		// Close out the page.
 		echo '</div>';
@@ -129,24 +129,10 @@ class WPFAQ_Manager_Admin
 			wp_die(1);
 		}
 
-		// Make sure we have our nonce (unslash + sanitize before verify).
-		if (! isset($_POST['nonce'])) {
-			wp_die(1);
-		}
-
-		$nonce = sanitize_text_field(wp_unslash($_POST['nonce']));
-
-		if (! wp_verify_nonce($nonce, 'wpfaq_sort_nonce')) {
-			wp_die(1);
-		}
-
 		// Bail if the FAQ order hasn't been passed.
 		if (empty($_POST['order'])) {
 			wp_die(1);
 		}
-
-		// Call the WordPress database class.
-		global $wpdb;
 
 		// Sanitize order string before explode.
 		$order = sanitize_text_field(wp_unslash($_POST['order']));
