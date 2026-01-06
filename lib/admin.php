@@ -66,7 +66,7 @@ class WPFAQ_Manager_Admin
 		echo wp_kses_post(self::sort_display());
 
 		// Include our nonce.
-		wp_nonce_field('wpfaq_sort_nonce', 'wpfaq_sort_nonce', false, false);
+		wp_nonce_field('wpfaq_sort_nonce', 'wpfaq_sort_nonce', false, true);
 
 		// Close out the page.
 		echo '</div>';
@@ -124,6 +124,8 @@ class WPFAQ_Manager_Admin
 		if (! wp_doing_ajax()) {
 			wp_die(1);
 		}
+
+		check_ajax_referer('wpfaq_sort_nonce', 'wpfaq_sort_nonce');
 
 		if (!current_user_can('edit_posts')) {
 			wp_die(1);
