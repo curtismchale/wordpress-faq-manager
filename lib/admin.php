@@ -294,11 +294,13 @@ class WPFAQ_Manager_Admin
 		}
 
 		// Bail on a month-based lookup.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Admin list-table view vars (read-only) used for sorting/filtering.
 		if (isset($_GET['m']) && '' !== $_GET['m']) {
 			return $query;
 		}
 
 		// Our standard setup to sort in ascending menu order.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Admin list-table view vars (read-only) used for sorting/filtering.
 		if (empty($_GET['order']) && empty($_GET['orderby'])) {
 			$query->set('order', 'ASC');
 			$query->set('orderby', 'menu_order');

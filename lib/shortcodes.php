@@ -55,9 +55,14 @@ class WPFAQ_Manager_Shortcodes
 		// Determine my pagination set.
 		$paged = 1;
 
+
+		// Determine current pagination page.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only pagination query var.
 		if (isset($_GET['faq_page'])) {
 			$paged = max(1, absint(wp_unslash($_GET['faq_page'])));
 		}
+
+
 		// Fetch my items.
 		if (false === $faqs = WPFAQ_Manager_Data::get_main_shortcode_faqs($atts['faq_id'], $atts['limit'], $topics, $tags, $paged)) {
 			return;
@@ -162,6 +167,7 @@ class WPFAQ_Manager_Shortcodes
 		$tags   = ! empty($atts['faq_tag']) ? explode(',', esc_attr($atts['faq_tag'])) : array();
 
 		// Determine my pagination set.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Read-only query parameter.
 		$paged  = ! empty($_GET['faq_page']) ? absint($_GET['faq_page']) : 1;
 
 		// Fetch my items.
