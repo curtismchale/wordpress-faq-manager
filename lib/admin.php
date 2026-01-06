@@ -157,15 +157,19 @@ class WPFAQ_Manager_Admin
 
 		// Loop the items passed.
 		foreach ($items as $item_id) {
-			$wpdb->update(
-				$wpdb->posts,
-				array('menu_order' => $count),
-				array('ID' => $item_id),
-				array('%d'),
-				array('%d')
+			if ('question' !== get_post_type($item_id)) {
+				continue;
+			}
+
+			wp_update_post(
+				array(
+					'ID'         => $item_id,
+					'menu_order' => $count,
+				)
 			);
 			$count++;
 		}
+
 
 		// Delete the transient.
 		delete_transient('wpfaq_admin_fetch_faqs');
