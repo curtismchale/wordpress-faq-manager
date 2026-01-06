@@ -53,8 +53,11 @@ class WPFAQ_Manager_Shortcodes
 		$tags   = ! empty($atts['faq_tag']) ? explode(', ', esc_attr($atts['faq_tag'])) : array();
 
 		// Determine my pagination set.
-		$paged  = ! empty($_GET['faq_page']) ? absint($_GET['faq_page']) : 1;
+		$paged = 1;
 
+		if (isset($_GET['faq_page'])) {
+			$paged = max(1, absint(wp_unslash($_GET['faq_page'])));
+		}
 		// Fetch my items.
 		if (false === $faqs = WPFAQ_Manager_Data::get_main_shortcode_faqs($atts['faq_id'], $atts['limit'], $topics, $tags, $paged)) {
 			return;
