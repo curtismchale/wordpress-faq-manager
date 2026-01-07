@@ -76,6 +76,11 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 
 == Changelog ==
 
+= 2.0.4.1 =
+
+* fixed a spelling mistake in readme
+* changed name after advice from plugin team
+
 = 2.0.4 =
 
 * more relaxed version of PHP supported to maintain backwards compatability a bit better
