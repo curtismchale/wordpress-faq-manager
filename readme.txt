@@ -46,7 +46,7 @@ Each FAQ acts like a "post". You can assign your own categories (called topics) 
 * List all from multiple FAQ tags:
 	place [faq faq_tag="tag-slug-1, tag-slug-2"] on a post / page
 
-* List all from both FAQ topcis and FAQ tags:
+* List all from both FAQ topics and FAQ tags:
 	place [faq faq_topic="topic-slug-1" faq_tag="tag-slug-2"] on a post / page
 
 The list will show 10 FAQs based on your sorting (if none has been done, it will be in date order).
