@@ -6,7 +6,7 @@
  * Description: Uses custom post types and taxonomies to manage an FAQ section for your site.
  * Author: Curtis McHale
  * Author URI: https://sfndesign.ca/
- * Version: 2.0.4
+ * Version: 2.0.4.1
  * Text Domain: easy-faq-manager
  * Requires WP: 6.0
  * Requires PHP: 8.0
