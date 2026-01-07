@@ -1,4 +1,4 @@
-# Easy FAQ Manager for WP #
+# SFN Easy FAQ Manager #
 
 **Contributors:** curtismchale, norcross
 

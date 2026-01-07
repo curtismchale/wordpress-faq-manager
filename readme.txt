@@ -1,4 +1,4 @@
-=== Easy FAQ Manager for WP ===
+=== SFN Easy FAQ Manager ===
 Contributors: curtismchale, norcross
 Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 4.0
