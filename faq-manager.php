@@ -9,7 +9,7 @@
  * Version: 2.0.3
  * Text Domain: easy-faq-manager
  * Requires WP: 6.0
- * Requires PHP: 8.3
+ * Requires PHP: 8.0
  * Domain Path: /languages
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html

@@ -6,7 +6,7 @@
 
 **Requires at least:** 4.0
 
-**Requires PHP:** 8.3
+**Requires PHP:** 8.0
 
 **Tested up to:** 6.9
 
