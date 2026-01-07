@@ -4,14 +4,14 @@ Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 4.0
 Requires PHP: 8.0
 Tested up to: 6.9
-Stable tag: 2.0.4.1
+Stable tag: 2.0.4.2
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Uses custom post types and taxonomies to manage an FAQ section for your site.
 
 == Description ==
-Uses custom post types and taxonomies to manage an FAQ section for your site. Includes a set of custom taxonomies to organize, and shortcode options for different display configurations. [See the FAQ section](http://wordpress.org/extend/plugins/wordpress-faq-manager/faq "See the FAQ section")  for complete setup options.
+Uses custom post types and taxonomies to manage an FAQ section for your site. Includes a set of custom taxonomies to organize, and shortcode options for different display configurations. [See the FAQ section](http://wordpress.org/plugins/wordpress-faq-manager/faq "See the FAQ section")  for complete setup options.
 
 == Installation ==
 
