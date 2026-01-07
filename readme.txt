@@ -4,7 +4,7 @@ Tags: frequently asked questions, FAQ, shortcodes, custom post types
 Requires at least: 4.0
 Requires PHP: 8.0
 Tested up to: 6.9
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: GPL-2.0-or-later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -75,6 +75,10 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 3. Example of expanded FAQs
 
 == Changelog ==
+
+= 2.0.4 =
+
+* more relaxed version of PHP supported to maintain backwards compatability a bit better
 
 = 2.0.3 =
 
