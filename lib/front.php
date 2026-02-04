@@ -201,12 +201,11 @@ class WPFAQ_Manager_Front
 			return $query;
 		}
 
-		// Bail if we are not on the RSS feed.
-		if (! $query->is_feed) {
+		// Only modify the main blog feed, not page, taxonomy, or CPT feeds.
+		if (! $query->is_feed || ! $query->is_main_query() || $query->is_singular) {
 			return $query;
 		}
 
-		// Only modify if we are on the RSS feed.
 		$query->set('post_type', array('post', 'question'));
 
 		// And return the query.
