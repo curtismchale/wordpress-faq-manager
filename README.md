@@ -10,7 +10,7 @@
 
 **Tested up to:** 6.9
 
-**Stable tag:** 2.0.4.3
+**Stable tag:** 2.0.4.4
 
 **License:** GPLv2 or later
 
@@ -97,6 +97,10 @@ The list will show 10 FAQs based on your sorting (if none has been done, it will
 [missing image]
 
 ## Changelog ##
+
+### 2.0.4.4 ###
+
+* got more strict about how we add our CPT to the main feed as we were overwriting other post types
 
 ### 2.0.4.1 ###
 
